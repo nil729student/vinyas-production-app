@@ -29,8 +29,6 @@ export default async function Page() {
 
     } = data;
 
-
-    console.log()
     return (
         <>
             <h1>Resultat</h1>
