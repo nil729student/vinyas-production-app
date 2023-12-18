@@ -12,7 +12,32 @@ datasource db {
 
 
 model Usuario {
-  id      Int     @id @default(autoincrement())
+  id      Int      @id @default(autoincrement())
   nombre  String
+}
 
+model Animal {
+  id        Int      @id @default(autoincrement())
+  dib       String
+  raza      String
+  edad      Int
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId Int
+}
+
+model Article {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  image      String?
+  weightKg    Float?
+  categoryId  Int
+  category    Category   @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  articles Article[]
 }

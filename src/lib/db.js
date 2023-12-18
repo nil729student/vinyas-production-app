@@ -1,5 +1,4 @@
 // lib/db.js
-// lib/db.js
 import { PrismaClient } from '@prisma/client';
 
 let prisma;

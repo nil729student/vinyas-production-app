@@ -1,4 +1,5 @@
-import { fechDespiecePerDib } from "@/lib/data"
+
+import { fechDespiecePerDib } from "@/lib/data";
 
 export default async function Page() {
     const resultat = await fechDespiecePerDib();
