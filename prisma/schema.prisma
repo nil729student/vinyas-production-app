@@ -17,12 +17,11 @@ model Usuario {
 }
 
 model Animal {
-  id        Int      @id @default(autoincrement())
-  dib       String
-  raza      String
-  edad      Int
-  article   Article  @relation(fields: [articleId], references: [id])
-  articleId Int
+  id         Int      @id @default(autoincrement())
+  dib        String
+  raza       String
+  edad       Int
+  articles   Article[]  // Un animal puede tener muchos artículos
 }
 
 model Article {
@@ -30,10 +29,12 @@ model Article {
   name        String
   description String?
   price       Float
-  image      String?
+  imagen      String?
   weightKg    Float?
   categoryId  Int
   category    Category   @relation(fields: [categoryId], references: [id])
+  animal      Animal     @relation(fields: [animalId], references: [id]) // Cada artículo está asociado a un único animal
+  animalId    Int
 }
 
 model Category {
