@@ -5,6 +5,20 @@ import { useState } from 'react';
 
 const FormArticles = () => {
     const [section, setSection] = useState('BOLA');
+    const [formArticles, setFormArticles] = useState({
+        article: '',
+        unitats: '',
+        unitatsConsum: '',
+        pes: '',
+    });
+
+    const handleInputChange = (event) => {
+        setFormArticles({
+            ...formArticles,
+            [event.target.name]: event.target.value,
+        });
+    }
+
 
     return (
         <div className="min-h-screen flex items-center justify-center">
