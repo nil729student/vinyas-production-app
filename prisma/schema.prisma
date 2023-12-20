@@ -19,21 +19,26 @@ model Usuario {
 model Animal {
   id         Int      @id @default(autoincrement())
   dib        String
-  raza       String
-  edad       Int
-  articles   Article[]  // Un animal puede tener muchos artículos
+  raza       String?
+  edad       Int?
+  articles   Article[]  // Un animal pot tenir molts articles
 }
 
 model Article {
-  id          Int       @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
   description String?
   price       Float
   imagen      String?
   weightKg    Float?
   categoryId  Int
-  category    Category   @relation(fields: [categoryId], references: [id])
-  animal      Animal     @relation(fields: [animalId], references: [id]) // Cada artículo está asociado a un único animal
+  category    Category     @relation(fields: [categoryId], references: [id])
+  animal      Animal       @relation(fields: [animalId], references: [id])
+  
+  parent      Article?     @relation("ChildToParent", fields: [parentId], references: [id])
+  parentId    Int?
+
+  children    Article[]    @relation("ChildToParent") // Artículos más pequeños derivados de este artículo
   animalId    Int
 }
 

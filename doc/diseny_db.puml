@@ -1,0 +1,39 @@
+@startuml
+!define RECTANGLE class
+!define ENTITY class
+
+RECTANGLE Animal {
+  id: Int
+  dib: String
+  raza: String
+  edad: Int
+  articles: Article[]
+}
+
+RECTANGLE Article {
+  id: Int
+  name: String
+  description: String?
+  price: Float
+  imagen: String?
+  weightKg: Float?
+  categoryId: Int
+  category: Category
+  animal: Animal
+  parent: Article
+  parentId: Int
+  children: Article[]
+  animalId: Int
+}
+
+RECTANGLE Category {
+  id: Int
+  name: String
+  articles: Article[]
+}
+
+Animal --|{ Article
+Article --o{ Article: parent
+Article --o{ Article: children
+Article --|{ Category
+@enduml
