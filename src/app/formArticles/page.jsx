@@ -6,10 +6,10 @@ import SelectSection from './SelectSection';
 import ArticleRow from './ArticleRow';
 import FormInput from './FormInput';
 import { createArticles } from '@/lib/actions';
+//import JsBarcode from 'jsbarcode';
 
 const formArticles = () => {
     const [section, setSection] = useState('BOLA');
-    console.log(section);
     const [formArticles, setFormArticles] = useState({
         animalId: '',
         section: '',
@@ -38,9 +38,17 @@ const formArticles = () => {
     };
 
     const handleAnimalIdChange = (e) => {
+        const codigoBarras = e.target.value;
+        // Expresión regular para encontrar la información después de "251" de este numero: "+C191210807251ES010905303165" el valor que retorna es: "ES010905303165"
+        const regex = /251(.+)/;
+        const resultado = codigoBarras.match(regex);
+        // Obtener la información deseada o dejar el valor original si no hay coincidencia tambíen retornara un error si no hay coincidencia
+        const dib = resultado ? resultado[1] : console.error('No se ha encontrado la información deseada');
+    
+        // Actualizar el estado con la información deseada
         setFormArticles((prevForm) => ({
             ...prevForm,
-            animalId: e.target.value,
+            animalId: dib,
         }));
     };
 
@@ -56,7 +64,6 @@ const formArticles = () => {
     return (
         <div className="min-h-screen flex items-center justify-center">
             <form action={createArticles} className=" shadow-md rounded bg-white px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
-
                 <FormInput
                     label="Identificador d'animal (DIB)"
                     name="animalId"
