@@ -19,8 +19,8 @@ model Usuario {
 model Animal {
   id         Int      @id @default(autoincrement())
   dib        String
-  raza       String?
-  edad       Int?
+  race       String?
+  age       Int?
   articles   Article[]  // Un animal pot tenir molts articles
 }
 
@@ -28,6 +28,8 @@ model Article {
   id          Int         @id @default(autoincrement())
   name        String
   description String?
+  units       Int
+  unitsConsum Int
   price       Float
   imagen      String?
   weightKg    Float?
@@ -39,7 +41,7 @@ model Article {
   parentId    Int?
 
   children    Article[]    @relation("ChildToParent") // Artículos más pequeños derivados de este artículo
-  animalId    Int
+  animalId    Int 
 }
 
 model Category {

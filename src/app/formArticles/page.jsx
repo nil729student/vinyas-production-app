@@ -19,7 +19,7 @@ const formArticles = () => {
             nervis: { unitats: '', unitatsConsum: '', pes: '' },
             ossos: { unitats: '', unitatsConsum: '', pes: '' },
             altres: { unitats: '', unitatsConsum: '', pes: '' },
-            // Pots afegir més tipus d'articles aquí si és necessari
+        
         },
     });
 
@@ -48,7 +48,7 @@ const formArticles = () => {
         // Actualizar el estado con la información deseada
         setFormArticles((prevForm) => ({
             ...prevForm,
-            animalId: dib,
+            animalDib: dib,
         }));
     };
 
