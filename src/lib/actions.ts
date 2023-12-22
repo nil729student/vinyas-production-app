@@ -1,96 +1,57 @@
 "use server";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient();
-// Todes les funcions que s'exporten en a quest archiu pertanyen al servidor
-interface ArticleData {
-  name: string;
-  description?: string;
-  units: number;
-  unitsConsum: number;
-  price?: number;
-  imagen?: string;
-  weightKg?: number;
-  categoryId: number;
-  animalId: number;
-  parentId?: number;
-}
 
-export async function createArticles(formData: FormData) {
-  const rowFormData: { [key: string]: string } = {};
-  formData.forEach((value, key) => {
-    rowFormData[key] = value as string;
-  });
-
-  console.log(rowFormData);
+export async function createArticles (formData: FormData) {
   try {
-    // 1. Parsear y validar los datos
-    const animalDib = formData.get('animalDib');
-    const animalRace = formData.get('animalRace');
-    const animalAge = formData.get('animalAge');
-    const section = formData.get('section');
-    const magreUnitats = formData.get('magreUnitats');
-    const magreUnitatsConsum = formData.get('magreUnitatsConsum');
-    const magrePes = formData.get('magrePes');
-    const ossosPes = formData.get('ossosPes');
-    const altresUnitats = formData.get('altresUnitats');
-    const altresUnitatsConsum = formData.get('altresUnitatsConsum');
-        const altresPes = formData.get('altresPes');
+    // obtenri el dib
+    console.log(formData);
+    console.log(formData['animalDib']);
 
-    // Crear un nou animal amb Prisma
-    const animal = await prisma.animal.create({
+    // Insertar el animal
+    await prisma.animal.create({
       data: {
-        dib: animalDib.toString(),
-
-
+        dib: formData['animalDib'] as string,
+        // Otras propiedades del animal, como raza y edad, si es necesario
+      },
+    });
+    
+    // Insertar el artículo principal (la "bola" en este caso)
+    /*
+    const mainArticle = await prisma.article.create({
+      data: {
+        name: rowFormData.section ,
+        description: "", // Añade la descripción del artículo principal si es necesario
+        price: 0, // Añade el precio del artículo principal si es necesario
+        imagen: "", // Añade la imagen del artículo principal si es necesario
+        weightKg: 0, // Añade el peso del artículo principal si es necesario
+        animalId: animal.id ,
       },
     });
 
-    // Iterar sobre els tipus d'articles (magre, grasa, nervis, ossos, altres)
-    interface FormDataWithArticles extends FormData {
-      articles: { [key: string]: any };
+    // Insertar los artículos derivados (magre, ossos, etc.)
+    for (const key in rowFormData.articles as any) {
+      const articleData = rowFormData.articles[key];
+      await prisma.article.create({
+        data: {
+          name: articleData.nom,
+          description: "", // Añade la descripción del artículo derivado si es necesario
+          price: 0, // Añade el precio del artículo derivado si es necesario
+          imagen: "", // Añade la imagen del artículo derivado si es necesario
+          weightKg: 0, // Añade el peso del artículo derivado si es necesario
+          parentId: mainArticle.id,
+          animalId: animal.id ,
+        },
+      });
     }
-
-for (const articleType in (formData as FormDataWithArticles).articles) {
-  const articleData = (formData as FormDataWithArticles).articles[articleType];
-  
-  // Crear un nou article amb Prisma per a cada tipus
-  await prisma.article.create({
-    data: {
-      name: articleType,
-      units: parseInt(articleData.unitats),
-      unitsConsum: parseInt(articleData.unitatsConsum),
-      weightKg: parseInt(articleData.pes),
-      animalId: animal.id,
-
-
-    } as ArticleData,
-  });
-}
-
-// Tancar la connexió a Prisma
-await prisma.$disconnect();
-
+    */
+    console.log("Inserción completada con éxito.");
   } catch (error) {
-    console.error('Error al insertar los artículos:', error);
+    console.error("Error al insertar en la base de datos:", error);
   } finally {
     await prisma.$disconnect();
   }
-  // insert in DB using Prisma
-
-
-
-
-
-
-  /*
-  const response = await fetch("/api/articles", {
-    method: "POST",
-    body: JSON.stringify(rowFormData),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  */
 
 }
 

@@ -6,22 +6,26 @@ import SelectSection from './SelectSection';
 import ArticleRow from './ArticleRow';
 import FormInput from './FormInput';
 import { createArticles } from '@/lib/actions';
-//import JsBarcode from 'jsbarcode';
 
 const formArticles = () => {
-    const [section, setSection] = useState('BOLA');
-    const [formArticles, setFormArticles] = useState({
-        animalId: '',
+
+    const initialArticle = {
+        nom: 'a',
+        unitats: '',
+        unitatsConsum: '',
+        pes: '',
+    };
+
+    const initialFormState = {
+        animalDib: '',
         section: '',
-        articles: {
-            magre: { unitats: '', unitatsConsum: '', pes: '' },
-            grasa: { unitats: '', unitatsConsum: '', pes: '' },
-            nervis: { unitats: '', unitatsConsum: '', pes: '' },
-            ossos: { unitats: '', unitatsConsum: '', pes: '' },
-            altres: { unitats: '', unitatsConsum: '', pes: '' },
-        
-        },
-    });
+        articles: [initialArticle],
+    };
+
+
+    const [section, setSection] = useState('BOLA');
+    const [formArticles, setFormArticles] = useState(initialFormState);
+    const ref = useRef(null);
 
     const handleInputChange = (e, articleType) => {
         const { name, value } = e.target;
@@ -45,18 +49,10 @@ const formArticles = () => {
 
     };
 
-    const handleAnimalIdChange = (e) => {
-        const codigoBarras = e.target.value;
-        // Expresión regular para encontrar la información después de "251" de este numero: "+C191210807251ES010905303165" el valor que retorna es: "ES010905303165"
-        const regex = /251(.+)/;
-        const resultado = codigoBarras.match(regex);
-        // Obtener la información deseada o dejar el valor original si no hay coincidencia tambíen retornara un error si no hay coincidencia
-        const dib = resultado ? resultado[1] : console.error('No se ha encontrado la información deseada');
-    
-        // Actualizar el estado con la información deseada
+    const handleAnimalDibChange = (e) => {
         setFormArticles((prevForm) => ({
             ...prevForm,
-            animalDib: dib,
+            animalDib: e.target.value,
         }));
     };
 
@@ -71,7 +67,12 @@ const formArticles = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <form action={createArticles} className=" shadow-md rounded bg-white px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
+            <form ref={ref} action={ async fetchData =>{
+                ref.current.reset();
+                const res = await createArticles(formArticles);
+                console.log(res);
+            }} className=" shadow-md rounded bg-black px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
+
                 <FormInput
                     label="Identificador d'animal (DIB)"
                     name="animalDib"
