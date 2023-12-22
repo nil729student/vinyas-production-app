@@ -1,7 +1,7 @@
 "use client"
 
 // pages/index.js
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import SelectSection from './SelectSection';
 import ArticleRow from './ArticleRow';
 import FormInput from './FormInput';
@@ -25,7 +25,11 @@ const formArticles = () => {
 
     const handleInputChange = (e, articleType) => {
         const { name, value } = e.target;
+        console.log(name, value);
+
+
         setFormArticles((prevForm) => ({
+            //magre : {unitats: 1, unitatsConsum: 2, pes: 3} 
             ...prevForm,
             articles: {
                 ...prevForm.articles,
@@ -34,7 +38,11 @@ const formArticles = () => {
                     [name]: value,
                 },
             },
+
         }));
+        
+        console.log(formArticles);
+
     };
 
     const handleAnimalIdChange = (e) => {
@@ -66,17 +74,24 @@ const formArticles = () => {
             <form action={createArticles} className=" shadow-md rounded bg-white px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
                 <FormInput
                     label="Identificador d'animal (DIB)"
-                    name="animalId"
+                    name="animalDib"
                     type="text"
-                    value={formArticles.animalId}
-                    onChange={handleAnimalIdChange}
+                    value={formArticles.animalDib}
+                    onChange={handleAnimalDibChange}
                     placeholder="DIB"
                 />
 
 
                 <SelectSection name="section" section={formArticles.section} setFormSection={handleSectionChange} />
-
-
+                {/*pes de la secció*/}
+                <FormInput
+                    label="Pes de la secció (kg)"
+                    name="pes"
+                    type="number"
+                    value={formArticles.pes}
+                    onChange={handleInputChange}
+                    placeholder="Pes"
+                />
 
 
                 <table className="w-full mb-4">
@@ -94,7 +109,7 @@ const formArticles = () => {
                             <ArticleRow
                                 key={article}
                                 article={article}
-                                formArticles={formArticles.articles[article]}
+                                formArticles={formArticles.articles}
                                 handleInputChange={(e) => handleInputChange(e, article)}
                             />
                         ))}

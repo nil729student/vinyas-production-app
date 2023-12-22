@@ -8,7 +8,7 @@ const ArticleRow = ({ article, formArticles, handleInputChange }) => {
       <td className="border px-4 py-2">{article}</td>
       <td className="border px-4 py-2">
         <FormInput
-          name={`${article.toLowerCase()}Unitats`}
+          name={`Unitats`}
           type="number"
           value={formArticles[`${article.toLowerCase()}Unitats`]}
           onChange={handleInputChange}
@@ -17,7 +17,7 @@ const ArticleRow = ({ article, formArticles, handleInputChange }) => {
       </td>
       <td className="border px-4 py-2">
         <FormInput
-          name={`${article.toLowerCase()}UnitatsConsum`}
+          name={`UnitatsConsum`}
           type="number"
           value={formArticles[`${article.toLowerCase()}UnitatsConsum`]}
           onChange={handleInputChange}
@@ -26,7 +26,7 @@ const ArticleRow = ({ article, formArticles, handleInputChange }) => {
       </td>
       <td className="border px-4 py-2">
         <FormInput
-          name={`${article.toLowerCase()}Pes`}
+          name={`Pes`}
           type="number"
           value={formArticles[`${article.toLowerCase()}Pes`]}
           onChange={handleInputChange}

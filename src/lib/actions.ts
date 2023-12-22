@@ -93,3 +93,6 @@ await prisma.$disconnect();
   */
 
 }
+
+// Llamada a la función
+//createArticles(/* Tu objeto FormData aquí */);
