@@ -27,6 +27,22 @@ const formArticles = () => {
     const [formArticles, setFormArticles] = useState(initialFormState);
     const ref = useRef(null);
 
+    const handleAnimalDibChange = (e) => {
+        setFormArticles((prevForm) => ({
+            ...prevForm,
+            animalDib: e.target.value,
+        }));
+    };
+
+    const handleSectionChange = (e) => {
+        setFormArticles((prevForm) => ({
+            ...prevForm,
+            section: section,
+            weightKgSection: e.target.value,
+
+        }));
+    };
+
     const handleInputChange = (e, articleType) => {
         const { name, value } = e.target;
         console.log(name, value);
@@ -49,19 +65,7 @@ const formArticles = () => {
 
     };
 
-    const handleAnimalDibChange = (e) => {
-        setFormArticles((prevForm) => ({
-            ...prevForm,
-            animalDib: e.target.value,
-        }));
-    };
 
-    const handleSectionChange = (e) => {
-        setFormArticles((prevForm) => ({
-            ...prevForm,
-            section: section,
-        }));
-    };
 
     const articles = ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
 
@@ -71,7 +75,7 @@ const formArticles = () => {
                 ref.current.reset();
                 const res = await createArticles(formArticles);
                 console.log(res);
-            }} className=" shadow-md rounded bg-black px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
+            }} className=" shadow-md rounded bg-wite px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
 
                 <FormInput
                     label="Identificador d'animal (DIB)"
@@ -87,10 +91,10 @@ const formArticles = () => {
                 {/*pes de la secció*/}
                 <FormInput
                     label="Pes de la secció (kg)"
-                    name="pes"
+                    name="weightKgSection"
                     type="number"
                     value={formArticles.pes}
-                    onChange={handleInputChange}
+                    onChange={handleSectionChange}
                     placeholder="Pes"
                 />
 

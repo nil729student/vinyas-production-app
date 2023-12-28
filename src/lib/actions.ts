@@ -1,52 +1,75 @@
 "use server";
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export async function createArticles (formData: FormData) {
   try {
     // obtenri el dib
-    console.log(formData);
-    console.log(formData['animalDib']);
-
+    
+    const articles = Object.fromEntries(
+      Object.entries(formData['articles']).filter(([key]) => key !== '0')
+    );
+    console.log(articles);
+    for (const article in articles) {
+      console.log(article);
+      console.log(articles[article]);
+    }
+    
     // Insertar el animal
-    await prisma.animal.create({
+    const newAnimal = await prisma.animal.create({
       data: {
         dib: formData['animalDib'] as string,
-        // Otras propiedades del animal, como raza y edad, si es necesario
+        // Afegir mes dades al futur del animal, com la raza el pes etc...
       },
-    });
-    
-    // Insertar el artículo principal (la "bola" en este caso)
-    /*
-    const mainArticle = await prisma.article.create({
-      data: {
-        name: rowFormData.section ,
-        description: "", // Añade la descripción del artículo principal si es necesario
-        price: 0, // Añade el precio del artículo principal si es necesario
-        imagen: "", // Añade la imagen del artículo principal si es necesario
-        weightKg: 0, // Añade el peso del artículo principal si es necesario
-        animalId: animal.id ,
-      },
+      // Selecionem el id per poder fer el connect
+      select: {
+        id: true,
+      }
+
     });
 
-    // Insertar los artículos derivados (magre, ossos, etc.)
-    for (const key in rowFormData.articles as any) {
-      const articleData = rowFormData.articles[key];
+    const insertedAnimal = newAnimal.id as number;
+    console.log(insertedAnimal);
+    // Insertar el artículo principal (la "bola" en este caso)
+    const weightKgValue: string | null = formData['weightKgSection'] as string | null;
+
+    const mainArticleData: Prisma.ArticleCreateInput = {
+      name: formData['section'] as string,
+      description: '',
+      price: 0,
+      imagen: '',
+      weightKg: weightKgValue ? parseFloat(weightKgValue) : null,
+      animal: { connect: { id: insertedAnimal } },
+      units: 1,
+      unitsConsum: 1,
+
+    };
+    
+    const parentArticle = await prisma.article.create({
+      data: mainArticleData,
+      select: {
+        id: true,
+      }
+    });
+    // Insertem els articles derivats (magre, ossos, etc.)
+
+    for (const article in articles) {
       await prisma.article.create({
         data: {
-          name: articleData.nom,
-          description: "", // Añade la descripción del artículo derivado si es necesario
-          price: 0, // Añade el precio del artículo derivado si es necesario
-          imagen: "", // Añade la imagen del artículo derivado si es necesario
-          weightKg: 0, // Añade el peso del artículo derivado si es necesario
-          parentId: mainArticle.id,
-          animalId: animal.id ,
+          name: article as string,
+          description: "",
+          price: 0,
+          imagen: "",
+          units: parseInt(articles[article]['Unitats'])  as number,
+          unitsConsum: parseInt(articles[article]['UnitatsConsum']) as number,
+          weightKg: parseFloat(articles[article]['Pes']) as number,
+          parent: { connect: { id: parentArticle.id as number } },
+          animal: { connect: { id: insertedAnimal } },
         },
       });
     }
-    */
-    console.log("Inserción completada con éxito.");
+
   } catch (error) {
     console.error("Error al insertar en la base de datos:", error);
   } finally {
@@ -56,4 +79,4 @@ export async function createArticles (formData: FormData) {
 }
 
 // Llamada a la función
-//createArticles(/* Tu objeto FormData aquí */);
+//createArticles(/* Tu objeto FormData aquí */
