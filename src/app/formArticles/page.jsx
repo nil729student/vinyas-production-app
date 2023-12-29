@@ -1,11 +1,12 @@
 "use client"
 
 // pages/index.js
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SelectSection from './SelectSection';
 import ArticleRow from './ArticleRow';
 import FormInput from './FormInput';
-import { createArticles } from '@/lib/actions';
+import DataAnimal from './DataAnimal';
+import { createArticles, getAllAnimals } from '@/lib/actions';
 
 const formArticles = () => {
 
@@ -22,10 +23,26 @@ const formArticles = () => {
         articles: [initialArticle],
     };
 
-
+    const [articlesData, setArticlesData] = useState([]);
     const [section, setSection] = useState('BOLA');
     const [formArticles, setFormArticles] = useState(initialFormState);
     const ref = useRef(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const fetchedAnimals = await getAllAnimals();
+                console.log(fetchedAnimals);
+                setArticlesData(fetchedAnimals);
+
+                
+            } catch (error) {
+                console.error('Error fetching animals:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const handleAnimalDibChange = (e) => {
         setFormArticles((prevForm) => ({
@@ -39,7 +56,6 @@ const formArticles = () => {
             ...prevForm,
             section: section,
             weightKgSection: e.target.value,
-
         }));
     };
 
@@ -60,22 +76,18 @@ const formArticles = () => {
             },
 
         }));
-        
-        console.log(formArticles);
 
     };
-
-
 
     const articles = ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
 
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <form ref={ref} action={ async fetchData =>{
+            <form ref={ref} action={async fetchData => {
                 ref.current.reset();
                 const res = await createArticles(formArticles);
                 console.log(res);
-            }} className=" shadow-md rounded bg-wite px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
+            }} className=" m-10 shadow-md rounded bg-wite px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
 
                 <FormInput
                     label="Identificador d'animal (DIB)"
@@ -87,7 +99,8 @@ const formArticles = () => {
                 />
 
 
-                <SelectSection name="section" section={formArticles.section} setFormSection={handleSectionChange} />
+                <SelectSection name="section" section={section} onChange={handleSectionChange} setFormSection={setSection} />
+
                 {/*pes de la secció*/}
                 <FormInput
                     label="Pes de la secció (kg)"
@@ -130,6 +143,27 @@ const formArticles = () => {
                     </button>
                 </div>
             </form>
+
+            {
+                articlesData.map((animal) => (
+   
+                        <DataAnimal key={animal.dib}
+                            dib={animal.dib}
+                            
+                                //TODO: handleBolaClick, handleBlocClick, handleFaldaClick, handleDevantClick
+                                /*
+                                onBolaClick={handleBolaClick}
+                                onBlocClick={handleBlocClick}
+                                onFaldaClick={handleFaldaClick}
+                                onDevantClick={handleDevantClick}
+                                */
+                            
+
+                        />
+                ))
+
+            }
+
         </div>
     );
 };

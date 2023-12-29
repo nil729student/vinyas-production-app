@@ -2,11 +2,20 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+export async function getAllAnimals() {
+  try {
+    const animals = await prisma.animal.findMany();
+    console.log(animals);
+    return animals;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 
 export async function createArticles (formData: FormData) {
   try {
     // obtenri el dib
-    
+    console.log(formData);
     const articles = Object.fromEntries(
       Object.entries(formData['articles']).filter(([key]) => key !== '0')
     );
@@ -78,5 +87,18 @@ export async function createArticles (formData: FormData) {
 
 }
 
-// Llamada a la función
-//createArticles(/* Tu objeto FormData aquí */
+export async function getArticles() {
+  try {
+    const articles = await prisma.article.findMany({
+      include: {
+        parent: true,
+        animal: true,
+      },
+    });
+    return articles;
+  } catch (error) {
+    console.error("Error al obtener los artículos:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
