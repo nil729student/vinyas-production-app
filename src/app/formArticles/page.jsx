@@ -6,7 +6,7 @@ import SelectSection from './SelectSection';
 import ArticleRow from './ArticleRow';
 import FormInput from './FormInput';
 import DataAnimal from './DataAnimal';
-import { createArticles, getAllAnimals } from '@/lib/actions';
+import { createArticles, getAllAnimals, getArticlesByParentId, getArticlesByAnimalId } from '@/lib/actions';
 
 const formArticles = () => {
 
@@ -32,6 +32,8 @@ const formArticles = () => {
         const fetchData = async () => {
             try {
                 const fetchedAnimals = await getAllAnimals();
+
+                
                 console.log(fetchedAnimals);
                 setArticlesData(fetchedAnimals);
 
@@ -149,6 +151,16 @@ const formArticles = () => {
    
                         <DataAnimal key={animal.dib}
                             dib={animal.dib}
+                            onSelectClick={() => {
+                                getArticlesByAnimalId(animal.dib).then((res) => {
+
+                                setFormArticles((prevForm) => ({
+                                    ...prevForm,
+                                    animalDib: animal.dib,
+                                }))
+                                console.log(res);
+                                })
+                            }}
                             
                                 //TODO: handleBolaClick, handleBlocClick, handleFaldaClick, handleDevantClick
                                 /*

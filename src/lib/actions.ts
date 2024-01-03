@@ -4,7 +4,13 @@ import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 export async function getAllAnimals() {
   try {
-    const animals = await prisma.animal.findMany();
+    // group by dib
+    const animals = await prisma.animal.groupBy({
+      by: ['dib'],
+    });
+
+    //const animals = await prisma.animal.findMany();
+
     console.log(animals);
     return animals;
   } finally {
@@ -95,6 +101,48 @@ export async function getArticles() {
         animal: true,
       },
     });
+    
+    console.log(articles);
+    return articles;
+  } catch (error) {
+    console.error("Error al obtener los artículos:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// obtenir els articles para de un animal(que no sean derivados) AND DIB
+export async function getArticlesByAnimalId(animalId: number, dib: string) {
+  try {
+    const articles = await prisma.article.findMany({
+      where: {
+        animal: {
+          dib: dib,
+        },
+        parent: null,
+      },
+    });
+    console.log(articles);
+    return articles;
+  } catch (error) {
+    console.error("Error al obtener los artículos:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+
+// obtenir tots els articles d'un article pare AND DIB
+export async function getArticlesByParentId(parentId: number, dib: string) {
+  try {
+    const articles = await prisma.article.findMany({
+      where: {
+        animal: {
+          dib: dib,
+        }
+      },
+    });
+    console.log(articles);
     return articles;
   } catch (error) {
     console.error("Error al obtener los artículos:", error);
