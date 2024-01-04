@@ -26,18 +26,17 @@ const formArticles = () => {
     const [articlesData, setArticlesData] = useState([]);
     const [section, setSection] = useState('BOLA');
     const [formArticles, setFormArticles] = useState(initialFormState);
+    const [editMode, setEditMode] = useState(false);
+
     const ref = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const fetchedAnimals = await getAllAnimals();
-
-                
                 console.log(fetchedAnimals);
                 setArticlesData(fetchedAnimals);
 
-                
             } catch (error) {
                 console.error('Error fetching animals:', error);
             }
@@ -54,10 +53,11 @@ const formArticles = () => {
     };
 
     const handleSectionChange = (e) => {
+        const { name, value } = e.target;
         setFormArticles((prevForm) => ({
             ...prevForm,
             section: section,
-            weightKgSection: e.target.value,
+            [name]: value, // name: e.target.value
         }));
     };
 
@@ -80,6 +80,62 @@ const formArticles = () => {
         }));
 
     };
+
+    const getSection = (sections, sectionName) => {
+        return sections.find(element => element.name === sectionName);
+    };
+
+    const handleSelectClick = async (animalDib) => {
+        try {
+            const resAnimalSections = await getArticlesByAnimalId(animalDib);
+            console.log(resAnimalSections);
+            //const filteredSection = getSection(resAnimalSections, section);
+            console.log(section);   
+            const filteredSection = resAnimalSections.find(element => element.name === section)
+            console.log(resAnimalSections.find(element => element.name === section));
+            //console.log(filteredSection.weightKg);
+
+            setFormArticles((prevForm) => ({
+                ...prevForm,
+                animalDib: animalDib,
+                section: section, // Update the section value with the filtered section's name
+                weightKgSection: filteredSection.weightKg,
+            }));
+
+            setEditMode(true);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // if the edit mode is true, when the section is changed, the articles of the section are loaded
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (editMode) {
+                    const filteredSection = getSection(resAnimalSections, section);
+                    const resArticles = await getArticlesByParentId(filteredSection);
+                    console.log(resArticles);
+
+                    setFormArticles((prevForm) => ({
+                        ...prevForm,
+                        articles: resArticles,
+                    }));
+
+                }
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+            }
+        };
+
+        fetchData();
+    }, [section]);
+
+
+
+
+
 
     const articles = ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
 
@@ -108,7 +164,7 @@ const formArticles = () => {
                     label="Pes de la secció (kg)"
                     name="weightKgSection"
                     type="number"
-                    value={formArticles.pes}
+                    value={formArticles.weightKgSection}// {formArticles.pes}
                     onChange={handleSectionChange}
                     placeholder="Pes"
                 />
@@ -151,16 +207,7 @@ const formArticles = () => {
    
                         <DataAnimal key={animal.dib}
                             dib={animal.dib}
-                            onSelectClick={() => {
-                                getArticlesByAnimalId(animal.dib).then((res) => {
-
-                                setFormArticles((prevForm) => ({
-                                    ...prevForm,
-                                    animalDib: animal.dib,
-                                }))
-                                console.log(res);
-                                })
-                            }}
+                            onSelectClick={() => handleSelectClick(animal.dib)}
                             
                                 //TODO: handleBolaClick, handleBlocClick, handleFaldaClick, handleDevantClick
                                 /*
