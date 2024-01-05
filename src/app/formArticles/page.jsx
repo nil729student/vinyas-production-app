@@ -10,6 +10,8 @@ import { createArticles, getAllAnimals, getArticlesByParentId, getArticlesByAnim
 
 const formArticles = () => {
 
+    const [animalDib, setAnimalDib] = useState('');
+
     const initialArticle = {
         nom: 'a',
         unitats: '',
@@ -59,12 +61,13 @@ const formArticles = () => {
             section: section,
             [name]: value, // name: e.target.value
         }));
+
+
     };
 
     const handleInputChange = (e, articleType) => {
         const { name, value } = e.target;
         console.log(name, value);
-
 
         setFormArticles((prevForm) => ({
             //magre : {unitats: 1, unitatsConsum: 2, pes: 3} 
@@ -88,9 +91,7 @@ const formArticles = () => {
     const handleSelectClick = async (animalDib) => {
         try {
             const resAnimalSections = await getArticlesByAnimalId(animalDib);
-            console.log(resAnimalSections);
-            //const filteredSection = getSection(resAnimalSections, section);
-            console.log(section);   
+            //const filteredSection = getSection(resAnimalSections, section);  
             const filteredSection = resAnimalSections.find(element => element.name === section)
             console.log(resAnimalSections.find(element => element.name === section));
             //console.log(filteredSection.weightKg);
@@ -109,11 +110,14 @@ const formArticles = () => {
         }
     };
 
+
+
     // if the edit mode is true, when the section is changed, the articles of the section are loaded
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (editMode) {
+                    const resAnimalSections = await getArticlesByAnimalId(formArticles.animalDib);
                     const filteredSection = getSection(resAnimalSections, section);
                     const resArticles = await getArticlesByParentId(filteredSection);
                     console.log(resArticles);
@@ -140,12 +144,12 @@ const formArticles = () => {
     const articles = ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center ">
             <form ref={ref} action={async fetchData => {
                 ref.current.reset();
                 const res = await createArticles(formArticles);
                 console.log(res);
-            }} className=" m-10 shadow-md rounded bg-wite px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
+            }} className="m-10 shadow-md rounded bg-white px-8 pt-6 pb-8 mb-4 w-full md:w-1/2 lg:w-1/3">
 
                 <FormInput
                     label="Identificador d'animal (DIB)"
@@ -202,26 +206,22 @@ const formArticles = () => {
                 </div>
             </form>
 
-            {
-                articlesData.map((animal) => (
-   
-                        <DataAnimal key={animal.dib}
-                            dib={animal.dib}
-                            onSelectClick={() => handleSelectClick(animal.dib)}
-                            
-                                //TODO: handleBolaClick, handleBlocClick, handleFaldaClick, handleDevantClick
-                                /*
-                                onBolaClick={handleBolaClick}
-                                onBlocClick={handleBlocClick}
-                                onFaldaClick={handleFaldaClick}
-                                onDevantClick={handleDevantClick}
-                                */
-                            
-
-                        />
-                ))
-
-            }
+            <div className="">
+                {articlesData.map((animal) => (
+                    <DataAnimal
+                        key={animal.dib}
+                        dib={animal.dib}
+                        onSelectClick={() => handleSelectClick(animal.dib)}
+                    // TODO: handleBolaClick, handleBlocClick, handleFaldaClick, handleDevantClick
+                    /*
+                    onBolaClick={handleBolaClick}
+                    onBlocClick={handleBlocClick}
+                    onFaldaClick={handleFaldaClick}
+                    onDevantClick={handleDevantClick}
+                    */
+                    />
+                ))}
+            </div>
 
         </div>
     );
