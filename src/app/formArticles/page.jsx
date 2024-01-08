@@ -26,7 +26,7 @@ const formArticles = () => {
     };
 
     const [articlesData, setArticlesData] = useState([]);
-    const [section, setSection] = useState('BOLA');
+    const [section, setSection] = useState('DEVANT');
     const [formArticles, setFormArticles] = useState(initialFormState);
     const [editMode, setEditMode] = useState(false);
 
@@ -36,7 +36,6 @@ const formArticles = () => {
         const fetchData = async () => {
             try {
                 const fetchedAnimals = await getAllAnimals();
-                console.log(fetchedAnimals);
                 setArticlesData(fetchedAnimals);
 
             } catch (error) {
@@ -91,16 +90,19 @@ const formArticles = () => {
     const handleSelectClick = async (animalDib) => {
         try {
             const resAnimalSections = await getArticlesByAnimalId(animalDib);
-            //const filteredSection = getSection(resAnimalSections, section);  
-            const filteredSection = resAnimalSections.find(element => element.name === section)
-            console.log(resAnimalSections.find(element => element.name === section));
-            //console.log(filteredSection.weightKg);
+            const filteredSection = getSection(resAnimalSections, section);  
+            //const filteredSection = resAnimalSections.find(element => element.name === section)
 
+            console.log(resAnimalSections);
+
+            //console.log(resAnimalSections.find(element => element.name === section));
+            //console.log(filteredSection.weightKg);
+            
             setFormArticles((prevForm) => ({
                 ...prevForm,
                 animalDib: animalDib,
                 section: section, // Update the section value with the filtered section's name
-                weightKgSection: filteredSection.weightKg,
+                //weightKgSection: filteredSection.weightKg,
             }));
 
             setEditMode(true);
@@ -138,10 +140,23 @@ const formArticles = () => {
 
 
 
-
-
-
-    const articles = ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
+    const getArticlesBySection = (section) => {
+        switch (section) {
+            case 'BOLA':
+                return ['magre', 'grasa'];
+            case 'BLOC':
+                return ['ossos', 'nervis'];
+            case 'FALDA':
+                return ['magre', 'grasa', 'nervis', 'ossos'];
+            case 'DEVANT':
+                return [ 'retall','magre', 'grasa', 'nervis', 'ossos'];
+            default:
+                return ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
+        }
+    };
+    
+    // Usage
+    const articles = getArticlesBySection(section);
 
     return (
         <div className="min-h-screen flex items-center justify-center ">
@@ -159,7 +174,6 @@ const formArticles = () => {
                     onChange={handleAnimalDibChange}
                     placeholder="DIB"
                 />
-
 
                 <SelectSection name="section" section={section} onChange={handleSectionChange} setFormSection={setSection} />
 
