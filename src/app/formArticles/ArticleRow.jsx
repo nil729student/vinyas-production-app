@@ -5,7 +5,7 @@ import FormInput from './FormInput';
 const ArticleRow = ({ article, formArticles, handleInputChange }) => {
   return (
     <tr>
-      <td className="border px-4 py-2">{article}</td>
+      <td className="border px-4 py-2">{article}</td> {/*nom article, nervi, grassa, ...*/}
       <td className="border px-4 py-2">
         <FormInput
           name={`Unitats`}

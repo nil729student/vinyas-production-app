@@ -18,7 +18,7 @@ model Usuario {
 
 model Animal {
   id         Int      @id @default(autoincrement())
-  dib        String
+  dib        String   @unique
   race       String?
   age       Int?
   articles   Article[]  // Un animal pot tenir molts articles
@@ -26,13 +26,14 @@ model Animal {
 
 model Article {
   id          Int         @id @default(autoincrement())
+
   name        String
   description String?
   units       Int
   unitsConsum Int
   price       Float
   imagen      String?
-  weightKg    Float?
+  weightKg    Float
   // categoryId  Int
   // category    Category     @relation(fields: [categoryId], references: [id])
   animal      Animal       @relation(fields: [animalId], references: [id])

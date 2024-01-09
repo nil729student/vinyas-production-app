@@ -6,23 +6,17 @@ import SelectSection from './SelectSection';
 import ArticleRow from './ArticleRow';
 import FormInput from './FormInput';
 import DataAnimal from './DataAnimal';
-import { createArticles, getAllAnimals, getArticlesByParentId, getArticlesByAnimalId } from '@/lib/actions';
+import { createArticles, getArticlesByParentId, getArticlesByAnimalId } from '@/lib/actions';
+import { getAllAnimals } from '@/lib/animalActions';
 
 const formArticles = () => {
 
     const [animalDib, setAnimalDib] = useState('');
 
-    const initialArticle = {
-        nom: 'a',
-        unitats: '',
-        unitatsConsum: '',
-        pes: '',
-    };
-
     const initialFormState = {
         animalDib: '',
         section: '',
-        articles: [initialArticle],
+        articles: [],
     };
 
     const [articlesData, setArticlesData] = useState([]);
@@ -37,7 +31,6 @@ const formArticles = () => {
             try {
                 const fetchedAnimals = await getAllAnimals();
                 setArticlesData(fetchedAnimals);
-
             } catch (error) {
                 console.error('Error fetching animals:', error);
             }
@@ -61,13 +54,15 @@ const formArticles = () => {
             [name]: value, // name: e.target.value
         }));
 
+        if (editMode) {
+            
+        }
+
 
     };
 
     const handleInputChange = (e, articleType) => {
         const { name, value } = e.target;
-        console.log(name, value);
-
         setFormArticles((prevForm) => ({
             //magre : {unitats: 1, unitatsConsum: 2, pes: 3} 
             ...prevForm,
@@ -90,10 +85,10 @@ const formArticles = () => {
     const handleSelectClick = async (animalDib) => {
         try {
             const resAnimalSections = await getArticlesByAnimalId(animalDib);
-            const filteredSection = getSection(resAnimalSections, section);  
-            //const filteredSection = resAnimalSections.find(element => element.name === section)
+            //const filteredSection = getSection(resAnimalSections, section);  
+            const filteredSection = resAnimalSections.find(element => element.name === section)
 
-            console.log(resAnimalSections);
+            console.log(filteredSection);
 
             //console.log(resAnimalSections.find(element => element.name === section));
             //console.log(filteredSection.weightKg);
@@ -143,15 +138,15 @@ const formArticles = () => {
     const getArticlesBySection = (section) => {
         switch (section) {
             case 'BOLA':
-                return ['magre', 'grasa'];
+                return ['retall', 'nervis aquiles', 'ossos', 'greix', 'aponebrosi'];
             case 'BLOC':
-                return ['ossos', 'nervis'];
+                return ['retall', 'nervis', 'ossos', 'greix'];
             case 'FALDA':
-                return ['magre', 'grasa', 'nervis', 'ossos'];
+                return ['retall', 'nervi vacio', 'nervi pla', 'ossos', 'greix', 'aponebrosi'];
             case 'DEVANT':
-                return [ 'retall','magre', 'grasa', 'nervis', 'ossos'];
+                return ['retall', 'nervis', 'ossos', 'greix', 'T5', 'aponebrosi'];
             default:
-                return ['magre', 'grasa', 'nervis', 'ossos', 'altres'];
+                return ['retall', 'magre', 'nervis', 'ossos', 'greix', 'altres'];
         }
     };
     
@@ -211,12 +206,33 @@ const formArticles = () => {
                 </table>
 
                 <div className="flex items-center justify-between">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Envia formulari
-                    </button>
+                        
+                    {editMode ? (
+                        <>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Actualitza formulari
+                            </button>
+                            
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Cancel·la
+                            </button>
+                        </>
+
+                    ) : (
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="submit"
+                        >
+                            Envia formulari
+                        </button>
+                    )
+                    }
                 </div>
             </form>
 
