@@ -10,7 +10,20 @@ export async function fechDespiecePerDib() {
         // make a request to the database kais
         await connKais();
         const result = await sql.query`
-        SELECT
+
+        SELECT dib_id, procap.ofc_sscc, ARTICLES.art_descrip, * FROM ApmSSCC AS APM 
+            INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
+            RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
+            inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
+        WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
+        order by procap.art_codi asc;
+
+       
+        `;
+
+
+        /*
+         SELECT
         aprodmas.apm_numeroserie AS lot, 
         APM.apm_id as id, -- id del ordre de fabricació (quan ha llegit la yoya)
         APM.art_codi AS art_quarter,
@@ -49,10 +62,9 @@ export async function fechDespiecePerDib() {
     WHERE APM.dib_id = 'FR3222629662'
     AND (HU_CONTENIDOS.ART_CODI IS NOT NULL OR PACKING_HU_CONTENIDOS.ART_CODI IS NOT NULL)  AND (HU_CABECERA.HUC_PESO_NETO<>'0')
     ORDER BY art_quarter;
-        `;
 
+    -----------------------------------------------------------------------------------
 
-        /*
         const result = await sql.query`
         SELECT 
             aprodmas.apm_numeroserie AS lot,

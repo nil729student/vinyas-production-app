@@ -138,13 +138,13 @@ const formArticles = () => {
     const getArticlesBySection = (section) => {
         switch (section) {
             case 'BOLA':
-                return ['retall', 'nervis aquiles', 'ossos', 'greix', 'aponebrosi'];
+                return ['retall', 'magre', 'nervis aquiles', 'ossos', 'greix', 'aponebrosi'];
             case 'BLOC':
-                return ['retall', 'nervis', 'ossos', 'greix'];
+                return ['retall', 'magre', 'nervis', 'ossos', 'greix'];
             case 'FALDA':
-                return ['retall', 'nervi vacio', 'nervi pla', 'ossos', 'greix', 'aponebrosi'];
+                return ['retall', 'magre', 'nervi vacio', 'nervi pla', 'ossos', 'greix', 'aponebrosi'];
             case 'DEVANT':
-                return ['retall', 'nervis', 'ossos', 'greix', 'T5', 'aponebrosi'];
+                return ['retall', 'magre', 'nervis', 'ossos', 'greix', 'T5', 'aponebrosi'];
             default:
                 return ['retall', 'magre', 'nervis', 'ossos', 'greix', 'altres'];
         }
@@ -181,7 +181,6 @@ const formArticles = () => {
                     onChange={handleSectionChange}
                     placeholder="Pes"
                 />
-
 
                 <table className="w-full mb-4">
                     <thead>
@@ -252,7 +251,6 @@ const formArticles = () => {
                     />
                 ))}
             </div>
-
         </div>
     );
 };

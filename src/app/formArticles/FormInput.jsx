@@ -12,9 +12,9 @@ const FormInput = ({ label, name, type, placeholder, value, onChange }) => {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        required
       />
     </div>
   );
 };
-
 export default FormInput;

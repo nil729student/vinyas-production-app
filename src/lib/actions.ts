@@ -99,17 +99,19 @@ export async function createArticles (formData: FormData) {
 
 export async function createArticles(formData: FormData) {
   if (!formData['weightKgSection']) {
-    throw new Error("No s'ha introduit el pes del animal");
+    console.log("No s'ha introduit el pes del animal");
   }
 
   const articles = filterArticles(formData['articles']);
 
   try {
+
     const insertedAnimal = await createAnimal(formData['animalDib']);
 
     const parentArticle = await createMainArticle(formData, insertedAnimal);
 
     await createDerivedArticles(articles, parentArticle, insertedAnimal);
+
   } catch (error) {
     console.error("Error al insertar en la base de datos:", error);
   } finally {
@@ -141,6 +143,7 @@ async function createMainArticle(formData: FormData, insertedAnimal: number) {
 
   const mainArticleData: Prisma.ArticleCreateInput = {
     name: formData['section'] as string,
+    lot:  "", // articles[article]['Lot'] as string ?? "",
     description: '',
     price: 0,
     imagen: '',
@@ -165,6 +168,7 @@ async function createDerivedArticles(articles: any, parentArticle: any, inserted
     await prisma.article.create({
       data: {
         name: article as string,
+        lot:  "", // articles[article]['Lot'] as string ?? "",
         description: "",
         price: 0,
         imagen: "",
@@ -177,8 +181,6 @@ async function createDerivedArticles(articles: any, parentArticle: any, inserted
     });
   }
 }
-
-
 
 export async function getArticles() {
   try {
