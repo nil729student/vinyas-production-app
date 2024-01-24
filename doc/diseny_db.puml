@@ -6,6 +6,7 @@ RECTANGLE Animal {
   id: Int
   dib: String
   raza: String
+  classificationId: Int
   edad: Int
   articles: Article[]
 }
@@ -26,14 +27,30 @@ RECTANGLE Article {
   animalId: Int
 }
 
-RECTANGLE Category {
+RECTANGLE Classification {
   id: Int
   name: String
-  articles: Article[]
+  description: String?
+  animals: Animal[]
 }
+
+RECTANGLE Results {
+  articles: Article[]
+  MaxWeightKg: Int
+  MinWeightKg: Int
+  MediumWeightKg: Int
+  MaxPrice: Int
+  MinPrice: Int
+  MediumPrice: Int
+  Quantity: Int
+}
+
 
 Animal --|{ Article
 Article --o{ Article: parent
 Article --o{ Article: children
-Article --|{ Category
+Article --o{ Classification
+Classification --|{ Animal
+Results --|{ Article
+Classification --o{ Results
 @enduml

@@ -1,5 +1,5 @@
 // Fech de dades de la API
-
+"use server";
 // Retorna les peçes resultatnts de una un animal (dib_id) -> quarter (art_codi) -> despiece (art_codi)
 import { NextResponse } from "next/server";
 import { connKais } from "@/lib/connDBKais.js"; // Make sure to import dbConn with the correct name
@@ -10,15 +10,13 @@ export async function fechDespiecePerDib() {
         // make a request to the database kais
         await connKais();
         const result = await sql.query`
-
-        SELECT dib_id, procap.ofc_sscc, ARTICLES.art_descrip, * FROM ApmSSCC AS APM 
+        SELECT dib_id, procap.lot_codigo, huc_peso_neto as peso_cuartero, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
             INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
             RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
             inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
         WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
         order by procap.art_codi asc;
-
-       
+    
         `;
 
 
@@ -107,8 +105,19 @@ export async function fechDespiecePerDib() {
         `;
         */
         const data = result.recordset;
-        console.log(data);
         return data;
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ 'error': 'An error occurred.' }, { status: 500 });
+    }
+}
+
+
+export async function createEscandall(dataEscandall) {
+
+    try {
+        console.log('createEscandall', dataEscandall);
+        return NextResponse.json( 'Successful ', { status: 200 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ 'error': 'An error occurred.' }, { status: 500 });

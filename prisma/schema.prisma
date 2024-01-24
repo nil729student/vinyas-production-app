@@ -20,8 +20,10 @@ model Animal {
   id         Int      @id @default(autoincrement())
   dib        String   @unique
   race       String?
+  classificationId Int
   age       Int?
   articles   Article[]  // Un animal pot tenir molts articles
+  classification   Classification @relation(fields: [classificationId], references: [id]) // Un animal pot tenir una classificació
 }
 
 model Article {
@@ -32,21 +34,39 @@ model Article {
   units       Int
   unitsConsum Int
   price       Float
-  imagen      String
+  image      String
   weightKg    Float
-  // categoryId  Int
-  // category    Category     @relation(fields: [categoryId], references: [id])
-  animal      Animal       @relation(fields: [animalId], references: [id])
-  
-  parent      Article?     @relation("ChildToParent", fields: [parentId], references: [id])
-  parentId    Int?
+  animalId    Int
+  parentId    Int?       // Si es un article derivat d'un altre article 
 
-  children    Article[]    @relation("ChildToParent") // Artículos más pequeños derivados de este artículo
-  animalId    Int 
+  classificationArtId Int   // si es un article que té classificació
+  classification   Classification @relation(fields: [classificationArtId], references: [id])
+  results             Results[]     @relation("ArticleToResults")
+  animal      Animal       @relation(fields: [animalId], references: [id])
+  parent      Article?     @relation("ChildToParent", fields: [parentId], references: [id]) // cuan un hi hagui un es creara la columna 
+  children    Article[]    @relation("ChildToParent") // Un article pot tenir molts articles derivats d'ell
+  
+
 }
 
-//model Category {
-//  id       Int       @id @default(autoincrement())
-//  name     String
-//  articles Article[]
-//}
+model Classification {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  animals     Animal[]
+  articles    Article[]  // Una classificació pot tenir molts articles
+  results     Results[]   @relation("ClassificationToResults") 
+}
+
+model Results {
+  id             Int     @id @default(autoincrement())
+  MaxWeightKg    Int
+  MinWeightKg    Int
+  MediumWeightKg Int
+  MaxPrice       Int
+  MinPrice       Int
+  MediumPrice    Int
+  Quantity       Int
+  articles       Article[] @relation("ArticleToResults") // Un resultat pot tenir molts articles
+  classifications Classification[] @relation("ClassificationToResults") // Un resultat pot tenir moltes classificacions
+}
