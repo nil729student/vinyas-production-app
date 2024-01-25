@@ -1,7 +1,10 @@
 
+// env
+
+
 const sqlConfigKais = {
-  user: 'sa',
-  password: 'pokemon',
+  user: process.env.USER_KAIS,
+  password: process.env.PASSWORD_KAIS,
   database: 'gwsv',
   server: 'KAIS-SERVER\\KAIS',
   pool: {
@@ -15,5 +18,7 @@ const sqlConfigKais = {
 
   }
 }
+
+
 
 module.exports = sqlConfigKais

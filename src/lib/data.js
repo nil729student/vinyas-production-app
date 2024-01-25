@@ -4,21 +4,23 @@
 import { NextResponse } from "next/server";
 import { connKais } from "@/lib/connDBKais.js"; // Make sure to import dbConn with the correct name
 import sql from 'mssql';
+import prisma from "./prisma";
+import {createMainArticle, createDerivedArticles} from "./actions";
+
 
 export async function fechDespiecePerDib() {
     try {
         // make a request to the database kais
+        //await connKaisEscorxa();
         await connKais();
         const result = await sql.query`
-        SELECT dib_id, procap.lot_codigo, huc_peso_neto as peso_cuartero, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
-            INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
-            RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
-            inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
-        WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
-        order by procap.art_codi asc;
-    
+            SELECT dib_id, procap.lot_codigo, huc_peso_neto as peso_cuartero, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
+                INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
+                RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
+                inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
+            WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
+            order by procap.art_codi asc;
         `;
-
 
         /*
          SELECT
@@ -116,14 +118,60 @@ export async function fechDespiecePerDib() {
 export async function createEscandall(dataEscandall) {
 
     try {
-        console.log('createEscandall', dataEscandall);
-        return NextResponse.json( 'Successful ', { status: 200 });
+        const promises = dataEscandall.map(item => {
+            return Promise.all([createAnimal(item), createArticle(item)]);
+        });
+
+        await Promise.all(promises);
+        return { message: 'Escandall Created' };
     } catch (error) {
-        console.error(error);
-        return NextResponse.json({ 'error': 'An error occurred.' }, { status: 500 });
+        return { message: 'Database Error: Failed to Create Escandall' };
     }
 }
 
+
+
+
+const createAnimal = async (item) => {
+
+    try {
+
+        await prisma.animal.create({
+
+            data: {
+                dib: item.dib_id,
+                race: "",
+                classificationId: 1,
+                age: 10,
+            }
+        });
+        return { message: 'Animal Created' };
+    }
+    catch (error) {
+        return { message: 'Database Error: Failed to Create Animal' };
+    }
+}
+
+const createArticle = async (item) => {
+
+    try {
+
+        await prisma.article.create({
+                
+                data: {
+                    code: item.art_codi,
+                    description: item.art_descrip,
+                    type: "quarter",
+                    classificationId: 1,
+                    weight: item.peso_art,
+                }
+        });
+        return { message: 'Article Created' };
+    }
+    catch (error) {
+        return { message: 'Database Error: Failed to Create Article' };
+    }
+}
 
 /*
 

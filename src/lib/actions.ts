@@ -129,6 +129,7 @@ async function createAnimal(dib: string) {
   const newAnimal = await prisma.animal.create({
     data: {
       dib: dib as string,
+      classification: { connect: { id: 1 } },
     },
     select: {
       id: true,
@@ -140,17 +141,18 @@ async function createAnimal(dib: string) {
 
 async function createMainArticle(formData: FormData, insertedAnimal: number) {
   const weightKgValue: string | null = formData['weightKgSection'] as string | null;
-
   const mainArticleData: Prisma.ArticleCreateInput = {
     name: formData['section'] as string,
     lot:  "", // articles[article]['Lot'] as string ?? "",
     description: '',
     price: 0,
-    imagen: '',
+    image: '',
     weightKg: weightKgValue ? parseFloat(weightKgValue) : null,
-    animal: { connect: { id: insertedAnimal } },
+    classification: { connect: { id: 1 }},// formData['classification'] as number } },
     units: 1,
     unitsConsum: 1,
+    animal: { connect: { id: insertedAnimal } },
+    art_codi: 1,
   };
 
   const parentArticle = await prisma.article.create({
@@ -171,12 +173,14 @@ async function createDerivedArticles(articles: any, parentArticle: any, inserted
         lot:  "", // articles[article]['Lot'] as string ?? "",
         description: "",
         price: 0,
-        imagen: "",
+        image: "",
         units: parseInt(articles[article]['Unitats']) as number,
         unitsConsum: parseInt(articles[article]['UnitatsConsum']) as number,
         weightKg: parseFloat(articles[article]['Pes']) as number,
+        classification: { connect: { id: 1 }}, //articles[article]['classification'] as number } },
         parent: { connect: { id: parentArticle.id as number } },
         animal: { connect: { id: insertedAnimal } },
+        art_codi: 2,
       },
     });
   }

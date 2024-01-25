@@ -17,17 +17,18 @@ model Usuario {
 }
 
 model Animal {
-  id         Int      @id @default(autoincrement())
-  dib        String   @unique
-  race       String?
-  classificationId Int
-  age       Int?
-  articles   Article[]  // Un animal pot tenir molts articles
-  classification   Classification @relation(fields: [classificationId], references: [id]) // Un animal pot tenir una classificació
+  id                 Int             @id @default(autoincrement())
+  dib                String          @unique
+  race               String?
+  classificationId   Int
+  age                Int?
+  articles           Article[]      // un animal pot tenir molts articles o no tenir-ne cap
+  classification     Classification  @relation(fields: [classificationId], references: [id]) // An animal can have a classification
 }
 
 model Article {
   id          Int         @id @default(autoincrement())
+  art_codi    Int
   lot         String      
   name        String
   description String
