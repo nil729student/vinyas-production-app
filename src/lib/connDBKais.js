@@ -1,12 +1,22 @@
 
 
 import sql from 'mssql';
-import configKais from './sqlConfigKais';
+import configKais from './config/sqlConfigKais';
+import sqlConfigKaisEscorxa from './config/sqlConfigKaisEscorxa';
 
-async function connKais() { // This name is fine
+async function connKais() { 
   try {
     await sql.connect(configKais);
-    console.log('Connected to the database');
+    console.log('Connected to the database Kais gwsv');
+  } catch (error) {
+    console.error('Database connection error:', error);
+  }
+}
+
+async function connKaisEscorxa() { 
+  try {
+    await sql.connect(sqlConfigKaisEscorxa);
+    console.log('Connected to the database Kais escorxa');
   } catch (error) {
     console.error('Database connection error:', error);
   }
@@ -14,4 +24,5 @@ async function connKais() { // This name is fine
 
 module.exports = {
   connKais,
+  connKaisEscorxa
 };

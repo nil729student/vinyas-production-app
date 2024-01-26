@@ -22,6 +22,7 @@ model Animal {
   race               String?
   classificationId   Int
   age                Int?
+  sexe               String
   articles           Article[]      // un animal pot tenir molts articles o no tenir-ne cap
   classification     Classification  @relation(fields: [classificationId], references: [id]) // An animal can have a classification
 }

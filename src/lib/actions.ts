@@ -130,6 +130,7 @@ async function createAnimal(dib: string) {
     data: {
       dib: dib as string,
       classification: { connect: { id: 1 } },
+      sexe: 'M',
     },
     select: {
       id: true,

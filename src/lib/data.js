@@ -2,10 +2,35 @@
 "use server";
 // Retorna les peçes resultatnts de una un animal (dib_id) -> quarter (art_codi) -> despiece (art_codi)
 import { NextResponse } from "next/server";
-import { connKais } from "@/lib/connDBKais.js"; // Make sure to import dbConn with the correct name
+import { connKais, connKaisEscorxa } from "@/lib/connDBKais.js"; // Make sure to import dbConn with the correct name
 import sql from 'mssql';
 import prisma from "./prisma";
 import {createMainArticle, createDerivedArticles} from "./actions";
+
+
+export async function fechAnimalByDib( dib_id ) {
+    try{
+        
+        await connKaisEscorxa();
+        const animal = await sql.query`
+            SELECT
+                SUBSTRING(dib_id, 1, 11) as dib_id,
+                lpa_pes, 
+                lpa_qualitatabr, 
+                lpa_sexe 
+            FROM LpaPesos 
+                WHERE dib_id 
+                LIKE ${dib_id + '%'}`;
+
+        const data = animal.recordset;
+        sql.close();
+        return data;
+    }
+    catch(error){
+        console.error(error);
+        return error;
+    }
+}
 
 
 export async function fechDespiecePerDib() {
@@ -21,7 +46,7 @@ export async function fechDespiecePerDib() {
             WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
             order by procap.art_codi asc;
         `;
-
+        
         /*
          SELECT
         aprodmas.apm_numeroserie AS lot, 
@@ -107,6 +132,7 @@ export async function fechDespiecePerDib() {
         `;
         */
         const data = result.recordset;
+        sql.close();
         return data;
     } catch (error) {
         console.error(error);
@@ -118,11 +144,12 @@ export async function fechDespiecePerDib() {
 export async function createEscandall(dataEscandall) {
 
     try {
-        const promises = dataEscandall.map(item => {
-            return Promise.all([createAnimal(item), createArticle(item)]);
-        });
 
-        await Promise.all(promises);
+        console.log(dataEscandall);
+        // Aixó funciona: await createAnimal(dataEscandall);
+        await Promise.all([createAnimal(dataEscandall), createArticle(dataEscandall)]);
+
+        // Promise.all(promises);
         return { message: 'Escandall Created' };
     } catch (error) {
         return { message: 'Database Error: Failed to Create Escandall' };
@@ -135,7 +162,7 @@ export async function createEscandall(dataEscandall) {
 const createAnimal = async (item) => {
 
     try {
-
+        console.log(item.dib_id, item.lpa_sexe);
         await prisma.animal.create({
 
             data: {
@@ -143,6 +170,7 @@ const createAnimal = async (item) => {
                 race: "",
                 classificationId: 1,
                 age: 10,
+                sexe: item.lpa_sexe,
             }
         });
         return { message: 'Animal Created' };
@@ -155,16 +183,20 @@ const createAnimal = async (item) => {
 const createArticle = async (item) => {
 
     try {
-
-        await prisma.article.create({
-                
-                data: {
-                    code: item.art_codi,
-                    description: item.art_descrip,
-                    type: "quarter",
-                    classificationId: 1,
-                    weight: item.peso_art,
-                }
+        console.log(item.despiece);
+        const data = item.despiece.map((item) =>({
+            art_codi: parseInt(item.art_codi),
+            lot: parseInt(item.lot_codigo),
+            name: item.art_descrip.trim(),
+            units: 1,
+            unitsConsum: 1,
+            price: 0,
+            image: "",
+            weightKg: item.peso_art,
+            animalId: item.dib_id,
+        }));
+        await prisma.article.createMany({
+            data,
         });
         return { message: 'Article Created' };
     }
