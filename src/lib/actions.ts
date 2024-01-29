@@ -108,9 +108,9 @@ export async function createArticles(formData: FormData) {
 
     const insertedAnimal = await createAnimal(formData['animalDib']);
 
-    const parentArticle = await createMainArticle(formData, insertedAnimal);
+    const parentArticle = await createMainArticleByForm(formData, insertedAnimal);
 
-    await createDerivedArticles(articles, parentArticle, insertedAnimal);
+    await createDerivedArticlesByForm(articles, parentArticle, insertedAnimal);
 
   } catch (error) {
     console.error("Error al insertar en la base de datos:", error);
@@ -140,7 +140,7 @@ async function createAnimal(dib: string) {
   return newAnimal.id as number;
 }
 
-async function createMainArticle(formData: FormData, insertedAnimal: number) {
+async function createMainArticleByForm(formData: FormData, insertedAnimal: number) {
   const weightKgValue: string | null = formData['weightKgSection'] as string | null;
   const mainArticleData: Prisma.ArticleCreateInput = {
     name: formData['section'] as string,
@@ -159,14 +159,14 @@ async function createMainArticle(formData: FormData, insertedAnimal: number) {
   const parentArticle = await prisma.article.create({
     data: mainArticleData,
     select: {
-      id: true,
+      id: true, // 
     }
   });
 
   return parentArticle;
 }
 
-async function createDerivedArticles(articles: any, parentArticle: any, insertedAnimal: number) {
+async function createDerivedArticlesByForm(articles: any, parentArticle: any, insertedAnimal: number) {
   for (const article in articles) {
     await prisma.article.create({
       data: {

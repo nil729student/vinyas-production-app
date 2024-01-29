@@ -5,12 +5,12 @@ import { NextResponse } from "next/server";
 import { connKais, connKaisEscorxa } from "@/lib/connDBKais.js"; // Make sure to import dbConn with the correct name
 import sql from 'mssql';
 import prisma from "./prisma";
-import {createMainArticle, createDerivedArticles} from "./actions";
+import { createMainArticleByForm, createDerivedArticles } from "./actions";
 
 
-export async function fechAnimalByDib( dib_id ) {
-    try{
-        
+export async function fechAnimalByDib(dib_id) {
+    try {
+
         await connKaisEscorxa();
         const animal = await sql.query`
             SELECT
@@ -26,7 +26,7 @@ export async function fechAnimalByDib( dib_id ) {
         sql.close();
         return data;
     }
-    catch(error){
+    catch (error) {
         console.error(error);
         return error;
     }
@@ -46,7 +46,7 @@ export async function fechDespiecePerDib() {
             WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
             order by procap.art_codi asc;
         `;
-        
+
         /*
          SELECT
         aprodmas.apm_numeroserie AS lot, 
@@ -147,7 +147,7 @@ export async function createEscandall(dataEscandall) {
 
         console.log(dataEscandall);
         // Aixó funciona: await createAnimal(dataEscandall);
-        await Promise.all([createAnimal(dataEscandall), createArticle(dataEscandall)]);
+        await Promise.all([createAnimal(dataEscandall), createArticles(dataEscandall)]);
 
         // Promise.all(promises);
         return { message: 'Escandall Created' };
@@ -156,14 +156,10 @@ export async function createEscandall(dataEscandall) {
     }
 }
 
-
-
-
 const createAnimal = async (item) => {
-
+    console.log(item, item.lot_codigo, item.art_descrip);
     try {
-        console.log(item.dib_id, item.lpa_sexe);
-        await prisma.animal.create({
+        const newAnimal = await prisma.animal.create({
 
             data: {
                 dib: item.dib_id,
@@ -171,26 +167,57 @@ const createAnimal = async (item) => {
                 classificationId: 1,
                 age: 10,
                 sexe: item.lpa_sexe,
+            },
+            select: {
+                id: true,
             }
         });
-        return { message: 'Animal Created' };
+
+        await createMainArticleByAnimal(newAnimal, item);
+        //return newAnimal.id;
+
     }
     catch (error) {
         return { message: 'Database Error: Failed to Create Animal' };
     }
 }
 
-const createArticle = async (item) => {
+const createMainArticleByAnimal = async (newAnimal, item) => {
+    try {
+        console.log(newAnimal.id);
+        await prisma.article.create({
+            data: {
+                name: "canals",
+                lot:  "", // articles[article]['Lot'] as string ?? "",
+                description: '',
+                price: 0,
+                image: '',
+                weightKg: item.lpa_pes,
+                classification: { connect: { id: 1 }},// formData['classification'] as number } },
+                units: 2,
+                unitsConsum: 2,
+                animal: { connect: newAnimal },
+                art_codi: 1,
+            }
+        });
+    }catch (error) {
+        return { message: 'Database Error: Failed to Create Article' };
+    }
+}
+
+
+const createArticles = async (item) => {
 
     try {
+        // function createMainArticle(item);
+        // function createDerivedArticles(item);
         console.log(item.despiece);
-        const data = item.despiece.map((item) =>({
+        const data = item.despiece.map((item) => ({
             art_codi: parseInt(item.art_codi),
             lot: parseInt(item.lot_codigo),
             name: item.art_descrip.trim(),
             units: 1,
-            unitsConsum: 1,
-            price: 0,
+            unitsConsum: 1,            price: 0,
             image: "",
             weightKg: item.peso_art,
             animalId: item.dib_id,
@@ -206,14 +233,10 @@ const createArticle = async (item) => {
 }
 
 /*
-
-
 escandalls 
 
 aponeurosi  s'ha de agafar amb el (PAD) si no s'ha de agafar la aponeurosi del (PAD)
 
 Atributs compostos:
 - APONEBROSI esta compost per: PAD
-
-
 */
