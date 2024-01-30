@@ -6,6 +6,7 @@ import { connKais, connKaisEscorxa } from "@/lib/connDBKais.js"; // Make sure to
 import sql from 'mssql';
 import prisma from "./prisma";
 import { createMainArticleByForm, createDerivedArticles } from "./actions";
+import { data } from "autoprefixer";
 
 
 export async function fechAnimalByDib(dib_id) {
@@ -146,8 +147,14 @@ export async function createEscandall(dataEscandall) {
     try {
 
         console.log(dataEscandall);
+
         // Aixó funciona: await createAnimal(dataEscandall);
-        await Promise.all([createAnimal(dataEscandall), createArticles(dataEscandall)]);
+
+
+
+        const animalId = await createAnimal(dataEscandall);
+        await createMainArticleByAnimal(animalId, dataEscandall);
+        await createArticles(dataEscandall, animalId);
 
         // Promise.all(promises);
         return { message: 'Escandall Created' };
@@ -172,10 +179,8 @@ const createAnimal = async (item) => {
                 id: true,
             }
         });
-
-        await createMainArticleByAnimal(newAnimal, item);
-        //return newAnimal.id;
-
+        //await createMainArticleByAnimal(newAnimal, item);
+        return newAnimal;
     }
     catch (error) {
         return { message: 'Database Error: Failed to Create Animal' };
@@ -184,10 +189,9 @@ const createAnimal = async (item) => {
 
 const createMainArticleByAnimal = async (newAnimal, item) => {
     try {
-        console.log(newAnimal.id);
         await prisma.article.create({
             data: {
-                name: "canals",
+                name: "CANAL",
                 lot:  "", // articles[article]['Lot'] as string ?? "",
                 description: '',
                 price: 0,
@@ -198,34 +202,60 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
                 unitsConsum: 2,
                 animal: { connect: newAnimal },
                 art_codi: 1,
-            }
+            },
         });
+
+
+
+
     }catch (error) {
         return { message: 'Database Error: Failed to Create Article' };
     }
 }
 
 
-const createArticles = async (item) => {
+const createArticles = async (articles, animalId) => {
 
     try {
         // function createMainArticle(item);
         // function createDerivedArticles(item);
-        console.log(item.despiece);
-        const data = item.despiece.map((item) => ({
-            art_codi: parseInt(item.art_codi),
-            lot: parseInt(item.lot_codigo),
+        /*const data = item.despiece.map((item) => ({
             name: item.art_descrip.trim(),
-            units: 1,
-            unitsConsum: 1,            price: 0,
+            lot: "20240130",
+            description: "",     
+            price: 0,
             image: "",
-            weightKg: item.peso_art,
-            animalId: item.dib_id,
+            weightKg: 4.00,
+            classification: { connect: { id: 1 }},
+            units: 1,
+            unitsConsum: 1,       
+            animal: { connect: 31 },
+            art_codi: 1,
         }));
-        await prisma.article.createMany({
-            data,
+        */
+
+        console.log(articles);
+
+        const dataArticles = articles.despiece.map((article) => ({
+            name: article.art_descrip.trim(),
+            lot: article.lot_codigo,
+            description: "",
+            price: 0,
+            image: "",
+            weightKg: article.peso_art,
+            classification: { connect: { id: 1 } },
+            units: 1,
+            unitsConsum: 1,
+            animal: { connect: animalId},
+            art_codi: 1,
+        }));
+        //console.log(dataArticles);
+
+        dataArticles.forEach(async (item) => {
+            await prisma.article.create({
+                data: item,
+            });
         });
-        return { message: 'Article Created' };
     }
     catch (error) {
         return { message: 'Database Error: Failed to Create Article' };
