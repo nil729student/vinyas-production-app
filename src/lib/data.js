@@ -11,7 +11,6 @@ import { data } from "autoprefixer";
 
 export async function fechAnimalByDib(dib_id) {
     try {
-
         await connKaisEscorxa();
         const animal = await sql.query`
             SELECT
@@ -22,7 +21,14 @@ export async function fechAnimalByDib(dib_id) {
             FROM LpaPesos 
                 WHERE dib_id 
                 LIKE ${dib_id + '%'}`;
-
+                /*
+                animal: {
+                    dib_id: 'CZ830760081',
+                    lpa_pes: 0,
+                    lpa_qualitatabr: '',
+                    lpa_sexe: 'M'
+                },
+                */
         const data = animal.recordset;
         sql.close();
         return data;
@@ -33,6 +39,9 @@ export async function fechAnimalByDib(dib_id) {
     }
 }
 
+export async function fechQuarterByDib(dib_id) {
+
+}
 
 export async function fechDespiecePerDib() {
     try {
@@ -40,98 +49,75 @@ export async function fechDespiecePerDib() {
         //await connKaisEscorxa();
         await connKais();
         const result = await sql.query`
-            SELECT dib_id, procap.lot_codigo, huc_peso_neto as peso_cuartero, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
+            SELECT HUC_LOTE AS dib_id, HUC_LOTE as lot_codigo, '' as art_codi, HUC_DESCRIPCION AS art_descrip, HUC_PESO_NETO as peso_art from HISTORICO_HU where HuC_LOTE='CZ830760081'
+            UNION ALL
+            SELECT dib_id, procap.lot_codigo, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
                 INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
                 RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
                 inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
             WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
-            order by procap.art_codi asc;
+            order by art_descrip asc;
         `;
 
         /*
-         SELECT
-        aprodmas.apm_numeroserie AS lot, 
-        APM.apm_id as id, -- id del ordre de fabricació (quan ha llegit la yoya)
-        APM.art_codi AS art_quarter,
-        APM.huc_sscc AS sscc_quarter,
-        APMD.art_codi AS art_despiece,
-        APMD.huc_sscc AS sscc_despiece,
-        HU_CONTENIDOS.ART_CODI AS art_stock,
-        HU_CABECERA.HUC_PESO_NETO AS Art_peso,
-        PACKING_HU_CONTENIDOS.ART_CODI AS art_venta,
-        PACKING_HU.HUC_PESO_NETO
-    FROM ApmSSCC AS APM
-        INNER JOIN ApmSSCC_Despiece AS APMD 
-        ON APM.aps_id = APMD.aps_id
 
-        INNER JOIN aprodmas 
-        ON APM.apm_id = aprodmas.apm_id
-
-        INNER JOIN HISTORICO_HU 
-        ON HISTORICO_HU.HUC_SSCC = APM.huc_sscc
-
-        INNER JOIN HISTORICO_HU_CONTENIDOS 
-        ON HISTORICO_HU_CONTENIDOS.HUC_ID = HISTORICO_HU.HUC_ID
-
-        INNER JOIN HU_CABECERA 
-        ON APMD.huc_sscc = HU_CABECERA.HUC_SSCC
-
-        INNER JOIN HU_CONTENIDOS 
-        ON HU_CABECERA.huc_id = HU_CONTENIDOS.HUC_ID
-
-        LEFT JOIN PACKING_HU 
-        ON APMD.huc_sscc = PACKING_HU.huc_SSCC
-
-        LEFT JOIN PACKING_HU_CONTENIDOS 
-        ON PACKING_HU.PKLL_ID = PACKING_HU_CONTENIDOS.PKLL_ID
-
-    WHERE APM.dib_id = 'FR3222629662'
-    AND (HU_CONTENIDOS.ART_CODI IS NOT NULL OR PACKING_HU_CONTENIDOS.ART_CODI IS NOT NULL)  AND (HU_CABECERA.HUC_PESO_NETO<>'0')
-    ORDER BY art_quarter;
-
-    -----------------------------------------------------------------------------------
-
-        const result = await sql.query`
-        SELECT 
-            aprodmas.apm_numeroserie AS lot,
-            APM.art_codi AS art_quarter,
-            APM.huc_sscc AS sscc_quarter,
-            APMD.art_codi AS art_despiece,
-            APMD.huc_sscc AS sscc_despiece,
-            HU_CONTENIDOS.ART_CODI AS art_stock,
-            HU_CABECERA.HUC_PESO_NETO AS Art_peso,
-            PACKING_HU_CONTENIDOS.ART_CODI AS art_venta,
-            PACKING_HU.HUC_PESO_NETO
-        FROM ApmSSCC AS APM
-            INNER JOIN ApmSSCC_Despiece AS APMD 
-            ON APM.aps_id = APMD.aps_id
-
-            INNER JOIN aprodmas 
-            ON APM.apm_id = aprodmas.apm_id
-
-            INNER JOIN HISTORICO_HU 
-            ON HISTORICO_HU.HUC_SSCC = APM.huc_sscc
-
-            INNER JOIN HISTORICO_HU_CONTENIDOS 
-            ON HISTORICO_HU_CONTENIDOS.HUC_ID = HISTORICO_HU.HUC_ID
-
-            INNER JOIN HU_CABECERA 
-            ON APMD.huc_sscc = HU_CABECERA.HUC_SSCC
-
-            INNER JOIN HU_CONTENIDOS 
-            ON HU_CABECERA.huc_id = HU_CONTENIDOS.HUC_ID
-
-            LEFT JOIN PACKING_HU 
-            ON APMD.huc_sscc = PACKING_HU.huc_SSCC
-
-            LEFT JOIN PACKING_HU_CONTENIDOS 
-            ON PACKING_HU.PKLL_ID = PACKING_HU_CONTENIDOS.PKLL_ID
-
-        WHERE APM.dib_id = 'CZ677862072'
-        AND (HU_CONTENIDOS.ART_CODI IS NOT NULL OR PACKING_HU_CONTENIDOS.ART_CODI IS NOT NULL) -- AND (HU_CABECERA.HUC_PESO_NETO<>'0')
-        ORDER BY art_quarter;
-        `;
+                canal: [{
+                    lot_codigo: '20240130',
+                    art_descrip: 'CANAL',
+                    peso_art: 0
+                    quarter: [{
+                        davant[{
+                            lot_codigo: '20240130',
+                            art_descrip: 'peça 1',
+                            peso_art: 0
+                            despice: [{
+                                lot_codigo: '20240130',
+                                art_descrip: 'peça 1',
+                                peso_art: 0
+                            }]
+                        }],
+                        darrera: [{
+                            lot_codigo: '20240130',
+                            art_descrip: 'peça 1',
+                            peso_art: 0
+                            despice: [{
+                                lot_codigo: '20240130',
+                                art_descrip: 'peça 1',
+                                peso_art: 0
+                            }]
+                        }],
+                    }]
+                }],
++               canal: [{ 
++                   lot_codigo: '20240130',
+                    art_descrip: 'CANAL',
+                    peso_art: 0
+                    quarter: [{
+                        davant[{
+                            lot_codigo: '20240130',
+                            art_descrip: 'peça 1',
+                            peso_art: 0
+                            despice: [{
+                                lot_codigo: '20240130',
+                                art_descrip: 'peça 1',
+                                peso_art: 0
+                            }]
+                        }],
+                        darrera: [{
+                            lot_codigo: '20240130',
+                            art_descrip: 'peça 1',
+                            peso_art: 0
+                            despice: [{
+                                lot_codigo: '20240130',
+                                art_descrip: 'peça 1',
+                                peso_art: 0
+                            }]
+                        }],
+                    }]
++               }],
+            },
         */
+
         const data = result.recordset;
         sql.close();
         return data;
@@ -149,12 +135,9 @@ export async function createEscandall(dataEscandall) {
         console.log(dataEscandall);
 
         // Aixó funciona: await createAnimal(dataEscandall);
-
-
-
         const animalId = await createAnimal(dataEscandall);
-        await createMainArticleByAnimal(animalId, dataEscandall);
-        await createArticles(dataEscandall, animalId);
+        const articleAnimalId = await createMainArticleByAnimal(animalId, dataEscandall);
+        await createArticles(dataEscandall, articleAnimalId, animalId);
 
         // Promise.all(promises);
         return { message: 'Escandall Created' };
@@ -188,8 +171,9 @@ const createAnimal = async (item) => {
 }
 
 const createMainArticleByAnimal = async (newAnimal, item) => {
+
     try {
-        await prisma.article.create({
+        const animalArticle = await prisma.article.create({
             data: {
                 name: "CANAL",
                 lot:  "", // articles[article]['Lot'] as string ?? "",
@@ -203,9 +187,12 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
                 animal: { connect: newAnimal },
                 art_codi: 1,
             },
+            select: {
+                id: true,
+            }
         });
-
-
+        console.log(animalArticle);
+        return animalArticle
 
 
     }catch (error) {
@@ -214,7 +201,7 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
 }
 
 
-const createArticles = async (articles, animalId) => {
+const createArticles = async (articles, parentArticle, animalId) => {
 
     try {
         // function createMainArticle(item);
@@ -234,7 +221,7 @@ const createArticles = async (articles, animalId) => {
         }));
         */
 
-        console.log(articles);
+        console.log(articles, parentArticle, animalId);
 
         const dataArticles = articles.despiece.map((article) => ({
             name: article.art_descrip.trim(),
@@ -247,6 +234,7 @@ const createArticles = async (articles, animalId) => {
             units: 1,
             unitsConsum: 1,
             animal: { connect: animalId},
+            parent: {connect: parentArticle},
             art_codi: 1,
         }));
         //console.log(dataArticles);

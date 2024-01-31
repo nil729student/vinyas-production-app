@@ -8,7 +8,8 @@ export default function LoadData() {
 
     const fetchData = async () => {
         try {
-            const [animal, resultat] = await Promise.all([fechAnimalByDib('CZ830760081'), fechDespiecePerDib()]);
+            const dib = 'CZ830760081';
+            const [animal, resultat] = await Promise.all([fechAnimalByDib(dib), fechDespiecePerDib()]);
             const plainObject = JSON.parse(JSON.stringify(resultat));
             const plainObjectAnimal_Escandall = JSON.parse(JSON.stringify(animal));
             plainObjectAnimal_Escandall[0].despiece = plainObject;
