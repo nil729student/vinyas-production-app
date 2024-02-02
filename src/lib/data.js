@@ -6,7 +6,7 @@ import { connKais, connKaisEscorxa } from "@/lib/connDBKais.js"; // Make sure to
 import sql from 'mssql';
 import prisma from "./prisma";
 import { createMainArticleByForm, createDerivedArticles } from "./actions";
-import { data } from "autoprefixer";
+
 
 
 export async function fechAnimalByDib(dib_id) {
@@ -21,14 +21,14 @@ export async function fechAnimalByDib(dib_id) {
             FROM LpaPesos 
                 WHERE dib_id 
                 LIKE ${dib_id + '%'}`;
-                /*
-                animal: {
-                    dib_id: 'CZ830760081',
-                    lpa_pes: 0,
-                    lpa_qualitatabr: '',
-                    lpa_sexe: 'M'
-                },
-                */
+        /*
+        animal: {
+            dib_id: 'CZ830760081',
+            lpa_pes: 0,
+            lpa_qualitatabr: '',
+            lpa_sexe: 'M'
+        },
+        */
         const data = animal.recordset;
         sql.close();
         return data;
@@ -39,8 +39,93 @@ export async function fechAnimalByDib(dib_id) {
     }
 }
 
-export async function fechQuarterByDib(dib_id) {
+function formatArticles(data) {
+    let canals = [];
 
+    // Paso 1: Crear los canales
+    for (let item of data) {
+        if (item.art_codi.trim() == '001007') {
+            // Crear canal
+            const canal = {
+                dib_id: item.dib_id.trim(),
+                lot_codigo: item.lot_codigo.trim(),
+                art_codi: item.art_codi.trim(),
+                art_descrip: item.art_descrip.trim(),
+                peso_art: [],
+                quarter: {
+                    davants: [],
+                    derreres: []
+                }
+            };
+            // enviali al array canals
+            canals.push(canal);
+            break;
+        }
+    }
+    const pesArtCanal = data.map((item) => {
+        if (item.art_codi.trim() == '001007') {
+            return item.peso_art;
+        }
+    }).filter((value) => value !== undefined); // Filter out undefined values
+
+    canals[0].peso_art = pesArtCanal;
+
+
+    // Paso 2: Organiza els quarts per canal
+    for (let item of data) {
+        // Buscar el canal
+        const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
+        // Crear el quarter
+        const quarter = {
+            lot_codigo: item.lot_codigo.trim(),
+            art_codi: item.art_codi.trim(),
+            art_descrip: item.art_descrip.trim(),
+            peso_art: [],
+            despiece: []
+        };
+        
+        if ( item.art_codi.trim() == '001107' ){
+            // Añadir el quarter al canal
+            canal.quarter.davants.push(quarter);
+        }
+        if ( item.art_codi.trim() == '001307' ){
+            // Añadir el quarter al canal
+            canal.quarter.derreres.push(quarter);
+        }
+
+        // treu els elemnets repetits del array de derreres i davants
+        canal.quarter.davants = [...new Map(canal.quarter.davants.map(item => [item['lot_codigo'], item])).values()];
+        canal.quarter.derreres = [...new Map(canal.quarter.derreres.map(item => [item['lot_codigo'], item])).values()];
+    }
+    // Paso 3: Organizar despieces por lote en cada quarter segun el lote del quarter i el lote del despiece
+    for (let item of data) {
+        // Buscar el canal
+        const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
+        let artDavant = canal.quarter.davants[0]
+        let artDerrere = canal.quarter.derreres[0]
+        // Crear el despiece
+        const despiece = {
+            lot_codigo: item.lot_codigo.trim(),
+            art_codi: item.art_codi.trim(),
+            art_descrip: item.art_descrip.trim(),
+            peso_art: item.peso_art
+        };
+        // carregem les dades diferents a la canal i els quartes: davants i derreres
+        if (item.art_codi.trim() !== '001107' && item.art_codi.trim() !== '001307' && item.art_codi.trim() !== '001007' ) {
+
+            if (item.lot_codigo.trim() == artDavant.lot_codigo) {
+                // Añadir el despiece al quarter
+                artDavant.despiece.push(despiece);
+            }
+            if (item.lot_codigo.trim() == artDerrere.lot_codigo) {
+                // Añadir el despiece al quarter
+                artDerrere.despiece.push(despiece);
+            }
+
+        }
+        
+    }
+    return canals;
 }
 
 export async function fechDespiecePerDib() {
@@ -49,14 +134,51 @@ export async function fechDespiecePerDib() {
         //await connKaisEscorxa();
         await connKais();
         const result = await sql.query`
-            SELECT HUC_LOTE AS dib_id, HUC_LOTE as lot_codigo, '' as art_codi, HUC_DESCRIPCION AS art_descrip, HUC_PESO_NETO as peso_art from HISTORICO_HU where HuC_LOTE='CZ830760081'
-            UNION ALL
-            SELECT dib_id, procap.lot_codigo, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
-                INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
-                RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
-                inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
-            WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
-            order by art_descrip asc;
+        -- Treiem les canals
+        SELECT 
+            LOT_CODIGO AS dib_id, 
+            LOT_CODIGO AS lot_codigo, 
+            ART_CODI AS art_codi, 
+            HISTORICO_HU_CONTENIDOS.HUC_DESCRIPCION AS art_descrip, 
+            HUC_PESO AS peso_art  
+            FROM
+            HISTORICO_HU 
+            JOIN 
+            HISTORICO_HU_CONTENIDOS ON HISTORICO_HU_CONTENIDOS.HUC_ID = HISTORICO_HU.HUC_ID
+        WHERE LOT_CODIGO = 'CZ830760081' AND HISTORICO_HU.HUC_SSCC LIKE '2%'
+        
+        UNION ALL
+        
+        -- Treiem els quarts
+        SELECT 
+            dib_id,
+            lot_codigo,
+            ApmSSCC.art_codi,
+            ARTICLES.art_descrip,
+            ApmSSCC.huc_peso_neto AS peso_art
+        FROM 
+            ApmSSCC 
+        JOIN 
+            ApmSSCC_Despiece 
+        ON 
+            ApmSSCC_Despiece.aps_id = ApmSSCC.aps_id
+        join 
+            ARTICLES
+        ON
+            ARTICLES.art_codi = ApmSSCC.art_codi
+        WHERE 
+            ApmSSCC.dib_id = 'CZ830760081'
+        GROUP BY 
+            dib_id, ApmSSCC.art_codi, ApmSSCC.huc_peso_neto, lot_codigo, ApmSSCC.huc_sscc, ARTICLES.art_descrip
+        
+        UNION ALL
+        --Treiem les peçes que passen per l'etiquetatge automatic
+        SELECT dib_id, procap.lot_codigo, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
+            INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
+            RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
+            inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
+        WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
+        order by peso_art desc; 
         `;
 
         /*
@@ -66,7 +188,7 @@ export async function fechDespiecePerDib() {
                     art_descrip: 'CANAL',
                     peso_art: 0
                     quarter: [{
-                        davant[{
+                        davant : [{
                             lot_codigo: '20240130',
                             art_descrip: 'peça 1',
                             peso_art: 0
@@ -114,11 +236,14 @@ export async function fechDespiecePerDib() {
                             }]
                         }],
                     }]
-+               }],
+               }],
             },
         */
+        const dataArticlesFormat = formatArticles(result.recordset);
+        const data = dataArticlesFormat;
 
-        const data = result.recordset;
+        console.log(data);
+
         sql.close();
         return data;
     } catch (error) {
@@ -131,8 +256,6 @@ export async function fechDespiecePerDib() {
 export async function createEscandall(dataEscandall) {
 
     try {
-
-        console.log(dataEscandall);
 
         // Aixó funciona: await createAnimal(dataEscandall);
         const animalId = await createAnimal(dataEscandall);
@@ -147,7 +270,6 @@ export async function createEscandall(dataEscandall) {
 }
 
 const createAnimal = async (item) => {
-    console.log(item, item.lot_codigo, item.art_descrip);
     try {
         const newAnimal = await prisma.animal.create({
 
@@ -175,13 +297,13 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
     try {
         const animalArticle = await prisma.article.create({
             data: {
-                name: "CANAL",
-                lot:  "", // articles[article]['Lot'] as string ?? "",
+                name: item.name,
+                lot: "", // articles[article]['Lot'] as string ?? "",
                 description: '',
                 price: 0,
                 image: '',
                 weightKg: item.lpa_pes,
-                classification: { connect: { id: 1 }},// formData['classification'] as number } },
+                classification: { connect: { id: 1 } },// formData['classification'] as number } },
                 units: 2,
                 unitsConsum: 2,
                 animal: { connect: newAnimal },
@@ -191,11 +313,10 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
                 id: true,
             }
         });
-        console.log(animalArticle);
         return animalArticle
 
 
-    }catch (error) {
+    } catch (error) {
         return { message: 'Database Error: Failed to Create Article' };
     }
 }
@@ -221,8 +342,6 @@ const createArticles = async (articles, parentArticle, animalId) => {
         }));
         */
 
-        console.log(articles, parentArticle, animalId);
-
         const dataArticles = articles.despiece.map((article) => ({
             name: article.art_descrip.trim(),
             lot: article.lot_codigo,
@@ -233,8 +352,8 @@ const createArticles = async (articles, parentArticle, animalId) => {
             classification: { connect: { id: 1 } },
             units: 1,
             unitsConsum: 1,
-            animal: { connect: animalId},
-            parent: {connect: parentArticle},
+            animal: { connect: animalId },
+            parent: { connect: parentArticle },
             art_codi: 1,
         }));
         //console.log(dataArticles);

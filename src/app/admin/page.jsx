@@ -20,7 +20,6 @@ export default function LoadData() {
             return { error: error.message };
         }
     };
-
     
     const handleCreateEscandall = async () => {
         await createEscandall(dataEscandall[0])
