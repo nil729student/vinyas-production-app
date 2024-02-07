@@ -30,6 +30,7 @@ export async function fechAnimalByDib(dib_id) {
         },
         */
         const data = animal.recordset;
+        
         sql.close();
         return data;
     }
@@ -67,8 +68,8 @@ function formatArticles(data) {
             return item.peso_art;
         }
     }).filter((value) => value !== undefined); // Filter out undefined values
-
-    canals[0].peso_art = pesArtCanal;
+    const sumArtCanal = pesArtCanal.reduce((total, item) => total + item, 0)
+    canals[0].peso_art = sumArtCanal;
 
 
     // Paso 2: Organiza els quarts per canal
@@ -83,14 +84,29 @@ function formatArticles(data) {
             peso_art: [],
             despiece: []
         };
-        
         if ( item.art_codi.trim() == '001107' ){
-            // Añadir el quarter al canal
+            // Añadir el quarter al canal amb la suma total del pes de les peçes 
             canal.quarter.davants.push(quarter);
+            // suma el pes de les peçes
+            const pesArtQuarter = data.map((item) => {
+                if (item.art_codi.trim() == '001107') {
+                    return item.peso_art;
+                }
+            }).filter((value) => value !== undefined); // Filter out undefined values
+            // suma el pesArtQuarter
+            const sumArtQuarter = pesArtQuarter.reduce((total, item) => total + item, 0)
+            quarter.peso_art = sumArtQuarter
         }
         if ( item.art_codi.trim() == '001307' ){
             // Añadir el quarter al canal
             canal.quarter.derreres.push(quarter);
+            const pesArtQuarter = data.map((item) => {
+                if (item.art_codi.trim() == '001307') {
+                    return item.peso_art;
+                }
+            }).filter((value) => value !== undefined); // Filter out undefined values
+            const sumArtQuarter = pesArtQuarter.reduce((total, item) => total + item, 0)
+            quarter.peso_art = sumArtQuarter;
         }
 
         // treu els elemnets repetits del array de derreres i davants
@@ -123,7 +139,6 @@ function formatArticles(data) {
             }
 
         }
-        
     }
     return canals;
 }
@@ -181,67 +196,8 @@ export async function fechDespiecePerDib() {
         order by peso_art desc; 
         `;
 
-        /*
-
-                canal: [{
-                    lot_codigo: '20240130',
-                    art_descrip: 'CANAL',
-                    peso_art: 0
-                    quarter: [{
-                        davant : [{
-                            lot_codigo: '20240130',
-                            art_descrip: 'peça 1',
-                            peso_art: 0
-                            despice: [{
-                                lot_codigo: '20240130',
-                                art_descrip: 'peça 1',
-                                peso_art: 0
-                            }]
-                        }],
-                        darrera: [{
-                            lot_codigo: '20240130',
-                            art_descrip: 'peça 1',
-                            peso_art: 0
-                            despice: [{
-                                lot_codigo: '20240130',
-                                art_descrip: 'peça 1',
-                                peso_art: 0
-                            }]
-                        }],
-                    }]
-                }],
-+               canal: [{ 
-+                   lot_codigo: '20240130',
-                    art_descrip: 'CANAL',
-                    peso_art: 0
-                    quarter: [{
-                        davant[{
-                            lot_codigo: '20240130',
-                            art_descrip: 'peça 1',
-                            peso_art: 0
-                            despice: [{
-                                lot_codigo: '20240130',
-                                art_descrip: 'peça 1',
-                                peso_art: 0
-                            }]
-                        }],
-                        darrera: [{
-                            lot_codigo: '20240130',
-                            art_descrip: 'peça 1',
-                            peso_art: 0
-                            despice: [{
-                                lot_codigo: '20240130',
-                                art_descrip: 'peça 1',
-                                peso_art: 0
-                            }]
-                        }],
-                    }]
-               }],
-            },
-        */
         const dataArticlesFormat = formatArticles(result.recordset);
         const data = dataArticlesFormat;
-
         console.log(data);
 
         sql.close();
@@ -260,7 +216,11 @@ export async function createEscandall(dataEscandall) {
         // Aixó funciona: await createAnimal(dataEscandall);
         const animalId = await createAnimal(dataEscandall);
         const articleAnimalId = await createMainArticleByAnimal(animalId, dataEscandall);
-        await createArticles(dataEscandall, articleAnimalId, animalId);
+        const articleQuarter = await createArticleQuarter(dataEscandall, articleAnimalId, animalId);
+        // insertem els articles dels quarts
+        const article = await createArticle(dataEscandall, articleQuarter, animalId);
+        // cridem a la funció article
+        article;
 
         // Promise.all(promises);
         return { message: 'Escandall Created' };
@@ -270,6 +230,7 @@ export async function createEscandall(dataEscandall) {
 }
 
 const createAnimal = async (item) => {
+
     try {
         const newAnimal = await prisma.animal.create({
 
@@ -284,6 +245,7 @@ const createAnimal = async (item) => {
                 id: true,
             }
         });
+        console.log(newAnimal)
         //await createMainArticleByAnimal(newAnimal, item);
         return newAnimal;
     }
@@ -293,16 +255,16 @@ const createAnimal = async (item) => {
 }
 
 const createMainArticleByAnimal = async (newAnimal, item) => {
-
+    console.log(newAnimal, item)
     try {
         const animalArticle = await prisma.article.create({
             data: {
-                name: item.name,
+                name: item.despiece[0].art_descrip,
                 lot: "", // articles[article]['Lot'] as string ?? "",
                 description: '',
                 price: 0,
                 image: '',
-                weightKg: item.lpa_pes,
+                weightKg: item.despiece[0].peso_art,
                 classification: { connect: { id: 1 } },// formData['classification'] as number } },
                 units: 2,
                 unitsConsum: 2,
@@ -313,8 +275,8 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
                 id: true,
             }
         });
+        console.log(animalArticle)
         return animalArticle
-
 
     } catch (error) {
         return { message: 'Database Error: Failed to Create Article' };
@@ -322,27 +284,11 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
 }
 
 
-const createArticles = async (articles, parentArticle, animalId) => {
+const createArticleQuarter = async (articles, parentArticle, animalId) => {
 
     try {
-        // function createMainArticle(item);
-        // function createDerivedArticles(item);
-        /*const data = item.despiece.map((item) => ({
-            name: item.art_descrip.trim(),
-            lot: "20240130",
-            description: "",     
-            price: 0,
-            image: "",
-            weightKg: 4.00,
-            classification: { connect: { id: 1 }},
-            units: 1,
-            unitsConsum: 1,       
-            animal: { connect: 31 },
-            art_codi: 1,
-        }));
-        */
 
-        const dataArticles = articles.despiece.map((article) => ({
+        const dataArticlesDavant = articles.despiece[0].quarter.davants.map((article) => ({
             name: article.art_descrip.trim(),
             lot: article.lot_codigo,
             description: "",
@@ -356,18 +302,114 @@ const createArticles = async (articles, parentArticle, animalId) => {
             parent: { connect: parentArticle },
             art_codi: 1,
         }));
-        //console.log(dataArticles);
 
-        dataArticles.forEach(async (item) => {
-            await prisma.article.create({
+        const dataArticlesDerrere = articles.despiece[0].quarter.derreres.map((article) => ({
+            name: article.art_descrip.trim(),
+            lot: article.lot_codigo,
+            description: "",
+            price: 0,
+            image: "",
+            weightKg: article.peso_art,
+            classification: { connect: { id: 1 } },
+            units: 1,
+            unitsConsum: 1,
+            animal: { connect: animalId },
+            parent: { connect: parentArticle },
+            art_codi: 1,
+        }));
+
+        const newArticleDavantPromises = dataArticlesDavant.map((item) => {
+            return prisma.article.create({
                 data: item,
+                select: {
+                    id: true,
+                }
             });
         });
+        const newArticleDerrerePromises = dataArticlesDerrere.map((item) => {
+            return prisma.article.create({
+                data: item,
+                select: {
+                    id: true,
+                }
+            });
+        });
+
+        const newArticleDavant = await Promise.all(newArticleDavantPromises);
+        const newArticleDerrere = await Promise.all(newArticleDerrerePromises);
+
+        return { newArticleDavant, newArticleDerrere }
     }
     catch (error) {
         return { message: 'Database Error: Failed to Create Article' };
     }
 }
+
+
+const createArticle = async (articles, parentArticle, animalId) => {
+    console.log(parentArticle) // { newArticleDavant: [ { id: 291 } ], newArticleDerrere: [ { id: 292 } ] }
+    console.log(animalId)
+    try {
+        const dataArticlesDavant = articles.despiece[0].quarter.davants.map((article) => {
+            return article.despiece.map((item) => ({
+                name: item.art_descrip.trim(),
+                lot: item.lot_codigo,
+                description: "",
+                price: 0,
+                image: "",
+                weightKg: item.peso_art,
+                classification: { connect: { id: 1 } },
+                units: 1,
+                unitsConsum: 1,
+                animal: { connect: animalId },
+                parent: { connect: { id: parentArticle.newArticleDavant[0].id } },
+                art_codi: 1,
+            }));
+        }).flat();
+
+        const dataArticlesDerrere = articles.despiece[0].quarter.derreres.map((article) => {
+            return article.despiece.map((item) => ({
+                name: item.art_descrip.trim(),
+                lot: item.lot_codigo,
+                description: "",
+                price: 0,
+                image: "",
+                weightKg: item.peso_art,
+                classification: { connect: { id: 1 } },
+                units: 1,
+                unitsConsum: 1,
+                animal: { connect: animalId },
+                parent: { connect: {id: parentArticle.newArticleDerrere[0].id }},
+                art_codi: 1,
+            }));
+        }).flat();
+
+        dataArticlesDavant.forEach(async (art) => {
+            console.log(art);
+            await prisma.article.create({
+                data: art,
+                select: {
+                    id: true,
+                }
+            });
+        });
+        dataArticlesDerrere.forEach(async (art) => {
+            console.log(art);
+            await prisma.article.create({
+                data: art,
+                select: {
+                    id: true,
+                }
+            });
+        });
+
+    }
+    catch (error) {
+        return { message: 'Database Error: Failed to Create Article' };
+    }
+}
+
+
 
 /*
 escandalls 
