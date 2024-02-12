@@ -1,5 +1,5 @@
 
-import { fechDespiecePerDib } from "@/lib/data";
+import { fechDespiecePerDib } from "@/lib/animalDataLoader";
 
 export default async function Page() {
     const resultat = await fechDespiecePerDib();

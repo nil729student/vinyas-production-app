@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import { fechAnimalByDib, fechDespiecePerDib, createEscandall } from "@/lib/data";
+import { fechAnimalByDib, fechDespiecePerDib, createEscandall } from "@/lib/animalDataLoader";
 
 export default function LoadData() {
     const [dataEscandall, setDataEscandall] = useState([])
@@ -46,6 +46,5 @@ export default function LoadData() {
                 }
             </div>
         </>
-
     );
 }

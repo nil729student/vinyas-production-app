@@ -8,7 +8,6 @@ import prisma from "./prisma";
 import { createMainArticleByForm, createDerivedArticles } from "./actions";
 
 
-
 export async function fechAnimalByDib(dib_id) {
     try {
         await connKaisEscorxa();
@@ -39,6 +38,7 @@ export async function fechAnimalByDib(dib_id) {
         return error;
     }
 }
+
 
 function formatArticles(data) {
     let canals = [];
@@ -143,6 +143,7 @@ function formatArticles(data) {
     return canals;
 }
 
+
 export async function fechDespiecePerDib() {
     try {
         // make a request to the database kais
@@ -229,6 +230,7 @@ export async function createEscandall(dataEscandall) {
     }
 }
 
+
 const createAnimal = async (item) => {
 
     try {
@@ -253,6 +255,7 @@ const createAnimal = async (item) => {
         return { message: 'Database Error: Failed to Create Animal' };
     }
 }
+
 
 const createMainArticleByAnimal = async (newAnimal, item) => {
     console.log(newAnimal, item)
@@ -408,14 +411,3 @@ const createArticle = async (articles, parentArticle, animalId) => {
         return { message: 'Database Error: Failed to Create Article' };
     }
 }
-
-
-
-/*
-escandalls 
-
-aponeurosi  s'ha de agafar amb el (PAD) si no s'ha de agafar la aponeurosi del (PAD)
-
-Atributs compostos:
-- APONEBROSI esta compost per: PAD
-*/
