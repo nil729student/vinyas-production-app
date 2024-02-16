@@ -1,15 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+// import nextui typescript
 
-// import nextui
-const nextui = require("@nextui-org/tailwind");
 
 // imoport 
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
   theme: {
     extend: {
@@ -20,7 +18,6 @@ module.exports = {
       },
     },
     darkMode: "class",
-    plugins: [nextui()],
   },
   plugins: [],
 }

@@ -45,7 +45,9 @@ function formatArticles(data) {
 
     // Paso 1: Crear los canales
     for (let item of data) {
-        if (item.art_codi.trim() == '001007') {
+        //console.log("canal: ", item);
+        if (item.art_codi.trim() == '001027') {
+            
             // Crear canal
             const canal = {
                 dib_id: item.dib_id.trim(),
@@ -59,17 +61,22 @@ function formatArticles(data) {
                 }
             };
             // enviali al array canals
-            canals.push(canal);
+            canals.push( canal);
             break;
         }
     }
     const pesArtCanal = data.map((item) => {
-        if (item.art_codi.trim() == '001007') {
+        if (item.art_codi.trim() == '001027') {
+            //console.log(item.peso_art);
             return item.peso_art;
         }
     }).filter((value) => value !== undefined); // Filter out undefined values
+
     const sumArtCanal = pesArtCanal.reduce((total, item) => total + item, 0)
+    console.log(sumArtCanal);
     canals[0].peso_art = sumArtCanal;
+
+
 
 
     // Paso 2: Organiza els quarts per canal
@@ -84,24 +91,26 @@ function formatArticles(data) {
             peso_art: [],
             despiece: []
         };
-        if ( item.art_codi.trim() == '001107' ){
+        if ( item.art_codi.trim() == '001327' ){
             // Añadir el quarter al canal amb la suma total del pes de les peçes 
             canal.quarter.davants.push(quarter);
             // suma el pes de les peçes
             const pesArtQuarter = data.map((item) => {
-                if (item.art_codi.trim() == '001107') {
+                if (item.art_codi.trim() == '001327') {
+                    console.log(item.peso_art);
                     return item.peso_art;
                 }
             }).filter((value) => value !== undefined); // Filter out undefined values
             // suma el pesArtQuarter
             const sumArtQuarter = pesArtQuarter.reduce((total, item) => total + item, 0)
+            console.log(sumArtQuarter);
             quarter.peso_art = sumArtQuarter
         }
-        if ( item.art_codi.trim() == '001307' ){
+        if ( item.art_codi.trim() == '001127' ){
             // Añadir el quarter al canal
             canal.quarter.derreres.push(quarter);
             const pesArtQuarter = data.map((item) => {
-                if (item.art_codi.trim() == '001307') {
+                if (item.art_codi.trim() == '001127') {
                     return item.peso_art;
                 }
             }).filter((value) => value !== undefined); // Filter out undefined values
@@ -148,6 +157,7 @@ export async function fechDespiecePerDib() {
     try {
         // make a request to the database kais
         //await connKaisEscorxa();
+        const dib_id = 'CZ030816024'; //CZ830760081
         await connKais();
         const result = await sql.query`
         -- Treiem les canals
@@ -161,7 +171,7 @@ export async function fechDespiecePerDib() {
             HISTORICO_HU 
             JOIN 
             HISTORICO_HU_CONTENIDOS ON HISTORICO_HU_CONTENIDOS.HUC_ID = HISTORICO_HU.HUC_ID
-        WHERE LOT_CODIGO = 'CZ830760081' AND HISTORICO_HU.HUC_SSCC LIKE '2%'
+        WHERE LOT_CODIGO = ${dib_id} AND HISTORICO_HU.HUC_SSCC LIKE '2%'
         
         UNION ALL
         
@@ -183,7 +193,7 @@ export async function fechDespiecePerDib() {
         ON
             ARTICLES.art_codi = ApmSSCC.art_codi
         WHERE 
-            ApmSSCC.dib_id = 'CZ830760081'
+            ApmSSCC.dib_id = ${dib_id}
         GROUP BY 
             dib_id, ApmSSCC.art_codi, ApmSSCC.huc_peso_neto, lot_codigo, ApmSSCC.huc_sscc, ARTICLES.art_descrip
         
@@ -193,10 +203,10 @@ export async function fechDespiecePerDib() {
             INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
             RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
             inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
-        WHERE APM.dib_id = 'CZ830760081' --and procap.lot_codigo = '2024011074' --'2024011275'
+        WHERE APM.dib_id = ${dib_id} --and procap.lot_codigo = '2024011074' --'2024011275'
         order by peso_art desc; 
         `;
-
+        console.log(result.recordset);
         const dataArticlesFormat = formatArticles(result.recordset);
         const data = dataArticlesFormat;
         console.log(data);
@@ -234,6 +244,8 @@ export async function createEscandall(dataEscandall) {
 const createAnimal = async (item) => {
 
     try {
+        console.log(item);
+
         const newAnimal = await prisma.animal.create({
 
             data: {
@@ -282,7 +294,7 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
         return animalArticle
 
     } catch (error) {
-        return { message: 'Database Error: Failed to Create Article' };
+        return { message: 'Database Error: Failed to Create MainArticleByAnimal' };
     }
 }
 
@@ -344,7 +356,7 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
         return { newArticleDavant, newArticleDerrere }
     }
     catch (error) {
-        return { message: 'Database Error: Failed to Create Article' };
+        return { message: 'Database Error: Failed to Create Quarters' };
     }
 }
 
@@ -386,7 +398,8 @@ const createArticle = async (articles, parentArticle, animalId) => {
                 art_codi: 1,
             }));
         }).flat();
-
+        console.log(dataArticlesDavant);
+        console.log(dataArticlesDerrere);
         dataArticlesDavant.forEach(async (art) => {
             console.log(art);
             await prisma.article.create({
@@ -405,6 +418,7 @@ const createArticle = async (articles, parentArticle, animalId) => {
                 }
             });
         });
+    
 
     }
     catch (error) {

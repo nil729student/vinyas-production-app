@@ -1,7 +1,7 @@
 import { Inter, Nabla } from 'next/font/google'
 import './globals.css'
-import Navbar from './Navbar'
-import { NextUIProvider } from '@nextui-org/react';
+//import Navbar from './Navbar'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,10 +13,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <NextUIProvider>
-        <Navbar />
-      </NextUIProvider>
-
       <body className={inter.className}>{children}</body> 
     </html>
   )
