@@ -8,7 +8,7 @@ export default function LoadData() {
 
     const fetchData = async () => {
         try {
-            const dib = 'CZ830760081';
+            const dib = 'FR3538980279';
             const [animal, resultat] = await Promise.all([fechAnimalByDib(dib), fechDespiecePerDib()]);
             const plainObject = JSON.parse(JSON.stringify(resultat));
             const plainObjectAnimal_Escandall = JSON.parse(JSON.stringify(animal));
@@ -20,7 +20,7 @@ export default function LoadData() {
             return { error: error.message };
         }
     };
-    
+
     const handleCreateEscandall = async () => {
         await createEscandall(dataEscandall[0])
     }

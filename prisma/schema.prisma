@@ -32,11 +32,11 @@ model Article {
   art_codi    Int?
   lot         String      
   name        String
-  description String
+  description String?
   units       Int
   unitsConsum Int
   price       Float
-  image      String
+  image      String?
   weightKg    Float
   animalId    Int
   parentId    Int?       // Si es un article derivat d'un altre article 

@@ -39,6 +39,8 @@ export async function fechAnimalByDib(dib_id) {
     }
 }
 
+// S'ha de canviar el codi de article de la canal i el codi de article per el quarter
+
 
 function formatArticles(data) {
     let canals = [];
@@ -46,7 +48,7 @@ function formatArticles(data) {
     // Paso 1: Crear los canales
     for (let item of data) {
         //console.log("canal: ", item);
-        if (item.art_codi.trim() == '001027') {
+        if (item.art_codi.trim() == '001007') { // 001007          001027
             
             // Crear canal
             const canal = {
@@ -66,7 +68,7 @@ function formatArticles(data) {
         }
     }
     const pesArtCanal = data.map((item) => {
-        if (item.art_codi.trim() == '001027') {
+        if (item.art_codi.trim() == '001007') {
             //console.log(item.peso_art);
             return item.peso_art;
         }
@@ -91,12 +93,13 @@ function formatArticles(data) {
             peso_art: [],
             despiece: []
         };
-        if ( item.art_codi.trim() == '001327' ){
+        // Filtrem les peçes per derreres 
+        if ( item.art_codi.trim() == '001307' ){
             // Añadir el quarter al canal amb la suma total del pes de les peçes 
             canal.quarter.davants.push(quarter);
             // suma el pes de les peçes
             const pesArtQuarter = data.map((item) => {
-                if (item.art_codi.trim() == '001327') {
+                if (item.art_codi.trim() == '001307') {
                     console.log(item.peso_art);
                     return item.peso_art;
                 }
@@ -106,11 +109,12 @@ function formatArticles(data) {
             console.log(sumArtQuarter);
             quarter.peso_art = sumArtQuarter
         }
-        if ( item.art_codi.trim() == '001127' ){
+        // Filtrem les peçes per derreres
+        if ( item.art_codi.trim() == '001107' ){
             // Añadir el quarter al canal
             canal.quarter.derreres.push(quarter);
             const pesArtQuarter = data.map((item) => {
-                if (item.art_codi.trim() == '001127') {
+                if (item.art_codi.trim() == '001107') {
                     return item.peso_art;
                 }
             }).filter((value) => value !== undefined); // Filter out undefined values
@@ -136,7 +140,7 @@ function formatArticles(data) {
             peso_art: item.peso_art
         };
         // carregem les dades diferents a la canal i els quartes: davants i derreres
-        if (item.art_codi.trim() !== '001107' && item.art_codi.trim() !== '001307' && item.art_codi.trim() !== '001007' ) {
+        if (item.art_codi.trim() !== '001307' && item.art_codi.trim() !== '001107' && item.art_codi.trim() !== '001007' ) {
 
             if (item.lot_codigo.trim() == artDavant.lot_codigo) {
                 // Añadir el despiece al quarter
@@ -157,7 +161,7 @@ export async function fechDespiecePerDib() {
     try {
         // make a request to the database kais
         //await connKaisEscorxa();
-        const dib_id = 'CZ030816024'; //CZ830760081
+        const dib_id = 'FR3538980279'; //CZ830760081
         await connKais();
         const result = await sql.query`
         -- Treiem les canals
@@ -245,9 +249,7 @@ const createAnimal = async (item) => {
 
     try {
         console.log(item);
-
         const newAnimal = await prisma.animal.create({
-
             data: {
                 dib: item.dib_id,
                 race: "",

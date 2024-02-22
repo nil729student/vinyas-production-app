@@ -15,6 +15,7 @@ const SelectSection = ({name, section, setFormSection }) => {
         <option value="BLOC">BLOC</option>
         <option value="FALDA">FALDA</option>
         <option value="DAVANT">DAVANT</option>
+        <option value="DERRERE">DERRERE</option>
       </select>
     </div>
   );

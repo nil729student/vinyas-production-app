@@ -142,9 +142,11 @@ const formArticles = () => {
             case 'BLOC':
                 return ['retall', 'magre', 'nervis', 'ossos', 'greix'];
             case 'FALDA':
-                return ['retall', 'magre', 'nervi vacio', 'nervi pla', 'ossos', 'greix', 'aponebrosi'];
+                return ['retall', 'magre', 'nervi vacio', 'nervi pla', 'ossos', 'greix', 'aponebrosi','brinsa', 'alayout'];
             case 'DEVANT':
                 return ['retall', 'magre', 'nervis', 'ossos', 'greix', 'T5', 'aponebrosi'];
+            case 'DERRERE':
+                return ['retall', 'magre', 'nervi vacio', 'nervi pla', 'ossos', 'greix', 'aponebrosi', 'brinsa', 'alayout'];
             default:
                 return ['retall', 'magre', 'nervis', 'ossos', 'greix', 'altres'];
         }
