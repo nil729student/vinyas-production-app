@@ -37,7 +37,7 @@ export default function LoadData() {
                     onClick={fetchData} >Carregar dades</button>
                 {
                     dataEscandall.length > 0 &&
-                    <>  
+                    <>
                         <p>{JSON.stringify(dataEscandall)}</p>
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-10 py-2 px-4 rounded"
                             onClick={handleCreateEscandall} >Crear escandall</button>

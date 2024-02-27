@@ -400,8 +400,7 @@ const createArticle = async (articles, parentArticle, animalId) => {
                 art_codi: 1,
             }));
         }).flat();
-        console.log(dataArticlesDavant);
-        console.log(dataArticlesDerrere);
+
         dataArticlesDavant.forEach(async (art) => {
             console.log(art);
             await prisma.article.create({
@@ -420,8 +419,6 @@ const createArticle = async (articles, parentArticle, animalId) => {
                 }
             });
         });
-    
-
     }
     catch (error) {
         return { message: 'Database Error: Failed to Create Article' };
