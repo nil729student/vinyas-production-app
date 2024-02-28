@@ -2,12 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { fechAnimalByDib, fechDespiecePerDib, createEscandall } from "@/lib/animalDataLoader";
+// import data.json
+//import xdataEscandall from "./data.json";
 
 export default function LoadData() {
     const [dataEscandall, setDataEscandall] = useState([])
     const [dib, setDib] = useState('')
     const [artCodi, setArtCodi] = useState('')
-
+    const [mostrarDetallCanal, setmostrarDetallCanal] = useState(false);
+    const [mostrarDetallDavants, setmostrarDetallDavants] = useState(false);
+    const [mostrarDetallDerreres, setmostrarDetallDerreres] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -31,6 +35,7 @@ export default function LoadData() {
         setDataEscandall([])
     }
 
+    /*
     if (dataEscandall.length > 0){
         console.log(dataEscandall[0].despiece[0].quarter);
         const dataQuarter = dataEscandall[0].despiece[0];
@@ -38,6 +43,7 @@ export default function LoadData() {
 
 
     }
+    */
 
 
 
@@ -72,7 +78,6 @@ export default function LoadData() {
                 {/* show data */}
                 {dataEscandall.length > 0 &&
                     <>
-                        <p>{JSON.stringify(dataEscandall)}</p>
                         <h1 className="text-2xl font-bold">Dades escandall</h1>
                         <table className="table-auto">
                             <thead>
@@ -97,7 +102,7 @@ export default function LoadData() {
 
                         <h1 className="text-2xl font-bold">Dades despiece</h1>
 
-                        <table className="table-auto">
+                        <table className="table-auto mb-4">
                             <thead>
                                 <tr>
                                     <th className="px-4 py-2">Lot</th>
@@ -107,32 +112,101 @@ export default function LoadData() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {
-                                    dataEscandall[0].despiece.map((item, index) => (
+                                {dataEscandall[0].despiece.map((item, index) => (
+                                    <tr key={index}>
+                                        <td className="border px-4 py-2">{item.lot_codigo}</td>
+                                        <td className="border px-4 py-2">{item.art_codi}</td>
+                                        <td className="border px-4 py-2">{item.art_descrip}</td>
+                                        <td className="border px-4 py-2">{item.peso_art} kg</td>
+                                        <td className="px-4">
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                onClick={() => setmostrarDetallCanal(!mostrarDetallCanal)}
+                                            >
+                                                {mostrarDetallCanal ? '-' : '+'}
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+                                ))}
+                            </tbody>
+
+                        </table>
+
+
+                        {mostrarDetallCanal && (
+                            <table className="table-auto mb-4">
+                                <thead>
+                                    <tr>
+                                        <th className="px-4 py-2">Lot</th>
+                                        <th className="px-4 py-2">Codi article</th>
+                                        <th className="px-4 py-2">Descripció</th>
+                                        <th className="px-4 py-2">Pes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {dataEscandall[0].despiece[0].quarter.davants.map((item, index) => (
+                                        <tr key={index} className="bg-slate-500 ">
+                                            <td className="px-4 py-2">{item.lot_codigo}</td>
+                                            <td className="border px-4 py-2">{item.art_codi}</td>
+                                            <td className="border px-4 py-2">{item.art_descrip}</td>
+                                            <td className="border px-4 py-2">{item.peso_art} kg</td>
+                                            <td className=" px-4">
+                                                <button
+                                                    className="bg-neutral-400 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded"
+                                                    onClick={() => setmostrarDetallDavants(!mostrarDetallDavants)}
+                                                >
+                                                    {mostrarDetallDavants ? '-' : '+'}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {mostrarDetallDavants && (
+                                    
+                                    dataEscandall[0].despiece[0].quarter.davants[0].despiece.map((item, index) => (
                                         <tr key={index}>
                                             <td className="border px-4 py-2">{item.lot_codigo}</td>
-                                            <td className="border px-4 py-2">{item.art_codi} </td>
+                                            <td className="border px-4 py-2">{item.art_codi}</td>
                                             <td className="border px-4 py-2">{item.art_descrip}</td>
                                             <td className="border px-4 py-2">{item.peso_art} kg</td>
                                         </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                                    )))}
+                                </tbody>
 
-                        <table className="table-auto">
-                            <thead>
-                                <tr>
-                                    <th className="px-4 py-2">Lot</th>
-                                    <th className="px-4 py-2">Codi article</th>
-                                    <th className="px-4 py-2">Descripció</th>
-                                    <th className="px-4 py-2">Pes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
 
-                            </tbody>
-                        </table>
+                                <tbody>
+                                    {dataEscandall[0].despiece[0].quarter.derreres.map((item, index) => (
+                                        <tr key={index} className="bg-slate-500 mb-4">
+                                            <td className="border px-4 py-2">{item.lot_codigo}</td>
+                                            <td className="border px-4 py-2">{item.art_codi}</td>
+                                            <td className="border px-4 py-2">{item.art_descrip}</td>
+                                            <td className="border px-4 py-2">{item.peso_art} kg</td>
+                                            <td className="px-4">
+                                                <button
+                                                    className="bg-neutral-400 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded"
+                                                    onClick={() => setmostrarDetallDerreres(!mostrarDetallDerreres)}
+                                                >
+                                                    {mostrarDetallDerreres ? '-' : '+'}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {mostrarDetallDerreres && (
+                                    
+                                    dataEscandall[0].despiece[0].quarter.derreres[0].despiece.map((item, index) => (
+                                        <tr key={index}>
+                                            <td className="border px-4 py-2">{item.lot_codigo}</td>
+                                            <td className="border px-4 py-2">{item.art_codi}</td>
+                                            <td className="border px-4 py-2">{item.art_descrip}</td>
+                                            <td className="border px-4 py-2">{item.peso_art} kg</td>
+                                        </tr>
+                                    )))}
+                                    
+
+                                </tbody>
+                            </table>
+                        )}
 
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-10 py-2 px-4 rounded"
                             onClick={handleCreateEscandall} >Crear escandall</button>
