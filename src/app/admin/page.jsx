@@ -35,9 +35,6 @@ export default function LoadData() {
         console.log(dataEscandall[0].despiece[0].quarter);
         const dataQuarter = dataEscandall[0].despiece[0];
 
-        for ( item in dataQuarter ){
-            console.log(item);
-        }
 
 
     }
