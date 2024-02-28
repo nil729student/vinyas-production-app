@@ -117,8 +117,7 @@ const formArticles = () => {
                     const resAnimalSections = await getArticlesByAnimalId(formArticles.animalDib);
                     const filteredSection = getSection(resAnimalSections, section);
                     const resArticles = await getArticlesByParentId(filteredSection);
-                    console.log(resArticles);
-
+                    
                     setFormArticles((prevForm) => ({
                         ...prevForm,
                         articles: resArticles,

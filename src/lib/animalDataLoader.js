@@ -13,7 +13,7 @@ export async function fechAnimalByDib(dib_id) {
         await connKaisEscorxa();
         const animal = await sql.query`
             SELECT
-                SUBSTRING(dib_id, 1, 11) as dib_id,
+                SUBSTRING(dib_id, 1, 12) as dib_id,
                 lpa_pes, 
                 lpa_qualitatabr, 
                 lpa_sexe 
@@ -75,7 +75,6 @@ function formatArticles(data) {
     }).filter((value) => value !== undefined); // Filter out undefined values
 
     const sumArtCanal = pesArtCanal.reduce((total, item) => total + item, 0)
-    console.log(sumArtCanal);
     canals[0].peso_art = sumArtCanal;
 
 
@@ -210,10 +209,10 @@ export async function fechDespiecePerDib() {
         WHERE APM.dib_id = ${dib_id} --and procap.lot_codigo = '2024011074' --'2024011275'
         order by peso_art desc; 
         `;
-        console.log(result.recordset);
+
         const dataArticlesFormat = formatArticles(result.recordset);
         const data = dataArticlesFormat;
-        console.log(data);
+
 
         sql.close();
         return data;
