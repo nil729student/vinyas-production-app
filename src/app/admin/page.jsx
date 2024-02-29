@@ -8,14 +8,17 @@ import { fechAnimalByDib, fechDespiecePerDib, createEscandall } from "@/lib/anim
 export default function LoadData() {
     const [dataEscandall, setDataEscandall] = useState([])
     const [dib, setDib] = useState('')
-    const [artCodi, setArtCodi] = useState('')
+    const [lot, setLot] = useState('')
+    const [artCodiCanal, setArtCodiCanal] = useState('')
+    const [artCodiQuarter, setArtCodiQuarter] = useState('')
+
     const [mostrarDetallCanal, setmostrarDetallCanal] = useState(false);
     const [mostrarDetallDavants, setmostrarDetallDavants] = useState(false);
     const [mostrarDetallDerreres, setmostrarDetallDerreres] = useState(false);
 
     const fetchData = async () => {
         try {
-            const [animal, resultat] = await Promise.all([fechAnimalByDib(dib), fechDespiecePerDib()]);
+            const [animal, resultat] = await Promise.all([fechAnimalByDib(dib), fechDespiecePerDib(dib)]);
             const plainObject = JSON.parse(JSON.stringify(resultat));
             const plainObjectAnimal_Escandall = JSON.parse(JSON.stringify(animal));
             plainObjectAnimal_Escandall[0].despiece = plainObject;
@@ -39,14 +42,8 @@ export default function LoadData() {
     if (dataEscandall.length > 0){
         console.log(dataEscandall[0].despiece[0].quarter);
         const dataQuarter = dataEscandall[0].despiece[0];
-
-
-
     }
     */
-
-
-
 
     return (
         <>
@@ -61,11 +58,27 @@ export default function LoadData() {
                     />
                     <input
                         type="text"
-                        placeholder="Codi article"
-                        value={artCodi}
-                        onChange={(e) => setArtCodi(e.target.value)}
+                        placeholder="Lot"
+                        value={lot}
+                        onChange={(e) => setLot(e.target.value)}
+                        className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                    {/*
+                    <input
+                        type="text"
+                        placeholder="Codi article canals"
+                        value={artCodiCanal}
+                        onChange={(e) => setArtCodiCanal(e.target.value)}
                         className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-4"
                     />
+                    <input
+                        type="text"
+                        placeholder="Codi article quarters"
+                        value={artCodiQuarter}
+                        onChange={(e) => setArtCodiQuarter(e.target.value)}
+                        className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-4"
+                    />
+                    */}
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-10 py-2 px-4 rounded"
                         onClick={fetchData}
@@ -147,14 +160,14 @@ export default function LoadData() {
                                 </thead>
                                 <tbody>
                                     {dataEscandall[0].despiece[0].quarter.davants.map((item, index) => (
-                                        <tr key={index} className="bg-slate-500 ">
-                                            <td className="px-4 py-2">{item.lot_codigo}</td>
-                                            <td className="border px-4 py-2">{item.art_codi}</td>
-                                            <td className="border px-4 py-2">{item.art_descrip}</td>
-                                            <td className="border px-4 py-2">{item.peso_art} kg</td>
-                                            <td className=" px-4">
+                                        <tr key={index}>
+                                            <td className=" bg-slate-400 border px-4 py-2">{item.lot_codigo}</td>
+                                            <td className=" bg-slate-400 border px-4 py-2">{item.art_codi}</td>
+                                            <td className=" bg-slate-400 border px-4 py-2">{item.art_descrip}</td>
+                                            <td className=" bg-slate-400 border px-4 py-2">{item.peso_art} kg</td>
+                                            <td className="px-4">
                                                 <button
-                                                    className="bg-neutral-400 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded"
+                                                    className="bg-green-400 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
                                                     onClick={() => setmostrarDetallDavants(!mostrarDetallDavants)}
                                                 >
                                                     {mostrarDetallDavants ? '-' : '+'}
@@ -166,7 +179,7 @@ export default function LoadData() {
                                     
                                     dataEscandall[0].despiece[0].quarter.davants[0].despiece.map((item, index) => (
                                         <tr key={index}>
-                                            <td className="border px-4 py-2">{item.lot_codigo}</td>
+                                            <td className=" border px-4 py-2">{item.lot_codigo}</td>
                                             <td className="border px-4 py-2">{item.art_codi}</td>
                                             <td className="border px-4 py-2">{item.art_descrip}</td>
                                             <td className="border px-4 py-2">{item.peso_art} kg</td>
@@ -177,14 +190,14 @@ export default function LoadData() {
 
                                 <tbody>
                                     {dataEscandall[0].despiece[0].quarter.derreres.map((item, index) => (
-                                        <tr key={index} className="bg-slate-500 mb-4">
-                                            <td className="border px-4 py-2">{item.lot_codigo}</td>
-                                            <td className="border px-4 py-2">{item.art_codi}</td>
-                                            <td className="border px-4 py-2">{item.art_descrip}</td>
-                                            <td className="border px-4 py-2">{item.peso_art} kg</td>
+                                        <tr key={index} className=" mb-4">
+                                            <td className="bg-slate-400 border px-4 py-2">{item.lot_codigo}</td>
+                                            <td className="bg-slate-400 border px-4 py-2">{item.art_codi}</td>
+                                            <td className="bg-slate-400 border px-4 py-2">{item.art_descrip}</td>
+                                            <td className="bg-slate-400 border px-4 py-2">{item.peso_art} kg</td>
                                             <td className="px-4">
                                                 <button
-                                                    className="bg-neutral-400 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded"
+                                                    className="bg-green-400 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
                                                     onClick={() => setmostrarDetallDerreres(!mostrarDetallDerreres)}
                                                 >
                                                     {mostrarDetallDerreres ? '-' : '+'}
@@ -202,8 +215,6 @@ export default function LoadData() {
                                             <td className="border px-4 py-2">{item.peso_art} kg</td>
                                         </tr>
                                     )))}
-                                    
-
                                 </tbody>
                             </table>
                         )}

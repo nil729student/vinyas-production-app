@@ -44,11 +44,11 @@ export async function fechAnimalByDib(dib_id) {
 
 function formatArticles(data) {
     let canals = [];
-
-    // Paso 1: Crear los canales
-    for (let item of data) {
-        //console.log("canal: ", item);
-        if (item.art_codi.trim() == '001007') { // 001007          001027
+    console.log(data);
+    // Pas 1: Crear les canals
+    for (let item of data.slice(0, 2)) {
+        //console.log("canal: ", item)
+        //if (item.art_codi.trim() == '001007') { // 001007          001027
             
             // Crear canal
             const canal = {
@@ -64,14 +64,15 @@ function formatArticles(data) {
             };
             // enviali al array canals
             canals.push( canal);
-            break;
-        }
+            //break;
+        //}
     }
-    const pesArtCanal = data.map((item) => {
-        if (item.art_codi.trim() == '001007') {
+    const pesArtCanal = data.slice(0, 2).map((item) => {
+        console.log(item.art_codi.trim());
+        //if (item.art_codi.trim() == '001007') {
             //console.log(item.peso_art);
             return item.peso_art;
-        }
+        //}
     }).filter((value) => value !== undefined); // Filter out undefined values
 
     const sumArtCanal = pesArtCanal.reduce((total, item) => total + item, 0)
@@ -80,7 +81,7 @@ function formatArticles(data) {
 
 
 
-    // Paso 2: Organiza els quarts per canal
+    // Pas 2: Organiza els quarts per canal
     for (let item of data) {
         // Buscar el canal
         const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
@@ -109,7 +110,7 @@ function formatArticles(data) {
             quarter.peso_art = sumArtQuarter
         }
         // Filtrem les peçes per derreres
-        if ( item.art_codi.trim() == '001107' ){
+        if ( item.art_codi.trim() == '001107' ){ // 001107 es el codi de la peça del davant
             // Añadir el quarter al canal
             canal.quarter.derreres.push(quarter);
             const pesArtQuarter = data.map((item) => {
@@ -156,11 +157,11 @@ function formatArticles(data) {
 }
 
 
-export async function fechDespiecePerDib() {
+export async function fechDespiecePerDib(dib_id) {
     try {
         // make a request to the database kais
         //await connKaisEscorxa();
-        const dib_id = 'FR3538980279'; //CZ830760081
+        //const dib_id = 'FR3538980279'; //CZ830760081
         await connKais();
         const result = await sql.query`
         -- Treiem les canals
