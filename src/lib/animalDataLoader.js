@@ -46,7 +46,7 @@ function formatArticles(data) {
     let canals = [];
     console.log(data);
     // Pas 1: Crear les canals
-    for (let item of data.slice(0, 2)) {
+    for (let item of data.slice(0, 1)) {
         //console.log("canal: ", item)
         //if (item.art_codi.trim() == '001007') { // 001007          001027
             
@@ -82,7 +82,7 @@ function formatArticles(data) {
 
 
     // Pas 2: Organiza els quarts per canal
-    for (let item of data) {
+    for (let item of data.slice(2, 6)) {
         // Buscar el canal
         const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
         // Crear el quarter
@@ -93,33 +93,34 @@ function formatArticles(data) {
             peso_art: [],
             despiece: []
         };
-        // Filtrem les peçes per derreres 
-        if ( item.art_codi.trim() == '001307' ){
+        // Filtrem les peçes per derreres
+        console.log(data.slice(2, 3)[0].art_codi.trim());
+        if ( item.art_codi.trim() == data.slice(2, 3)[0].art_codi.trim()){
             // Añadir el quarter al canal amb la suma total del pes de les peçes 
-            canal.quarter.davants.push(quarter);
             // suma el pes de les peçes
-            const pesArtQuarter = data.map((item) => {
-                if (item.art_codi.trim() == '001307') {
-                    console.log(item.peso_art);
-                    return item.peso_art;
-                }
+            const pesArtQuarterDerrere = data.slice(2, 4).map((item) => {
+                canal.quarter.davants.push(quarter);
+                console.log(item.peso_art);
+                return item.peso_art;
             }).filter((value) => value !== undefined); // Filter out undefined values
             // suma el pesArtQuarter
-            const sumArtQuarter = pesArtQuarter.reduce((total, item) => total + item, 0)
-            console.log(sumArtQuarter);
-            quarter.peso_art = sumArtQuarter
+            const sumArtQuarterDerrere = pesArtQuarterDerrere.reduce((total, item) => total + item, 0)
+            console.log(sumArtQuarterDerrere);
+            quarter.peso_art = sumArtQuarterDerrere
         }
-        // Filtrem les peçes per derreres
-        if ( item.art_codi.trim() == '001107' ){ // 001107 es el codi de la peça del davant
+
+        // Filtrem les peçes per davants
+        if ( item.art_codi.trim() == data.slice(4, 5)[0].art_codi.trim() ){ // 001107 es el codi de la peça del davant
             // Añadir el quarter al canal
-            canal.quarter.derreres.push(quarter);
-            const pesArtQuarter = data.map((item) => {
-                if (item.art_codi.trim() == '001107') {
+            
+            const pesArtQuarterDavant = data.slice(4, 6).map((item) => {
+                canal.quarter.derreres.push(quarter);
+                //if (item.art_codi.trim() == '001107') {
                     return item.peso_art;
-                }
+                //}
             }).filter((value) => value !== undefined); // Filter out undefined values
-            const sumArtQuarter = pesArtQuarter.reduce((total, item) => total + item, 0)
-            quarter.peso_art = sumArtQuarter;
+            const sumArtQuarterDavant = pesArtQuarterDavant.reduce((total, item) => total + item, 0)
+            quarter.peso_art = sumArtQuarterDavant;
         }
 
         // treu els elemnets repetits del array de derreres i davants
@@ -140,7 +141,7 @@ function formatArticles(data) {
             peso_art: item.peso_art
         };
         // carregem les dades diferents a la canal i els quartes: davants i derreres
-        if (item.art_codi.trim() !== '001307' && item.art_codi.trim() !== '001107' && item.art_codi.trim() !== '001007' ) {
+        if (item.art_codi.trim() !== data.slice(4, 6) && item.art_codi.trim() !== data.slice(2, 4) && item.art_codi.trim() !== data.slice(0, 1) ) {
 
             if (item.lot_codigo.trim() == artDavant.lot_codigo) {
                 // Añadir el despiece al quarter
@@ -153,6 +154,7 @@ function formatArticles(data) {
 
         }
     }
+
     return canals;
 }
 
@@ -208,12 +210,19 @@ export async function fechDespiecePerDib(dib_id) {
             RIGHT JOIN prordfab_capturas_34 as procap ON APMD.huc_id = procap.huc_id
             inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
         WHERE APM.dib_id = ${dib_id} --and procap.lot_codigo = '2024011074' --'2024011275'
-        order by peso_art desc; 
+
+        UNION ALL
+
+		SELECT dib_id, procap.lot_codigo, procap.art_codi, ARTICLES.art_descrip, procap.ofc_cantidad as peso_art FROM ApmSSCC AS APM 
+            INNER JOIN ApmSSCC_Despiece AS APMD ON APM.aps_id = APMD.aps_id 
+            RIGHT JOIN prordfab_capturas_historico_34 as procap ON APMD.huc_id = procap.huc_id
+            inner join ARTICLES on ARTICLES.art_codi = procap.art_codi
+        WHERE APM.dib_id = ${dib_id} --and procap.lot_codigo = '2024011074' --'2024011275'
+        order by peso_art desc;
         `;
 
         const dataArticlesFormat = formatArticles(result.recordset);
         const data = dataArticlesFormat;
-
 
         sql.close();
         return data;
@@ -272,7 +281,6 @@ const createAnimal = async (item) => {
 
 
 const createMainArticleByAnimal = async (newAnimal, item) => {
-    console.log(newAnimal, item)
     try {
         const animalArticle = await prisma.article.create({
             data: {
