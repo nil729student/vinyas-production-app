@@ -48,9 +48,9 @@ export default function LoadData() {
 
     return (
         <>
-            <div class="flex justify-center items-center w-full">
+            <div className="flex justify-center items-center w-full">
                 <div className="bg-white shadow-md rounded justify-center px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
-                    <div class="flex flex-col w-full ">
+                    <div className="flex flex-col w-full ">
                         <input
                             type="text"
                             placeholder="DIB"
@@ -144,7 +144,6 @@ export default function LoadData() {
                                                 </td>
 
                                             </tr>
-
                                         ))}
                                     </tbody>
 
