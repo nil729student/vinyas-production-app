@@ -58,8 +58,8 @@ function formatArticles(data) {
                 art_descrip: item.art_descrip.trim(),
                 peso_art: [],
                 quarter: {
-                    davants: [],
-                    derreres: []
+                    derreres: [],
+                    davants: []
                 }
             };
             // enviali al array canals
@@ -99,7 +99,7 @@ function formatArticles(data) {
             // Añadir el quarter al canal amb la suma total del pes de les peçes 
             // suma el pes de les peçes
             const pesArtQuarterDerrere = data.slice(2, 4).map((item) => {
-                canal.quarter.davants.push(quarter);
+                canal.quarter.derreres.push(quarter);
                 console.log(item.peso_art);
                 return item.peso_art;
             }).filter((value) => value !== undefined); // Filter out undefined values
@@ -114,7 +114,7 @@ function formatArticles(data) {
             // Añadir el quarter al canal
             
             const pesArtQuarterDavant = data.slice(4, 6).map((item) => {
-                canal.quarter.derreres.push(quarter);
+                canal.quarter.davants.push(quarter);
                 //if (item.art_codi.trim() == '001107') {
                     return item.peso_art;
                 //}
@@ -123,15 +123,18 @@ function formatArticles(data) {
             quarter.peso_art = sumArtQuarterDavant;
         }
 
-        // treu els elemnets repetits del array de derreres i davants
-        canal.quarter.davants = [...new Map(canal.quarter.davants.map(item => [item['lot_codigo'], item])).values()];
+        // treu els elemnets repetits del array de  i davants
+        canal.quarter.davants = [...new Map(canal.quarter.davants.map(item => [item['lot_codigo'], item])).values()]
         canal.quarter.derreres = [...new Map(canal.quarter.derreres.map(item => [item['lot_codigo'], item])).values()];
+;
+
     }
     // Paso 3: Organizar despieces por lote en cada quarter segun el lote del quarter i el lote del despiece
     for (let item of data) {
         // Buscar el canal
         const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
         let artDavant = canal.quarter.davants[0]
+        console.log(artDavant);
         let artDerrere = canal.quarter.derreres[0]
         // Crear el despiece
         const despiece = {
@@ -142,12 +145,13 @@ function formatArticles(data) {
         };
         // carregem les dades diferents a la canal i els quartes: davants i derreres
         if (item.art_codi.trim() !== data.slice(4, 6) && item.art_codi.trim() !== data.slice(2, 4) && item.art_codi.trim() !== data.slice(0, 1) ) {
+            
+            if (item.lot_codigo.trim() == artDavant.lot_codigo  ) {
 
-            if (item.lot_codigo.trim() == artDavant.lot_codigo) {
-                // Añadir el despiece al quarter
+                // Añadir el despiece 
                 artDavant.despiece.push(despiece);
             }
-            if (item.lot_codigo.trim() == artDerrere.lot_codigo) {
+            if (item.lot_codigo.trim() == artDerrere.lot_codigo ) {
                 // Añadir el despiece al quarter
                 artDerrere.despiece.push(despiece);
             }
