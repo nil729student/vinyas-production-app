@@ -23,6 +23,7 @@ export default function LoadData() {
             const plainObject = JSON.parse(JSON.stringify(resultat));
             const plainObjectAnimal_Escandall = JSON.parse(JSON.stringify(animal));
             plainObjectAnimal_Escandall[0].despiece = plainObject;
+            console.log(plainObjectAnimal_Escandall);
             setDataEscandall(plainObjectAnimal_Escandall);
             return plainObject;
         } catch (error) {

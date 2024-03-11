@@ -2,6 +2,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { getAllAnimals } from '@/lib/animalActions';
 import { handlerEscandallbyAnimal } from '@/lib/escandallActions';
+import EscandallList from './EscandallList';
 
 const AnimalList = () => {
     const [animals, setAnimals] = useState([]);
@@ -36,40 +37,29 @@ const AnimalList = () => {
         try {
             const fetchedEscandall = await handlerEscandallbyAnimal(animalId);
             setEscandall(fetchedEscandall);
-            setShowDetall(true); // Muestra los detalles
+            setShowDetall(!showDetall);
         } catch (error) {
             console.error('Error fetching escandall:', error);
         }
     };
 
-    const toggleDetall = () => {
-        setShowDetall(!showDetall); // Cambia el estado de showDetall cada vez que se hace clic en el botón
-    };
-
 
 
     return (
-        <div className='bg-white'>
-            <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} />
-            <ul>
-                {showDetall && escandall && (
-                    <div>
-                        <h2>Detall</h2>
-                        <ul>
-                            {escandall.map((article) => (
-                                <li key={article.id}>{JSON.stringify(escandall)}</li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-                {filteredAnimals.map((animal) => (
-                    <li key={animal.id}>
-                        <button onClick={() => handleDetall(animal.id)}>{animal.dib}</button>
-                    </li>
-                )
-
-                )}
-            </ul>
+        <div className="flex">
+            <div className="w-1/6 justify-center bg-gray-200 p-4 ">
+                <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
+                <ul>
+                    {filteredAnimals.map((animal) => (
+                        <li key={animal.id} className="mb-2">
+                            <button onClick={() => handleDetall(animal.id)} className="p-2 bg-slate-300 hover:bg-slate-400 text-black rounded mx-auto flex items-center justify-center w-full ">{animal.dib}</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <div className="w-3/4 p-4">
+                {showDetall && <EscandallList escandall={escandall} />}
+            </div>
         </div>
     );
 };

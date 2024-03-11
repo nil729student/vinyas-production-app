@@ -1,0 +1,261 @@
+[
+    {
+        "dib_id": "CZ8307600811",
+        "lpa_pes": 255,
+        "lpa_qualitatabr": "AO 2+",
+        "lpa_sexe": "M",
+        "despiece": [
+            {
+                "dib_id": "CZ830760081",
+                "lot_codigo": "CZ830760081",
+                "art_codi": "001007",
+                "art_descrip": "CANAL AÑOJO AO",
+                "peso_art": 249.9,
+                "quarter": {
+                    "derreres": [
+                        {
+                            "lot_codigo": "2024011074",
+                            "art_codi": "001307",
+                            "art_descrip": "TRASERO AÑOJO AO",
+                            "peso_art": 155.5,
+                            "despiece": [
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "001307",
+                                    "art_descrip": "TRASERO AÑOJO AO",
+                                    "peso_art": 77.75
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "001307",
+                                    "art_descrip": "TRASERO AÑOJO AO",
+                                    "peso_art": 77.75
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011122",
+                                    "art_descrip": "TAPA TERNERA VACÍO -9KG",
+                                    "peso_art": 8.31
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011122",
+                                    "art_descrip": "TAPA TERNERA VACÍO -9KG",
+                                    "peso_art": 7.88
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011124",
+                                    "art_descrip": "CONTRA TERNERA VACÍO",
+                                    "peso_art": 4.75
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011413",
+                                    "art_descrip": "LOMO BAJO TERNERA VACIO 4-5KG",
+                                    "peso_art": 4.63
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011129",
+                                    "art_descrip": "BABILLA TERNERA VACÍO -6KG",
+                                    "peso_art": 4.6
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011129",
+                                    "art_descrip": "BABILLA TERNERA VACÍO -6KG",
+                                    "peso_art": 4.56
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011124",
+                                    "art_descrip": "CONTRA TERNERA VACÍO",
+                                    "peso_art": 4.53
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011413",
+                                    "art_descrip": "LOMO BAJO TERNERA VACIO 4-5KG",
+                                    "peso_art": 4.16
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011126",
+                                    "art_descrip": "CORAZON CADERA TERNERA VACÍO -4.2KG",
+                                    "peso_art": 3.38
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011233",
+                                    "art_descrip": "CUBE ROLL TERNERA VACIO +3.2KG",
+                                    "peso_art": 3.27
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011126",
+                                    "art_descrip": "CORAZON CADERA TERNERA VACÍO -4.2KG",
+                                    "peso_art": 3.21
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011145",
+                                    "art_descrip": "CUBE ROLL TERNERA VACÍO +2KG",
+                                    "peso_art": 2.91
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011123",
+                                    "art_descrip": "REDONDO TERNERA VACIO+2KG",
+                                    "peso_art": 2.22
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011130",
+                                    "art_descrip": "CULATA DE CONTRA TERNERA VACÍO",
+                                    "peso_art": 2.16
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011123",
+                                    "art_descrip": "REDONDO TERNERA VACIO+2KG",
+                                    "peso_art": 2.06
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011131",
+                                    "art_descrip": "MORCILLO TRASERO TERNERA VACÍO",
+                                    "peso_art": 1.99
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011131",
+                                    "art_descrip": "MORCILLO TRASERO TERNERA VACÍO",
+                                    "peso_art": 1.94
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011130",
+                                    "art_descrip": "CULATA DE CONTRA TERNERA VACÍO",
+                                    "peso_art": 1.9
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011127",
+                                    "art_descrip": "PICAÑA TERNERA VACÍO",
+                                    "peso_art": 1.48
+                                },
+                                {
+                                    "lot_codigo": "2024011074",
+                                    "art_codi": "011127",
+                                    "art_descrip": "PICAÑA TERNERA VACÍO",
+                                    "peso_art": 1.36
+                                }
+                            ]
+                        }
+                    ],
+                    "davants": [
+                        {
+                            "lot_codigo": "2024011275",
+                            "art_codi": "001107",
+                            "art_descrip": "DELANTERO AÑOJO AO",
+                            "peso_art": 96.6,
+                            "despiece": [
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "001107",
+                                    "art_descrip": "DELANTERO AÑOJO AO",
+                                    "peso_art": 48.3
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "001107",
+                                    "art_descrip": "DELANTERO AÑOJO AO",
+                                    "peso_art": 48.3
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011243",
+                                    "art_descrip": "AGUJA TERNERA VACIO 5-8 KG",
+                                    "peso_art": 7.34
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011243",
+                                    "art_descrip": "AGUJA TERNERA VACIO 5-8 KG",
+                                    "peso_art": 6.86
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011099",
+                                    "art_descrip": "FALDA PECHO TERNERA PAD VACIO",
+                                    "peso_art": 4.61
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011398",
+                                    "art_descrip": "CENTRO ESPALDA TERNERA VACÍO  2-3KG",
+                                    "peso_art": 3
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011398",
+                                    "art_descrip": "CENTRO ESPALDA TERNERA VACÍO  2-3KG",
+                                    "peso_art": 2.94
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011112",
+                                    "art_descrip": "MORCILLO DELANTERO TERNERA VACÍO",
+                                    "peso_art": 2.51
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011406",
+                                    "art_descrip": "CHURRASCO TERNERA VACIO -3KG",
+                                    "peso_art": 2.48
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011406",
+                                    "art_descrip": "CHURRASCO TERNERA VACIO -3KG",
+                                    "peso_art": 2.47
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011112",
+                                    "art_descrip": "MORCILLO DELANTERO TERNERA VACÍO",
+                                    "peso_art": 2.15
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011109",
+                                    "art_descrip": "LLANA TERNERA VACÍO",
+                                    "peso_art": 2.02
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011109",
+                                    "art_descrip": "LLANA TERNERA VACÍO",
+                                    "peso_art": 2.02
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011111",
+                                    "art_descrip": "REDONDO ESPALDA TERNERA VACÍO",
+                                    "peso_art": 1.45
+                                },
+                                {
+                                    "lot_codigo": "2024011275",
+                                    "art_codi": "011111",
+                                    "art_descrip": "REDONDO ESPALDA TERNERA VACÍO",
+                                    "peso_art": 1.42
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+]
