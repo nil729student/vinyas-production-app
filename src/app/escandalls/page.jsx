@@ -4,8 +4,12 @@ import { getAllAnimals } from '@/lib/animalActions';
 import { handlerEscandallbyAnimal } from '@/lib/escandallActions';
 import EscandallList from './EscandallList';
 
+
+export const EscandallContext = React.createContext();
+
 const AnimalList = () => {
     const [animals, setAnimals] = useState([]);
+    const [selectAnimal, setSelectAnimal] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showDetall, setShowDetall] = useState(false);
     const [escandall, setEscandall] = useState([]);
@@ -19,7 +23,6 @@ const AnimalList = () => {
                 console.error('Error fetching animals:', error);
             }
         };
-
         fetchData();
 
     }, []);
@@ -30,20 +33,17 @@ const AnimalList = () => {
         );
     }, [animals, searchTerm]);
 
-    // on set detall true, fetch escandall by animalId
-
-
     const handleDetall = async (animalId) => {
         try {
             const fetchedEscandall = await handlerEscandallbyAnimal(animalId);
+            const handleAnimal = animals.find((animal) => animal.id === animalId);
+            setSelectAnimal(handleAnimal);
             setEscandall(fetchedEscandall);
             setShowDetall(!showDetall);
         } catch (error) {
             console.error('Error fetching escandall:', error);
         }
     };
-
-
 
     return (
         <div className="flex">
@@ -57,9 +57,11 @@ const AnimalList = () => {
                     ))}
                 </ul>
             </div>
-            <div className="w-3/4 p-4">
-                {showDetall && <EscandallList escandall={escandall} />}
-            </div>
+            <EscandallContext.Provider value={{ showDetall, escandall, selectAnimal }}>
+                <div className="w-3/4 p-4">
+                    {showDetall && <EscandallList />}
+                </div>
+            </EscandallContext.Provider>
         </div>
     );
 };
