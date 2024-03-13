@@ -13,7 +13,7 @@ const ArtList = (article) => {
                         <li>Lot: <b>{art.lot}</b></li>
                         <li>Preu: <b>{art.price}</b></li>
                         <li>Pes: <b>{art.weightKg} kg</b></li>
-                        <li> Persentatge  %</li>
+                        <li> Persentatge <b>{art.percent}</b>  %</li>
                     </ul>
                 ))
             }

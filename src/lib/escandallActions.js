@@ -23,9 +23,26 @@ export async function handlerEscandallbyAnimal(animalId) {
             }
         }
     });
-
     
-
-
     return escandall;
+}
+
+
+// calcul de els percentatges d'un article respecte el quarter davant i derrere
+export async function handlerPercentatgeArticle(articleId) {
+    const article = await prisma.article.findUnique({ // obtenim l'article per id
+        where: { id: articleId },
+        include: {
+            parent: {
+                include: {
+                    parent: true
+                }
+            }
+        }
+    });
+    console.log(article);
+    // calculem el percentatge de l'article respecte el quarter.
+    //const total = article.parent.parent.weightKg;
+    //const percentatge = (article.weightKg * 100) / total;
+    //return percentatge;
 }
