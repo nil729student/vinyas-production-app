@@ -18,11 +18,16 @@ export async function handlerEscandallbyAnimal(animalId) {
         include: {
             children: {
                 include: {
-                    children: true
+                    children: {
+                        orderBy: {
+                            art_codi: 'asc',
+                        },
+                    }
                 }
             }
         }
     });
+    console.log(escandall);
     
     return escandall;
 }

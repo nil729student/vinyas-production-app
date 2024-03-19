@@ -8,24 +8,25 @@ const ArtAnimal = () => {
     const { escandall } = useContext(EscandallContext);
 
     return (
-    <> 
-
-        <h3>Dades animal</h3>
-        <div>
-            <h3>{selectAnimal.dib}</h3>
-            <ul>
-                <li>Clasifiacio: <b>{selectAnimal.classificationId}</b></li>
-                <li>Edat: <b>{selectAnimal.age}</b> y</li>
-                <li>Sexe: <b>{selectAnimal.sexe}</b></li>
-                <li>Codi article: <b>{escandall[0].art_codi}</b></li>
-                <li>Pes: <b>{escandall[0].weightKg}</b> kg</li>
-                <li>Article consumits: <b>{escandall[0].art_codi}</b> - <b>{escandall[0].name}</b>  Unitats : <b>{escandall[0].units}</b></li>
-                <li>Preu: <b>?</b></li>
-            </ul>
-
+        <div className="p-4 rounded-lg  bg-bg-secondary">
+            <h3 className="text-xl font-bold mb-2 text-gray-800">Dades animal</h3>
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <p className="font-semibold text-gray-700">DIB: {selectAnimal.dib}</p>
+                    <p className="font-semibold text-gray-700">Clasificació: {selectAnimal.classificationId}</p>
+                    <p className="font-semibold text-gray-700">Edat: {selectAnimal.age}</p>
+                    <p className="font-semibold text-gray-700">Sexe: {selectAnimal.sexe}</p>
+                </div>
+                <div>
+                    <p className="font-semibold text-gray-700">Codi article: {escandall[0].art_codi}</p>
+                    <p className="font-semibold text-gray-700">Pes: {escandall[0].weightKg} kg</p>
+                    <p className="font-semibold text-gray-700">Article consumit: {escandall[0].art_codi} - {escandall[0].name}</p>
+                    <p className="font-semibold text-gray-700">Unitats: {escandall[0].units}</p>
+                    <p className="font-semibold text-gray-700">Preu: ?</p>
+                </div>
+            </div>
         </div>
-
-    </>
-)};
+    );
+};
 
 export default ArtAnimal;

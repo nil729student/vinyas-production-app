@@ -12,30 +12,31 @@ const EscandallList = () => {
 
 
     return (
-        <div className="  " >
-            <h2 className="text-2xl mb-4">Escandall</h2>
-            <div className=" justify-center items-center">
-                <div className="p-4 bg-white shadow-md rounded-lg overflow-hidden">
+        <>
+        <h2 className="text-2xl mb-4">Escandall</h2>
+        <div className="bg-white shadow-md rounded-lg overflow-hidden " >
+            
+            <div className=" justify-center items-center ">
+                <div className="p-4 ">
                     <ArtAnimal />
-
-                    <button
-                        className="ml-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                </div>
+                <button
+                        className="ml-4 ml-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={() => setviewQuarters(!viewQuarters)}
                     >
                         {viewQuarters ? 'Oculta' : 'Mostrar'}
-                    </button>
-                </div>
+                </button>
             </div>
 
             {viewQuarters && (
-                <div className="mt-4">
+                <div className="m-4">
                     {escandall[0].children.map((quart) => (
                         <ArtQuater key={quart.id} quart={quart} />
                     ))}
                 </div>
             )}
-
         </div>
+        </>
 
     );
 }

@@ -39,7 +39,7 @@ const AnimalList = () => {
             const handleAnimal = animals.find((animal) => animal.id === animalId);
             setSelectAnimal(handleAnimal);
             setEscandall(fetchedEscandall);
-            setShowDetall(!showDetall);
+            setShowDetall(true);
         } catch (error) {
             console.error('Error fetching escandall:', error);
         }
@@ -52,7 +52,7 @@ const AnimalList = () => {
                 <ul>
                     {filteredAnimals.map((animal) => (
                         <li key={animal.id} className="mb-2">
-                            <button onClick={() => handleDetall(animal.id)} className="p-2 bg-slate-300 hover:bg-slate-400 text-black rounded mx-auto flex items-center justify-center w-full ">{animal.dib}</button>
+                            <button onClick={() => handleDetall(animal.id)} className={`p-2 bg-slate-300 hover:bg-slate-400 text-black rounded mx-auto flex items-center justify-center w-full ${selectAnimal && selectAnimal.id === animal.id ? 'bg-slate-400' : ''}`}>{animal.dib}</button>
                         </li>
                     ))}
                 </ul>

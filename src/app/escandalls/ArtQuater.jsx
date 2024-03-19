@@ -3,12 +3,12 @@ import ArtList from "./ArtList";
 
 const ArtQuarter = (quarts) => {
     const [showArticles, setShowArticles] = useState(false);
+    const { quart } = quarts;
+    const pesQuart = quart.weightKg;
 
-    const pesQuart = quarts.quart.weightKg;
+    const sumaArts = quart.children.reduce((acc, art) => acc + art.weightKg, 0);
 
-    const sumaArts = quarts.quart.children.reduce((acc, art) => acc + art.weightKg, 0);
-
-    const percentatgeCalulArts = quarts.quart.children.map((art) => {
+    const percentatgeCalulArts = quart.children.map((art) => {
         const percent = (art.weightKg * 100) / pesQuart;
         return { ...art, percent };
     });
@@ -16,36 +16,28 @@ const ArtQuarter = (quarts) => {
     const sumaPercentatge = percentatgeCalulArts.reduce((acc, art) => acc + art.percent, 0);
 
     return (
-        <div>
-            <div className="bg-slate-400">
-                <h3>Article fill del para (QUATER)</h3>
-                <ul>
-                    <li>Article: <b>{quarts.quart.name}</b></li>
-                    <li>Codi: <b>{quarts.quart.art_codi}</b></li>
-                    <li>Lot: <b>{quarts.quart.lot}</b></li>
-                    <li>Preu: <b>{quarts.quart.price}</b></li>
-                    <li>Pes: <b>{quarts.quart.weightKg} kg</b></li>
-                    <li>Total Articles: <b>{sumaArts}</b></li>
-                    <li> Persentatge <b>{sumaPercentatge}</b>  %</li>
-
-
+        <div className=" mx-auto mb-6 rounded-lg overflow-hidden border border-gray-200">
+            <div className="p-4 bg-gray-100">
+                <h3 className="text-xl font-semibold mb-2">Article fill del para (QUATER)</h3>
+                <ul className="space-y-2">
+                    <li><span className="font-semibold">Article:</span> <span>{quart.name}</span></li>
+                    <li><span className="font-semibold">Codi:</span> <span>{quart.art_codi}</span></li>
+                    <li><span className="font-semibold">Lot:</span> <span>{quart.lot}</span></li>
+                    <li><span className="font-semibold">Preu:</span> <span>{quart.price}</span></li>
+                    <li><span className="font-semibold">Pes:</span> <span>{quart.weightKg} kg</span></li>
+                    <li><span className="font-semibold">Total Articles:</span> <span>{sumaArts} kg</span></li>
+                    <li><span className="font-semibold">Percentatge:</span> <span>{sumaPercentatge}%</span></li>
                 </ul>
                 <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => setShowArticles(!showArticles)}
                 >
-                    {showArticles ? 'Mostrar oculta' : 'Mostrar articles'}
+                    {showArticles ? 'Ocultar articles' : 'Mostrar articles'}
                 </button>
             </div>
-
-
-
             {showArticles &&
-
                 <ArtList article={percentatgeCalulArts} />
             }
-
-
         </div>
     );
 }
