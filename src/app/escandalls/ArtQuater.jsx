@@ -18,7 +18,7 @@ const ArtQuarter = (quarts) => {
     return (
         <div className=" mx-auto mb-6 rounded-lg overflow-hidden border border-gray-200">
             <div className="p-4 bg-gray-100">
-                <h3 className="text-xl font-semibold mb-2">Article fill del para (QUATER)</h3>
+                <h3 className="text-xl font-semibold mb-2">{quart.name}</h3>
                 <ul className="space-y-2">
                     <li><span className="font-semibold">Article:</span> <span>{quart.name}</span></li>
                     <li><span className="font-semibold">Codi:</span> <span>{quart.art_codi}</span></li>

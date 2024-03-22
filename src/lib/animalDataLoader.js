@@ -39,12 +39,10 @@ export async function fechAnimalByDib(dib_id) {
     }
 }
 
-// S'ha de canviar el codi de article de la canal i el codi de article per el quarter
-
 
 function formatArticles(data) {
     let canals = [];
-    console.log(data);
+
     // Pas 1: Crear les canals
     for (let item of data.slice(0, 1)) {
         //console.log("canal: ", item)
@@ -67,8 +65,8 @@ function formatArticles(data) {
             //break;
         //}
     }
+
     const pesArtCanal = data.slice(0, 2).map((item) => {
-        console.log(item.art_codi.trim());
         //if (item.art_codi.trim() == '001007') {
             //console.log(item.peso_art);
             return item.peso_art;
@@ -76,7 +74,8 @@ function formatArticles(data) {
     }).filter((value) => value !== undefined); // Filter out undefined values
 
     const sumArtCanal = pesArtCanal.reduce((total, item) => total + item, 0)
-    canals[0].peso_art = sumArtCanal;
+
+    canals[0].peso_art = parseFloat(sumArtCanal.toFixed(2));
 
 
 
@@ -94,24 +93,21 @@ function formatArticles(data) {
             despiece: []
         };
         // Filtrem les peçes per derreres
-        console.log(data.slice(2, 3)[0].art_codi.trim());
         if ( item.art_codi.trim() == data.slice(2, 3)[0].art_codi.trim()){
             // Añadir el quarter al canal amb la suma total del pes de les peçes 
             // suma el pes de les peçes
             const pesArtQuarterDerrere = data.slice(2, 4).map((item) => {
                 canal.quarter.derreres.push(quarter);
-                console.log(item.peso_art);
                 return item.peso_art;
             }).filter((value) => value !== undefined); // Filter out undefined values
             // suma el pesArtQuarter
             const sumArtQuarterDerrere = pesArtQuarterDerrere.reduce((total, item) => total + item, 0)
-            console.log(sumArtQuarterDerrere);
-            quarter.peso_art = sumArtQuarterDerrere
+            quarter.peso_art = parseFloat(sumArtQuarterDerrere.toFixed(2))
         }
 
         // Filtrem les peçes per davants
         if ( item.art_codi.trim() == data.slice(4, 5)[0].art_codi.trim() ){ // 001107 es el codi de la peça del davant
-            // Añadir el quarter al canal
+            // Afagim el quarter al canal
             
             const pesArtQuarterDavant = data.slice(4, 6).map((item) => {
                 canal.quarter.davants.push(quarter);
@@ -120,7 +116,8 @@ function formatArticles(data) {
                 //}
             }).filter((value) => value !== undefined); // Filter out undefined values
             const sumArtQuarterDavant = pesArtQuarterDavant.reduce((total, item) => total + item, 0)
-            quarter.peso_art = sumArtQuarterDavant;
+
+            quarter.peso_art = parseFloat(sumArtQuarterDavant.toFixed(2));
         }
 
         // treu els elemnets repetits del array de  i davants
@@ -131,7 +128,7 @@ function formatArticles(data) {
     }
     // Paso 3: Organizar despieces por lote en cada quarter segun el lote del quarter i el lote del despiece
     for (let item of data) {
-        // Buscar el canal
+        // Buscar la canal
         const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
         let artDavant = canal.quarter.davants[0]
         console.log(artDavant);
@@ -145,15 +142,16 @@ function formatArticles(data) {
         };
         // carregem les dades diferents a la canal i els quartes: davants i derreres
         if (item.art_codi.trim() !== data.slice(4, 6) && item.art_codi.trim() !== data.slice(2, 4) && item.art_codi.trim() !== data.slice(0, 1) ) {
-            
-            if (item.lot_codigo.trim() == artDavant.lot_codigo  ) {
 
-                // Añadir el despiece 
+            if (item.lot_codigo.trim() == artDavant.lot_codigo && despiece.art_codi !== artDavant.art_codi ) {
+                
+                // Afeguim el despiece 
                 artDavant.despiece.push(despiece);
             }
-            if (item.lot_codigo.trim() == artDerrere.lot_codigo ) {
-                // Añadir el despiece al quarter
+            if (item.lot_codigo.trim() == artDerrere.lot_codigo && despiece.art_codi !== artDerrere.art_codi) {
+                // Afeguim el despiece al quarter
                 artDerrere.despiece.push(despiece);
+
             }
 
         }
@@ -298,7 +296,7 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
                 units: 2,
                 unitsConsum: 2,
                 animal: { connect: newAnimal },
-                art_codi: 1,
+                art_codi: item.despiece[0].art_codi,
             },
             select: {
                 id: true,
@@ -329,7 +327,7 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
             unitsConsum: 1,
             animal: { connect: animalId },
             parent: { connect: parentArticle },
-            art_codi: 1,
+            art_codi: article.art_codi,
         }));
 
         const dataArticlesDerrere = articles.despiece[0].quarter.derreres.map((article) => ({
@@ -344,7 +342,7 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
             unitsConsum: 1,
             animal: { connect: animalId },
             parent: { connect: parentArticle },
-            art_codi: 1,
+            art_codi: article.art_codi,
         }));
 
         const newArticleDavantPromises = dataArticlesDavant.map((item) => {
@@ -380,6 +378,7 @@ const createArticle = async (articles, parentArticle, animalId) => {
     console.log(animalId)
     try {
         const dataArticlesDavant = articles.despiece[0].quarter.davants.map((article) => {
+            
             return article.despiece.map((item) => ({
                 name: item.art_descrip.trim(),
                 lot: item.lot_codigo,
@@ -392,7 +391,7 @@ const createArticle = async (articles, parentArticle, animalId) => {
                 unitsConsum: 1,
                 animal: { connect: animalId },
                 parent: { connect: { id: parentArticle.newArticleDavant[0].id } },
-                art_codi: 1,
+                art_codi: item.art_codi,
             }));
         }).flat();
 
@@ -409,7 +408,7 @@ const createArticle = async (articles, parentArticle, animalId) => {
                 unitsConsum: 1,
                 animal: { connect: animalId },
                 parent: { connect: {id: parentArticle.newArticleDerrere[0].id }},
-                art_codi: 1,
+                art_codi: item.art_codi,
             }));
         }).flat();
 

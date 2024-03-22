@@ -47,7 +47,7 @@ const AnimalList = () => {
 
     return (
         <div className="flex">
-            <div className="w-1/6 justify-center bg-gray-200 p-4 ">
+            <div className="w-1/6 justify-center bg-gray-200 p-4 h-screen">
                 <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
                 <ul>
                     {filteredAnimals.map((animal) => (
@@ -58,7 +58,7 @@ const AnimalList = () => {
                 </ul>
             </div>
             <EscandallContext.Provider value={{ showDetall, escandall, selectAnimal }}>
-                <div className="w-3/4 p-4">
+                <div className="w-3/4 p-7 pl-20">
                     {showDetall && <EscandallList />}
                 </div>
             </EscandallContext.Provider>

@@ -16,12 +16,12 @@ const EscandallList = () => {
         <h2 className="text-2xl mb-4">Escandall</h2>
         <div className="bg-white shadow-md rounded-lg overflow-hidden " >
             
-            <div className=" justify-center items-center ">
-                <div className="p-4 ">
+            <div className=" justify-center items-center">
+                <div className=" p-4">
                     <ArtAnimal />
                 </div>
                 <button
-                        className="ml-4 ml-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 mb-4"
                         onClick={() => setviewQuarters(!viewQuarters)}
                     >
                         {viewQuarters ? 'Oculta' : 'Mostrar'}

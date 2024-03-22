@@ -20,6 +20,9 @@ export default function Navbar() {
           <Link href="/escandalls" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
             Escandalls
           </Link>
+          <Link href="/panel" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+            Panell de control
+          </Link>
           <Link href="/formArticles" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
             Form Articles
           </Link>
