@@ -36,7 +36,7 @@ const ArtQuarter = (quarts) => {
                 </button>
             </div>
             {showArticles &&
-                <ArtList article={percentatgeCalulArts} />
+                <ArtList article={percentatgeCalulArts} lot={quart.lot} />
             }
         </div>
     );

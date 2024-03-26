@@ -33,8 +33,8 @@ model Article {
   lot         String      
   name        String
   description String?
-  units       Int
-  unitsConsum Int
+  units       Int @default(1)
+  unitsConsum Int @default(1)
   price       Float
   image      String?
   weightKg    Float

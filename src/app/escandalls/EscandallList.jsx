@@ -8,7 +8,7 @@ import { EscandallContext } from "./page";
 
 const EscandallList = () => {
     const { escandall } = useContext(EscandallContext);
-    const [viewQuarters, setviewQuarters] = useState(false); 
+    const [viewQuarters, setViewQuarters] = useState(false); 
 
 
     return (
@@ -22,7 +22,7 @@ const EscandallList = () => {
                 </div>
                 <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 mb-4"
-                        onClick={() => setviewQuarters(!viewQuarters)}
+                        onClick={() => setViewQuarters(!viewQuarters)}
                     >
                         {viewQuarters ? 'Oculta' : 'Mostrar'}
                 </button>

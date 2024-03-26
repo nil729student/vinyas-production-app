@@ -244,7 +244,7 @@ export async function createEscandall(dataEscandall) {
         const articleAnimalId = await createMainArticleByAnimal(animalId, dataEscandall);
         const articleQuarter = await createArticleQuarter(dataEscandall, articleAnimalId, animalId);
         // insertem els articles dels quarts
-        const article = await createArticle(dataEscandall, articleQuarter, animalId);
+        const article = await createManyArticles(dataEscandall, articleQuarter, animalId);
         // cridem a la funció article
         article;
 
@@ -373,7 +373,7 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
 }
 
 
-const createArticle = async (articles, parentArticle, animalId) => {
+const createManyArticles = async (articles, parentArticle, animalId) => {
     console.log(parentArticle) // { newArticleDavant: [ { id: 291 } ], newArticleDerrere: [ { id: 292 } ] }
     console.log(animalId)
     try {
