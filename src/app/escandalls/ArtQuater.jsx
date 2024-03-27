@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ArtList from "./ArtList";
 
 const ArtQuarter = (quarts) => {
-    const [showArticles, setShowArticles] = useState(false);
+    const [showArticles, setShowArticles] = useState(true);
     const { quart } = quarts;
     const pesQuart = quart.weightKg;
 
@@ -36,7 +36,7 @@ const ArtQuarter = (quarts) => {
                 </button>
             </div>
             {showArticles &&
-                <ArtList article={percentatgeCalulArts} lot={quart.lot} />
+                <ArtList article={percentatgeCalulArts} quarter={quart} />
             }
         </div>
     );

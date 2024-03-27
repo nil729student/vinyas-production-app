@@ -4,7 +4,8 @@ import FormArticle from "./FormArticle";
 
 
 
-const ArtList = ({ article, lot }) => {
+const ArtList = ({ article, quarter }) => {
+
     const [createMode, setCreateMode] = useState(false); // Definim un estat per controlar si estem creant un nou article o no
     const [editMode, seteditMode] = useState({});// Definm el objecte que volem editar amb el id i el camp que volem editar exmple: {1: {price: 10}, 2: {price: 20}}
     const [articleList, setArticleList] = useState(article);
@@ -18,26 +19,28 @@ const ArtList = ({ article, lot }) => {
 
             }
         }));
-    };
+    }; 
 
     const handleCreateArticle = async (article) => {
         const objArticle = {
             ...article,
             art_codi: parseInt(article.art_codi),
-            lot: lot,
+            lot: quarter.lot,
             weightKg: parseFloat(article.weightKg),
             price: parseFloat(article.price),
+            animalId: quarter.animalId,
+            parentId: quarter.id,
+            classificationArtId: quarter.classificationArtId,
         };
 
-        console.log("Creating article...", objArticle)
-        // Afegir lògica per afegir un nou article a l'estat global o enviar la petició al servidor
         const newArticle = await createArticle(objArticle);
+
         setArticleList([...articleList, newArticle]); // Afegim el nou article a la llista d'articles
-        console.log("Article created:", articleList);
+
+        setCreateMode(false);
     };
 
     const handleUpdateArticle = async (id) => {
-        //  Afegir lògica per desar els canvis a l'estat global o enviar-los al servidor
         const updatedArticle = await updateArticle(editMode[id], id);
         setArticleList(articleList.map(art => art.id === id ? updatedArticle : art)); // Actualizem la llista d'articles amb les dades actualitzades
         seteditMode(prevState => ({
@@ -47,7 +50,6 @@ const ArtList = ({ article, lot }) => {
     };
 
     const handledeleteArticle = async (id) => {
-        // Afegir lògica per eliminar l'article de l'estat global o enviar la petició al servidor
         const deletedArticle = await deleteArticle(id);
         setArticleList(articleList.filter(art => art.id !== id)); // Actualizem la llista d'articles sense l'article eliminat
         return deletedArticle;
