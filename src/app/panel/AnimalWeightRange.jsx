@@ -1,6 +1,15 @@
-import React from "react";
+"use client"
 
-export default function AnimalWeightRange() {
+import React from "react";
+import { getArticlesByCanalWeightRange } from "@/lib/filterActions/AnimalWeightRange.js";
+
+export default async function AnimalWeightRange() {
+
+    const handlerAnimalWeightRange = async () => {
+        console.log("AnimalWeightRange");
+        await getArticlesByCanalWeightRange(250, 220);
+    }
+    
     return(
         <>
             <dib>
@@ -10,6 +19,7 @@ export default function AnimalWeightRange() {
                 <input id="class" className="border" type="text" />
                 <label htmlFor="class">unitat</label>
                 <input className="border" type="number" />
+                <button onClick={ handlerAnimalWeightRange }>Search</button>
             </dib>
         </>
     )

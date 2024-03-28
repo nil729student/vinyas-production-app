@@ -6,9 +6,9 @@
 
 
 "use server";
-import { Prisma, PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import prisma from './prisma';
+
 export async function handlerEscandallbyAnimal(animalId) {
     const escandall = await prisma.article.findMany({
         where: { 

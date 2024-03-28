@@ -1,7 +1,8 @@
 "use server";
-import { Prisma, PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import { Prisma } from '@prisma/client';
+import prisma from './prisma';
+
 export async function getAllAnimals() {
   try {
     // group by dib
