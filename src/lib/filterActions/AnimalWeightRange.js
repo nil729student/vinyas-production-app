@@ -38,10 +38,10 @@ export async function getArticlesByCanalWeightRange(maxWeight, minWeight) {
     });
 
     const mitjanaPerArticle = calculMitjanaPerArticle(articles);
+    const maxWeightPerArticle = getMaxWeightPerArticle(articles);
+    const minWeightPerArticle = getMinWeightPerArticle(articles);
 
-    console.log(mitjanaPerArticle);
-
-    return mitjanaPerArticle;
+    return {mitjanaPerArticle , maxWeightPerArticle, minWeightPerArticle};
 }
 
 
@@ -64,3 +64,26 @@ function calculMitjanaPerArticle(data) {
 }
 
 
+// Retorna el pes maxim de cada article
+function getMaxWeightPerArticle(data) {
+    const maxWeightPerArticle = {};
+    data.forEach(item => {
+        const { art_codi, weightKg } = item;
+        if (maxWeightPerArticle[art_codi] === undefined || weightKg > maxWeightPerArticle[art_codi]) {
+            maxWeightPerArticle[art_codi] = weightKg;
+        }
+    });
+    return maxWeightPerArticle;
+}
+
+// Retorna el pes minim de cada article
+function getMinWeightPerArticle(data) {
+    const minWeightPerArticle = {};
+    data.forEach(item => {
+        const { art_codi, weightKg } = item;
+        if (minWeightPerArticle[art_codi] === undefined || weightKg < minWeightPerArticle[art_codi]) {
+            minWeightPerArticle[art_codi] = weightKg;
+        }
+    });
+    return minWeightPerArticle;
+}
