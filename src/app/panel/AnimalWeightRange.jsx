@@ -2,21 +2,26 @@
 
 import React, { useState } from "react";
 import { getArticlesByCanalWeightRange } from "@/lib/filterActions/AnimalWeightRange.js";
+import TableAnimalWeightRange from "./TableAnimalWeightRange";
 
 export default function AnimalWeightRange() {
-
+    
+    const [loadArts, setLoadArts] = useState(false); 
     const [minWeight, setMinWeight] = useState(0);
     const [maxWeight, setMaxWeight] = useState(0);
+    const [weights, setWeights] = useState([]); // Add weights state variable
 
     const handlerAnimalWeightRange = async () => {
         console.log("AnimalWeightRange");
-        const {mitjanaPerArticle , maxWeightPerArticle, minWeightPerArticle} =  await getArticlesByCanalWeightRange(maxWeight, minWeight); // 250, 220
-        console.log(mitjanaPerArticle , maxWeightPerArticle, minWeightPerArticle);
+        const weights =  await getArticlesByCanalWeightRange(maxWeight, minWeight); // 250, 220
+        console.log(weights);
+        setLoadArts(true);
+        setWeights(weights); // Update weights state variable
     }
 
     return (
         <>
-            <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+            <div className="p-6 w-4/5 mx-auto bg-white rounded-xl shadow-md flex items-center">
                 <div className="flex-1">
                     <h1 className="text-xl font-bold mb-4">Animal Weight Range</h1>
                     <div className="mb-4">
@@ -48,8 +53,15 @@ export default function AnimalWeightRange() {
                     >
                         Search
                     </button>
+
+                    {
+                        loadArts && <TableAnimalWeightRange weights={weights}  />
+                    }
+
                 </div>
             </div>
+
+
         </>
     )
 }
