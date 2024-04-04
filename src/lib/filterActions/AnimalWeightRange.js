@@ -37,11 +37,11 @@ export async function getArticlesByCanalWeightRange(maxWeight, minWeight) {
         }
     });
 
-    const mitjanaPerArticle = calculMitjanaPerArticle(articles);
-    const maxWeightPerArticle = getMaxWeightPerArticle(articles);
-    const minWeightPerArticle = getMinWeightPerArticle(articles);
+    const artMitjanaPerArticle = calculMitjanaPerArticle(articles);
+    const artMaxWeightPerArticle = getMaxWeightPerArticle(articles);
+    const artMinWeightPerArticle = getMinWeightPerArticle(articles);
 
-    return {mitjanaPerArticle , maxWeightPerArticle, minWeightPerArticle};
+    return {articles, artMitjanaPerArticle , artMaxWeightPerArticle, artMinWeightPerArticle};
 }
 
 
