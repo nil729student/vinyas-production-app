@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useState } from "react";
-import { getArticlesByCanalWeightRange } from "@/lib/filterActions/AnimalWeightRange.js";
-import TableAnimalWeightRange from "./TableAnimalWeightRange";
+import { getArticlesByQuarterWeightRange } from "@/lib/filterActions/AnimalWeightRange.js";
+import TableQuarterWeightRange from "./TableQuarterWeightRange";
 
-export default function AnimalWeightRange() {
+export default function QuarterWeightRange() {
 
     const [loadArts, setLoadArts] = useState(false);
     const [minWeight, setMinWeight] = useState(0);
@@ -12,8 +12,8 @@ export default function AnimalWeightRange() {
     const [dataArt, setDataArt] = useState({});
     const [weights, setWeights] = useState({});
 
-    const handlerAnimalWeightRange = async () => {
-        const response = await getArticlesByCanalWeightRange(maxWeight, minWeight); // 250, 220
+    const handlerQuarterWeightRange = async () => {
+        const response = await getArticlesByQuarterWeightRange(maxWeight, minWeight); // 250, 220
         console.log(response);
         const { 
                 articles: articles, 
@@ -32,7 +32,7 @@ export default function AnimalWeightRange() {
             <div className="p-6 mb-10 mx-auto bg-white rounded-xl shadow-md flex items-center">
                 <div className="flex-1">
                     <div className=" mx-auto max-w-sm p-6" >
-                        <h1 className="text-xl font-bold mb-4">Canal Weight Range</h1>
+                        <h1 className="text-xl font-bold mb-4">Quarter Weight Range</h1>
                         <div className="mb-4">
                             <input className="border p-2 rounded w-full" type="number" placeholder="Minimum weight"
                                 onChange={(e) => {
@@ -57,7 +57,7 @@ export default function AnimalWeightRange() {
                             <input id="unit" className="border p-2 rounded w-full" type="number" />
                         </div>
                         <button
-                            onClick={handlerAnimalWeightRange}
+                            onClick={handlerQuarterWeightRange}
                             className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Search
@@ -67,7 +67,7 @@ export default function AnimalWeightRange() {
                     <div>
 
                         {
-                            loadArts && <TableAnimalWeightRange dataArt={dataArt} weights={weights} />
+                            loadArts && <TableQuarterWeightRange dataArt={dataArt} weights={weights} />
                         }
 
                     </div>
