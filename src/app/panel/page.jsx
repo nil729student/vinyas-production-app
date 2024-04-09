@@ -10,8 +10,6 @@ export default function panel() {
 
     const [switchStatus, setSwitchStatus] = useState('animal');
 
-    console.log(switchStatus);
-
     return(
         <div>
             <h1>Panel de control</h1>
