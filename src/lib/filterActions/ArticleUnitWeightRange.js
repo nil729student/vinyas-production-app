@@ -11,15 +11,6 @@ export default async function ArticleUnitWeightRange() {
                 gte: 6.50,
                 lte: 7
             },
-            parent: {
-                parent: {
-                    is: {
-                        id: {
-                            not: null
-                        }
-                    }
-                }
-            }
         },
         include: {
             parent: {
@@ -29,8 +20,7 @@ export default async function ArticleUnitWeightRange() {
             }
         }
     });
-    
-    console.log(articles);
+
     return articles;
 }
 

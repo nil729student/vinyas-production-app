@@ -2,12 +2,17 @@ import React, { useState } from "react";
 
 import ArticleUnitWeightRange from "@/lib/filterActions/ArticleUnitWeightRange";
 
-export default function SelectedArticlesList({ selectedArticles }) {
+export default function SelectedArticlesList({ selectedArticles, onData }) {
 
-    const [selectedArticlesParmas, setselectedArticlesParams] = useState({});
+    //const [selectedArticlesParmas, setselectedArticlesParams] = useState({});
 
-    const handleCanalByArticle = () => {    
+    const handleCanalByArticle = async () => {    
         console.log(selectedArticles);
+        const resArtsParent = await ArticleUnitWeightRange();
+        console.log(resArtsParent)
+        // Cuando quieras enviar datos de vuelta al padre
+        onData(resArtsParent);
+        
     }
 
     return (

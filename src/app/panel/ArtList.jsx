@@ -2,9 +2,11 @@
 
 import React, { useState } from "react";
 import SelectedArticles from "./SelectedArticlesList";
+import { data } from "autoprefixer";
 
 export default function ArtList( { dataArticles } ) {
     const [selectedArticles, setselectedArticles] = useState({});
+    const [data, setData] = useState(null);
 
     const handleSelect = (art) => {
         setselectedArticles(prevState => ({
@@ -12,6 +14,12 @@ export default function ArtList( { dataArticles } ) {
             [art.id]: prevState[art.id] ? undefined : art
         }));
     }
+
+    // revem les dades del component fill
+    const handleData = (data) => {
+        setData(data);
+    };
+
 
     return (
         <div className="flex">
@@ -29,7 +37,10 @@ export default function ArtList( { dataArticles } ) {
                 </ul>
             </div>
 
-            <SelectedArticles selectedArticles={selectedArticles} />
+            <SelectedArticles selectedArticles={selectedArticles} onData={handleData} />
+
+            {data && <pre>{JSON.stringify(data)}</pre>}
+
 
         </div>
     )

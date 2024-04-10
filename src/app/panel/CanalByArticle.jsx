@@ -18,9 +18,6 @@ export default function CanalByArticle() {
 
                 <div>
                     <ArtList dataArticles={dataArticles} />
-
-                    
-
                 </div>
 
             </div>
