@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import SelectedArticles from "./SelectedArticlesList";
 import { data } from "autoprefixer";
 
-export default function ArtList( { dataArticles } ) {
+export default function ArtList({ dataArticles }) {
+
     const [selectedArticles, setselectedArticles] = useState({});
     const [data, setData] = useState(null);
 
@@ -22,15 +23,17 @@ export default function ArtList( { dataArticles } ) {
 
 
     return (
+        
         <div className="flex">
-            <div className="w-1/6 justify-center bg-gray-200 p-4 h-screen">
+
+            <div className="w-1/6 bg-gray-200 p-4 h-screen rounded-lg shadow-lg">
                 <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
-                <ul>
+                <ul className="space-y-4">
                     {dataArticles.map((art) => (
-                        <li key={art.id} className="mb-2">
-                            <button onClick={() => handleSelect(art)} className={`p-2 bg-slate-300 hover:bg-slate-400 text-black rounded mx-auto flex items-center justify-center w-full ${selectedArticles[art.id] ? 'bg-slate-400' : ''}`}>
-                                <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => {}} /> {/* amb el operador !!: podem obtenir el seguent ! amb el primer obtenim si es true o false amb el segon si es  */}
-                                {art.id} - {art.name}
+                        <li key={art.id} className="bg-white p-4 rounded-lg shadow">
+                            <button onClick={() => handleSelect(art)} className={`flex items-center space-x-2 ${selectedArticles[art.id] ? 'bg-gray-600 text-white' : 'bg-white-300 text-black'} hover:bg-gray-600 rounded p-2 w-full`}>
+                                <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => { }} />
+                                <span>{art.id} - {art.name}</span>
                             </button>
                         </li>
                     ))}
@@ -40,7 +43,6 @@ export default function ArtList( { dataArticles } ) {
             <SelectedArticles selectedArticles={selectedArticles} onData={handleData} />
 
             {data && <pre>{JSON.stringify(data)}</pre>}
-
 
         </div>
     )

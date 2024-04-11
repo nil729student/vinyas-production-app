@@ -1,33 +1,98 @@
 import React, { useState } from "react";
-
 import ArticleUnitWeightRange from "@/lib/filterActions/ArticleUnitWeightRange";
 
 export default function SelectedArticlesList({ selectedArticles, onData }) {
 
-    //const [selectedArticlesParmas, setselectedArticlesParams] = useState({});
+    const [viewInFormat, setViewInFormat] = useState(true);
+    const [selectedArticlesParmas, setSelectedArticlesParams] = useState({});
 
-    const handleCanalByArticle = async () => {    
-        console.log(selectedArticles);
-        const resArtsParent = await ArticleUnitWeightRange();
-        console.log(resArtsParent)
-        // Cuando quieras enviar datos de vuelta al padre
+    const handleCanalByArticle = async () => {
+        console.log(selectedArticlesParmas);
+        const resArtsParent = await ArticleUnitWeightRange(selectedArticlesParmas);
+        // Enviem les dades al component para a traves de la funcio onData
         onData(resArtsParent);
-        
     }
 
+    const handleWeightChange = (e, artId) => {
+        const updatedArticlesParams = {
+            ...selectedArticlesParmas,
+            [artId]: { ...selectedArticlesParmas[artId], weight: e.target.value }
+        };
+        setSelectedArticlesParams(updatedArticlesParams);
+        console.log(updatedArticlesParams);
+    };
+
+    const handleUnitsChange = (e, artId) => {
+        const updatedArticlesParams = {
+            ...selectedArticlesParmas,
+            [artId]: { ...selectedArticlesParmas[artId], units: e.target.value }
+        };
+        setSelectedArticlesParams(updatedArticlesParams);
+        console.log(updatedArticlesParams);
+    };
+
     return (
-        <div className="w-1/6 justify-center bg-gray-200 p-4 h-screen">
-            <h2>Comanda:</h2>
-            <ul>
-                {Object.values(selectedArticles).filter(Boolean).map((art) => (
-                    <li key={art.id}>{art.name}
-                        <input type="number" placeholder="pes" />
-                        <input type="number" placeholder="unitats" />
-                    </li>
-                ))}
-            </ul>
-            
-            <button onClick={handleCanalByArticle}> Calcula </button>
-        </div>
-    )
+        <>
+
+
+
+            <div className="justify-center bg-gray-200 p-4 h-screen rounded-lg shadow-lg">
+                
+                <button onClick={() => setViewInFormat(!viewInFormat)} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Canvia format </button>
+                <h2 className="text-2xl font-bold mb-4 text-center">Comanda:</h2>
+                {
+                    viewInFormat ? (
+                        <>
+   
+                            <div className="flex  items-center space-x-2">
+
+                                <ul className="space-y-4">
+                                    {Object.values(selectedArticles).filter(Boolean).map((art) => (
+                                        <li key={art.id} className="flex flex-col space-y-2 p-4 rounded-lg shadow">
+                                            <span className="text-lg font-semibold"> {art.id} - {art.name}</span>
+                                            <div className="flex items-center space-x-2">
+                                                <label htmlFor="units" className="font-medium">Unitats</label>
+                                                <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 rounded-lg p-2 w-full" />
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <label htmlFor="weight" className="font-medium">Pes peça</label>
+                                                <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 rounded-lg p-2 w-full" />
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="flex items-center space-x-2">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Codi Nom</th>
+                                        <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Unitats</th>
+                                        <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes peça</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.values(selectedArticles).filter(Boolean).map((art) => (
+                                        <tr className="hover:bg-grey-lighter" key={art.id}>
+                                            <td className="py-4 px-6 border-b border-grey-light">{art.name} - {art.id}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">
+                                                <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 border-gray-200 rounded-lg p-2 w-full"/>
+                                            </td>
+                                            <td className="py-4 px-6 border-b border-grey-light">
+                                                <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 border-gray-200 rounded-lg p-2 w-full"/>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )
+                }
+
+                <button onClick={handleCanalByArticle} className="mt-4 bg-blue-500 text-white rounded-lg p-2 w-full hover:bg-belue-600"> Calcula </button>
+            </div>
+        </>
+    );
 }
