@@ -47,8 +47,4 @@ export default async function ArticleUnitWeightRange(selectedArticlesParmas) {
 
 
     return results;
-
-
-
 }
-
