@@ -5,11 +5,11 @@ import SelectedArticles from "./SelectedArticlesList";
 
 export default function ArtList({ dataArticles }) {
 
-    const [selectedArticles, setselectedArticles] = useState({});
+    const [selectedArticles, setSelectedArticles] = useState({});
     const [dataArtsParent, setDataArtsParent] = useState(null);
 
     const handleSelect = (art) => {
-        setselectedArticles(prevState => ({
+        setSelectedArticles(prevState => ({
             ...prevState,
             [art.id]: prevState[art.id] ? undefined : art
         }));
@@ -40,29 +40,40 @@ export default function ArtList({ dataArticles }) {
 
             <div className="flex-1 flex flex-col justify-center items-center">
                 <SelectedArticles selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
-
                 <div className="mt-4">
                     <h2 className="text-2xl font-bold mb-4 text-center">Dades dels articles seleccionats:</h2>
                     <ul className="space-y-4">
-                        {dataArtsParent && Object.entries(dataArtsParent).map(([artId, artData]) => (
-                            artData.map((artData) => (
-                                console.log(artData),
-                                <li key={artId} className="flex flex-col space-y-2 p-4 rounded-lg shadow">
-                                    <span className="text-lg font-semibold"> {artId} - {artData.parent.parent.name}</span>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="font-medium">Unitats: {artData.units}</span>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="font-medium">Pes Quarter: {artData.parent.parent.weightKg}kg</span>
-                                    </div>
-                                    <span className=" font-semibold"> {artId} - {artData.parent.name}</span>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="font-medium">Unitats: {artData.units}</span>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="font-medium">Pes Quarter: {artData.parent.weightKg}kg</span>
-                                    </div>
-                                </li>
+                        {
+                        
+                        dataArtsParent && Object.entries(dataArtsParent).map(([artId, artData]) => (
+                            console.log(artData.artMitjanaPerArticle), // Axixò no funciona
+                            artData.articles.map((artData) => (
+                                <table key={artId} className="w-full text-left border-collapse space-y-2 p-4 rounded-lg shadow">
+                                    <thead>
+                                        <tr>
+                                            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">ID - Name</th>
+                                            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Unitats</th>
+                                            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr className="hover:bg-grey-lighter">
+                                            <td className="py-4 px-6 border-b border-grey-light">{artId} - {artData.parent.parent.name}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">{artData.units}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">{artData.parent.parent.weightKg}kg</td>
+                                        </tr>
+                                        <tr className="hover:bg-grey-lighter">
+                                            <td className="py-4 px-6 border-b border-grey-light">{artId} - {artData.parent.name}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">{artData.units}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">{artData.parent.weightKg}kg</td>
+                                        </tr>
+                                        <tr className="hover:bg-grey-lighter">
+                                            <td className="py-4 px-6 border-b border-grey-light">{artId} - {artData.name}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">{artData.units}</td>
+                                            <td className="py-4 px-6 border-b border-grey-light">{artData.weightKg}kg</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             ))
                         ))}
                     </ul>

@@ -9,6 +9,7 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
     const handleCanalByArticle = async () => {
         console.log(selectedArticlesParmas);
         const resArtsParent = await ArticleUnitWeightRange(selectedArticlesParmas);
+        console.log(resArtsParent);
         // Enviem les dades al component para a traves de la funcio onData
         onDataArtsParent(resArtsParent);
     }
