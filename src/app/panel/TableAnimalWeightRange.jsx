@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
 export default function TableAnimalWeightRange({ dataArt, weights }) {
-    console.log(dataArt);
-    console.log(weights);
+
     const { artMitjanaPerArticle, artMinWeightPerArticle, artMaxWeightPerArticle } = weights;
 
     const uniqueArticles = dataArt.filter((article, index, self) =>

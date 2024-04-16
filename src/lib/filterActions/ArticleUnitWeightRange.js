@@ -43,14 +43,12 @@ export default async function ArticleUnitWeightRange(selectedArticlesParmas) {
                 // Pes minim dels pesos quarter
                 const quarterArtMinWeightPerArticle = Math.min(...articles.map(art => art.parent.weightKg));
 
-
                 // Mitjana dels pesos canal
-                const canalArtMitjanaPerArticle = articles.reduce((acc, art) => acc + art.parent.weightKg, 0) / articles.length;
+                const canalArtMitjanaPerArticle = articles.reduce((acc, art) => acc + art.parent.parent.weightKg, 0) / articles.length;
                 // Pes maxim de la canal
-                const canalArtMaxWeightPerArticle = Math.max(...articles.map(art => art.parent.weightKg));
+                const canalArtMaxWeightPerArticle = Math.max(...articles.map(art => art.parent.parent.weightKg));
                 // Pes minim de la canal
-                const canalArtMinWeightPerArticle = Math.min(...articles.map(art => art.parent.weightKg));
-
+                const canalArtMinWeightPerArticle = Math.min(...articles.map(art => art.parent.parent.weightKg));
 
                 results[art_codi] = {
                     articles,
@@ -65,12 +63,8 @@ export default async function ArticleUnitWeightRange(selectedArticlesParmas) {
                     canalArtMinWeightPerArticle
                 };
 
-                
-                console.log("Results: ", results[art_codi])
-
             } catch (err) {
                 console.error(`Error fetching articles for art_codi ${art_codi}:`, err);
-
             }
 
         }

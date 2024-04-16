@@ -15,15 +15,15 @@ export default function AnimalWeightRange() {
     const handlerAnimalWeightRange = async () => {
         const response = await getArticlesByCanalWeightRange(maxWeight, minWeight); // 250, 220
         console.log(response);
-        const { 
-                articles: articles, 
-                artMitjanaPerArticle: artMitjanaPerArticle,
-                artMaxWeightPerArticle: artMaxWeightPerArticle,
-                artMinWeightPerArticle: artMinWeightPerArticle
-            } = response; // estem definint articles i mitjanaPerArticle a les 
-        
+        const {
+            articles: articles,
+            artMitjanaPerArticle: artMitjanaPerArticle,
+            artMaxWeightPerArticle: artMaxWeightPerArticle,
+            artMinWeightPerArticle: artMinWeightPerArticle
+        } = response; // estem definint articles i mitjanaPerArticle a les 
+
         setLoadArts(true);
-        setWeights({artMitjanaPerArticle, artMaxWeightPerArticle, artMinWeightPerArticle}); // Update weights state variable
+        setWeights({ artMitjanaPerArticle, artMaxWeightPerArticle, artMinWeightPerArticle }); // Update weights state variable
         setDataArt(articles);
     }
 

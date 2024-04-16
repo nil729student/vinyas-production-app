@@ -33,16 +33,14 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
     };
 
     return (
-        <div className=" justify-center items-center p-4 rounded-lg">
+        <div className="p-4 rounded-lg">
 
             <button onClick={() => setViewInFormat(!viewInFormat)} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Canvia format </button>
             <h2 className="text-2xl font-bold mb-4 text-center">Comanda:</h2>
             {
                 viewInFormat ? (
                     <>
-
-                        <div className=" ">
-
+                        <div className="">
                             <ul className="space-y-4">
                                 {Object.values(selectedArticles).filter(Boolean).map((art) => (
                                     <li key={art.id} className="flex flex-col space-y-2 p-4 rounded-lg shadow">
@@ -61,13 +59,13 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
                         </div>
                     </>
                 ) : (
-                    <div className=" space-x-4">
-                        <table className="w-full text-left border-collapse">
+                    <div className="flex justify-center space-x-4 ">
+                        <table className=" w-1/2 text-left border-collapse table-fixed">
                             <thead>
                                 <tr>
-                                    <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Codi Nom</th>
-                                    <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Unitats</th>
-                                    <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes peça</th>
+                                    <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Codi Nom</th>
+                                    <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Unitats</th>
+                                    <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes peça</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -83,12 +81,17 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
                                     </tr>
                                 ))}
                             </tbody>
+                            
+                            <button onClick={handleCanalByArticle} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Calcula </button>
+                        
                         </table>
+
                     </div>
+                    
                 )
             }
+
             
-            <button onClick={handleCanalByArticle} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Calcula </button>
         </div>
     );
 }

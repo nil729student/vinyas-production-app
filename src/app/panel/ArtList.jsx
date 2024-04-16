@@ -2,11 +2,19 @@
 
 import React, { useState } from "react";
 import SelectedArticles from "./SelectedArticlesList";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 export default function ArtList({ dataArticles }) {
 
     const [selectedArticles, setSelectedArticles] = useState({});
     const [dataArtsParent, setDataArtsParent] = useState(null);
+    const [detallCalcul, setDetallCalcul] = useState(false);
 
     const handleSelect = (art) => {
         setSelectedArticles(prevState => ({
@@ -44,38 +52,89 @@ export default function ArtList({ dataArticles }) {
                     <h2 className="text-2xl font-bold mb-4 text-center">Dades dels articles seleccionats:</h2>
                     <ul className="space-y-4">
                         {
-                        
-                        dataArtsParent && Object.entries(dataArtsParent).map(([artId, artData]) => (
-                            console.log(artData.artMitjanaPerArticle), // Axixò no funciona
-                            artData.articles.map((artData) => (
-                                <table key={artId} className="w-full text-left border-collapse space-y-2 p-4 rounded-lg shadow">
-                                    <thead>
-                                        <tr>
-                                            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">ID - Name</th>
-                                            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Unitats</th>
-                                            <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className="hover:bg-grey-lighter">
-                                            <td className="py-4 px-6 border-b border-grey-light">{artId} - {artData.parent.parent.name}</td>
-                                            <td className="py-4 px-6 border-b border-grey-light">{artData.units}</td>
-                                            <td className="py-4 px-6 border-b border-grey-light">{artData.parent.parent.weightKg}kg</td>
-                                        </tr>
-                                        <tr className="hover:bg-grey-lighter">
-                                            <td className="py-4 px-6 border-b border-grey-light">{artId} - {artData.parent.name}</td>
-                                            <td className="py-4 px-6 border-b border-grey-light">{artData.units}</td>
-                                            <td className="py-4 px-6 border-b border-grey-light">{artData.parent.weightKg}kg</td>
-                                        </tr>
-                                        <tr className="hover:bg-grey-lighter">
-                                            <td className="py-4 px-6 border-b border-grey-light">{artId} - {artData.name}</td>
-                                            <td className="py-4 px-6 border-b border-grey-light">{artData.units}</td>
-                                            <td className="py-4 px-6 border-b border-grey-light">{artData.weightKg}kg</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            dataArtsParent &&
+                            Object.entries(dataArtsParent).map(([artId, artData]) => (
+                                <div key={artId}>
+                                    {artData.artMitjanaPerArticle ? (
+                                        <TableContainer component={Paper}>
+                                            <Table aria-label="simple table">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell><b>Codi</b></TableCell>
+                                                        <TableCell><b>Unitats</b></TableCell>
+                                                        <TableCell><b>Pes Mitj</b></TableCell>
+                                                        <TableCell><b>Pes Maxim</b></TableCell>
+                                                        <TableCell><b>Pes Minim</b></TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    <TableRow>
+                                                        <TableCell>{artData.articles[0].parent.parent.art_codi}</TableCell>
+                                                        <TableCell>{artData.articles[0].parent.parent.name}</TableCell>
+                                                        <TableCell>{Number(artData.canalArtMitjanaPerArticle.toFixed(2))}kg</TableCell>
+                                                        <TableCell>{Number(artData.canalArtMaxWeightPerArticle.toFixed(2))}kg</TableCell>
+                                                        <TableCell>{Number(artData.canalArtMinWeightPerArticle.toFixed(2))}kg</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>{artData.articles[0].parent.art_codi}</TableCell>
+                                                        <TableCell>{artData.articles[0].parent.name}</TableCell>
+                                                        <TableCell>{Number(artData.quarterArtMitjanaPerArticle.toFixed(2))}kg</TableCell>
+                                                        <TableCell>{Number(artData.quarterArtMaxWeightPerArticle.toFixed(2))}kg</TableCell>
+                                                        <TableCell>{Number(artData.quarterArtMinWeightPerArticle.toFixed(2))}kg</TableCell>
+                                                    </TableRow>
+                                                    <TableRow>
+                                                        <TableCell>{artData.articles[0].art_codi}</TableCell>
+                                                        <TableCell>{artData.articles[0].name}</TableCell>
+                                                        <TableCell>{Number(artData.artMitjanaPerArticle.toFixed(2))}kg</TableCell>
+                                                        <TableCell>{Number(artData.artMaxWeightPerArticle.toFixed(2))}kg</TableCell>
+                                                        <TableCell>{Number(artData.artMinWeightPerArticle.toFixed(2))}kg</TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    ) : (
+                                        <div>
+                                            <h2 className="text-2xl font-bold mb-4 text-center">No hi ha dades:</h2>
+                                        </div>
+                                    )}
+                                    <button onClick={() => setDetallCalcul(!detallCalcul)} className="mt-4 mb-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Detall Calcul </button>
+
+                                    {
+                                        detallCalcul && // si detallCalcul es true
+                                        artData.articles.map((artData) => (
+                                            <table key={artId} className="w-full text-left border-collapse space-y-2 p-4 rounded-lg shadow-lg bg-blue-100">
+                                                <thead>
+                                                    <tr>
+                                                        <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">ID - Name</th>
+                                                        <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">Unitats</th>
+                                                        <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">Pes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr className="hover:bg-blue-200">
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artId} - {artData.parent.parent.name}</td>
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artData.units}</td>
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artData.parent.parent.weightKg}kg</td>
+                                                    </tr>
+                                                    <tr className="hover:bg-blue-200">
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artId} - {artData.parent.name}</td>
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artData.units}</td>
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artData.parent.weightKg}kg</td>
+                                                    </tr>
+                                                    <tr className="hover:bg-blue-200">
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artId} - {artData.name}</td>
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artData.units}</td>
+                                                        <td className="py-4 px-6 border-b border-blue-300">{artData.weightKg}kg</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        ))
+                                    }
+
+                                </div>
                             ))
-                        ))}
+                        }
+
                     </ul>
                 </div>
             </div>
