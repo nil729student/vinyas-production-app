@@ -60,7 +60,7 @@ export default function ArtList({ dataArticles }) {
                                             <Table aria-label="simple table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell><b>Codi</b></TableCell>
+                                                        <TableCell><b>Codi Article</b></TableCell>
                                                         <TableCell><b>Unitats</b></TableCell>
                                                         <TableCell><b>Pes Mitj</b></TableCell>
                                                         <TableCell><b>Pes Maxim</b></TableCell>
@@ -97,15 +97,17 @@ export default function ArtList({ dataArticles }) {
                                             <h2 className="text-2xl font-bold mb-4 text-center">No hi ha dades:</h2>
                                         </div>
                                     )}
-                                    <button onClick={() => setDetallCalcul(!detallCalcul)} className="mt-4 mb-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Detall Calcul </button>
-
+                                    <button onClick={() => setDetallCalcul(!detallCalcul)} className="mt-4 mb-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Detall Calcul  </button>
+                                    <div>
+                                        Numero de articles obtinguts: <b>{artData.articles.length}</b>
+                                    </div>
                                     {
                                         detallCalcul && // si detallCalcul es true
                                         artData.articles.map((artData) => (
                                             <table key={artId} className="w-full text-left border-collapse space-y-2 p-4 rounded-lg shadow-lg bg-blue-100">
                                                 <thead>
                                                     <tr>
-                                                        <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">ID - Name</th>
+                                                        <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">CODI ARTICLE</th>
                                                         <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">Unitats</th>
                                                         <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">Pes</th>
                                                     </tr>
@@ -130,7 +132,6 @@ export default function ArtList({ dataArticles }) {
                                             </table>
                                         ))
                                     }
-
                                 </div>
                             ))
                         }

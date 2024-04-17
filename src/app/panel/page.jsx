@@ -12,8 +12,9 @@ export default function panel() {
 
     return(
         <div>
-            <h1>Panel de control</h1>
-            <SwitchAnimalToArticle switchStatus={switchStatus} setSwitchStatus={setSwitchStatus} />
+            <div className="flex  p-4">
+                <SwitchAnimalToArticle switchStatus={switchStatus} setSwitchStatus={setSwitchStatus} />
+            </div>
             {switchStatus === 'article' ? <CanalByArticle /> : null}
             {switchStatus === 'animal' ? <AnimalWeightRange /> : null}
         </div>
