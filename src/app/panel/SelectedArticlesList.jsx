@@ -3,7 +3,7 @@ import ArticleUnitWeightRange from "@/lib/filterActions/ArticleUnitWeightRange";
 
 export default function SelectedArticlesList({ selectedArticles, onDataArtsParent }) {
 
-    const [viewInFormat, setViewInFormat] = useState(true);
+    const [viewInFormat, setViewInFormat] = useState(false);
     const [selectedArticlesParmas, setSelectedArticlesParams] = useState({});
 
     const handleCanalByArticle = async () => {
@@ -50,7 +50,7 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
                                             <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 rounded-lg p-2 w-full" />
                                         </div>
                                         <div className="flex items-center space-x-2">
-                                            <label htmlFor="weight" className="font-medium">Pes peça</label>
+                                            <label htmlFor="weight" className="font-medium">Pes peça 0.5</label>
                                             <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 rounded-lg p-2 w-full" />
                                         </div>
                                     </li>
@@ -65,7 +65,7 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
                                 <tr>
                                     <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Codi Nom</th>
                                     <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Unitats</th>
-                                    <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes peça</th>
+                                    <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Pes peça +0.5 -0.5</th>
                                 </tr>
                             </thead>
                             <tbody>
