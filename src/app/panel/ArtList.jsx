@@ -34,16 +34,18 @@ export default function ArtList({ dataArticles }) {
         <div className="flex justify-between items-start h-screen">
             <div className="w-1/6 bg-gray-200 p-4 rounded-lg shadow-lg">
                 <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
-                <ul className="space-y-4">
-                    {dataArticles.map((art) => (
-                        <li key={art.id} className="bg-white p-4 rounded-lg shadow">
-                            <button onClick={() => handleSelect(art)} className={`flex items-center space-x-2 ${selectedArticles[art.id] ? 'bg-gray-200' : 'bg-white-300 text-black'} hover:bg-gray-200 rounded p-2 w-full`}>
-                                <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => { }} />
-                                <span>{art.id} - {art.name}</span>
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                <div class="overflow-x-auto overflow-y-auto h-screen ">
+                    <ul className="space-y-4 p-4 ">
+                        {dataArticles.map((art) => (
+                            <li key={art.id} className="bg-white p-4 rounded-lg shadow">
+                                <button onClick={() => handleSelect(art)} className={`flex items-center space-x-2 ${selectedArticles[art.id] ? 'bg-gray-200' : 'bg-white-300 text-black'} hover:bg-gray-200 rounded p-2 w-full`}>
+                                    <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => { }} />
+                                    <span>{art.id} - {art.name}</span>
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
 
             <div className="flex-1 flex flex-col justify-center items-center">

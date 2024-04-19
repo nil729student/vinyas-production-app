@@ -1,42 +1,255 @@
 [
     {
-        "id": 1,
-        "name": "Babilla"
+      "id": 500001,
+      "name": "COSTILLA"
     },
     {
-        "id": 11145,
-        "name": "CUBE ROLL TERNERA VACÍO"
+      "id": 600901,
+      "name": "NERVIS MIXTA"
     },
     {
-        "id": 11243,
-        "name": "AGUJA TERNERA VACIO"
+      "id": 600905,
+      "name": "NERVI PLA"
     },
     {
-        "id": 4,
-        "name": "Filet"
+      "id": 11413,
+      "name": "LOMO BAJO TERNERA VACIO 4-5KG"
     },
     {
-        "id": 5,
-        "name": "Article 5"
+      "id": 600002,
+      "name": "NERVI CHINO"
     },
     {
-        "id": 6,
-        "name": "Article 6"
+      "id": 600904,
+      "name": "NERVI LLOM ALT"
     },
     {
-        "id": 7,
-        "name": "Article 7"
+      "id": 500098,
+      "name": "MAGRE"
     },
     {
-        "id": 8,
-        "name": "Article 8"
+      "id": 11109,
+      "name": "LLANA TERNERA VACÍO"
     },
     {
-        "id": 9,
-        "name": "Article 9"
+      "id": 11105,
+      "name": "FALDA PECHO TERNERA VACÍO"
     },
     {
-        "id": 10,
-        "name": "Article 10"
+      "id": 11157,
+      "name": "CENTRO ESPALDA VACÍO"
+    },
+    {
+      "id": 11106,
+      "name": "CHURRASCO TERNERA VACÍO +3 KG"
+    },
+    {
+      "id": 11099,
+      "name": "FALDA PECHO TERNERA PAD VACIO"
+    },
+    {
+      "id": 500095,
+      "name": "MAGRO COSTILLA"
+    },
+    {
+      "id": 11137,
+      "name": "SOLOMILLO TERNERA VACÍO +2KG"
+    },
+    {
+      "id": 500008,
+      "name": "BRINSA"
+    },
+    {
+      "id": 11146,
+      "name": "SOLOMILLO TERNERA VACIO -2KG"
+    },
+    {
+      "id": 11108,
+      "name": "LLANA TERNERA VACÍO"
+    },
+    {
+      "id": 500101,
+      "name": "SOLOMILLO"
+    },
+    {
+      "id": 11129,
+      "name": "BABILLA TERNERA VACÍO -6KG"
+    },
+    {
+      "id": 11130,
+      "name": "CULATA DE CONTRA TERNERA VACÍO"
+    },
+    {
+      "id": 11406,
+      "name": "CHURRASCO TERNERA VACIO -3KG"
+    },
+    {
+      "id": 11440,
+      "name": "LOMO BAJO TERNERA VACIO 3-4KG"
+    },
+    {
+      "id": 11145,
+      "name": "CUBE ROLL TERNERA VACÍO +2KG"
+    },
+    {
+      "id": 11127,
+      "name": "PICAÑA TERNERA VACÍO"
+    },
+    {
+      "id": 500105,
+      "name": "LOMO BAJO"
+    },
+    {
+      "id": 500099,
+      "name": "GRASSA PIT"
+    },
+    {
+      "id": 11122,
+      "name": "TAPA TERNERA VACÍO -7KG"
+    },
+    {
+      "id": 500099,
+      "name": "GRASSA"
+    },
+    {
+      "id": 11088,
+      "name": "ENTRAÑA TERNERA VACÍO"
+    },
+    {
+      "id": 11143,
+      "name": "VACIO TERNERA VACIO"
+    },
+    {
+      "id": 11112,
+      "name": "MORCILLO DELANTERO"
+    },
+    {
+      "id": 500954,
+      "name": "T5"
+    },
+    {
+      "id": 44545,
+      "name": "test"
+    },
+    {
+      "id": 11398,
+      "name": "CENTRO ESPALDA TERNERA"
+    },
+    {
+      "id": 11122,
+      "name": "TAPA TERNERA VACÍO"
+    },
+    {
+      "id": 600903,
+      "name": "NERVI RODO"
+    },
+    {
+      "id": 500099,
+      "name": "GREIX"
+    },
+    {
+      "id": 11923,
+      "name": "REDONDO AÑOJO VACIO"
+    },
+    {
+      "id": 11412,
+      "name": "ALOYAU TERNERA PAD VACIO"
+    },
+    {
+      "id": 11111,
+      "name": "REDONDO ESPALDA TERNERA VACÍO"
+    },
+    {
+      "id": 12397,
+      "name": "FROZEN BEEF GOLDEN COIN"
+    },
+    {
+      "id": 11123,
+      "name": "REDONDO TERNERA VACIO+2KG"
+    },
+    {
+      "id": 11912,
+      "name": "MORCILLO DELANTERO AÑOJO VACIO"
+    },
+    {
+      "id": 10139,
+      "name": "FALDA TARADELLES"
+    },
+    {
+      "id": 10216,
+      "name": "FALSO SOLOMILLO"
+    },
+    {
+      "id": 11113,
+      "name": "CUELLO TERNERA VACÍO"
+    },
+    {
+      "id": 500202,
+      "name": "REDONDO"
+    },
+    {
+      "id": 500001,
+      "name": "COSTILLA    "
+    },
+    {
+      "id": 10126,
+      "name": "CORAZON CADERA TERNERA VACÍO -4.2KG"
+    },
+    {
+      "id": 11243,
+      "name": "AGUJA TERNERA VACIO 5-8 KG"
+    },
+    {
+      "id": 500004,
+      "name": "VACIO"
+    },
+    {
+      "id": 11124,
+      "name": "CONTRA TERNERA VACÍO"
+    },
+    {
+      "id": 12127,
+      "name": "PICAÑA TERNERA CONG."
+    },
+    {
+      "id": 11145,
+      "name": "CUBE ROLL TERNERA"
+    },
+    {
+      "id": 600902,
+      "name": "OSSOS"
+    },
+    {
+      "id": 500313,
+      "name": "CUELLO"
+    },
+    {
+      "id": 11126,
+      "name": "CORAZON CADERA TERNERA"
+    },
+    {
+      "id": 500503,
+      "name": "ALOYAU"
+    },
+    {
+      "id": 1327,
+      "name": "TRASERO TERNERA ZAO"
+    },
+    {
+      "id": 11140,
+      "name": "FALDA S/HUESO TERNERA VACÍO"
+    },
+    {
+      "id": 11131,
+      "name": "MORCILLO TRASERO TERNERA VACÍO"
+    },
+    {
+      "id": 500209,
+      "name": "RAVILLO"
+    },
+    {
+      "id": 500316,
+      "name": "GOLDEN COIN                   "
     }
-]
+  ]
+  
