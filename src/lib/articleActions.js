@@ -59,3 +59,34 @@ export async function deleteArticle(idArt) {
         return null;
     }
 }
+
+export async function getMaxMinWeightArticles(codArt) {
+    try{
+        console.log('codArt:', codArt);
+        const result = await prisma.article.aggregate({
+            where: {
+                art_codi: codArt
+            },
+            _count: {
+                _all: true
+            },
+            _max: {
+                weightKg: true
+            },
+            _min: {
+                weightKg: true
+            }
+        });
+
+        if (result._count && result._max && result._min) {
+            console.log('Count:', result._count._all);
+            console.log('Max weight:', result._max.weightKg);
+            console.log('Min weight:', result._min.weightKg);
+        } else {
+            console.log('No articles found with art_codi:', codArt);
+        }
+        return result;
+    } catch (error) {
+        console.error('Error fetching articles by code:', error);
+    }
+}

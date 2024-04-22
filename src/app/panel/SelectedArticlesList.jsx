@@ -5,7 +5,7 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
 
     const [viewInFormat, setViewInFormat] = useState(false);
     const [selectedArticlesParmas, setSelectedArticlesParams] = useState({});
-
+    
     const handleCanalByArticle = async () => {
         console.log(selectedArticlesParmas);
         const resArtsParent = await ArticleUnitWeightRange(selectedArticlesParmas);

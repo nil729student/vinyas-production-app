@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { getMaxMinWeightArticles } from "@/lib/articleActions";
 import SelectedArticles from "./SelectedArticlesList";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,17 +11,25 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+
 export default function ArtList({ dataArticles }) {
 
     const [selectedArticles, setSelectedArticles] = useState({});
     const [dataArtsParent, setDataArtsParent] = useState(null);
     const [detallCalcul, setDetallCalcul] = useState(false);
 
-    const handleSelect = (art) => {
+    const handleSelect = async (art) => {
+        console.log(art);
+        const weightMaxMin = await getMaxMinWeightArticles(art.id);
+        console.log(weightMaxMin);
         setSelectedArticles(prevState => ({
             ...prevState,
-            [art.id]: prevState[art.id] ? undefined : art
+            [art.id]: prevState[art.id] ? undefined : art,
         }));
+
+
+        console.log(weightMaxMin);
+        console.log(selectedArticles);
     }
 
     // revem les dades del component fill
@@ -28,9 +37,7 @@ export default function ArtList({ dataArticles }) {
         setDataArtsParent(data);
     };
 
-
     return (
-
         <div className="flex justify-between items-start h-screen">
             <div className="w-1/6 bg-gray-200 p-4 rounded-lg shadow-lg">
                 <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
@@ -49,11 +56,15 @@ export default function ArtList({ dataArticles }) {
             </div>
 
             <div className="flex-1 flex flex-col justify-center items-center">
+
+                {/* formulari "format taula" amb els articles  seleccionats  */}
                 <SelectedArticles selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
+         
                 <div className="mt-4">
                     <h2 className="text-2xl font-bold mb-4 text-center">Dades dels articles seleccionats:</h2>
                     <ul className="space-y-4">
                         {
+                            // taula dels resultats
                             dataArtsParent &&
                             Object.entries(dataArtsParent).map(([artId, artData]) => (
                                 <div key={artId}>
@@ -137,7 +148,6 @@ export default function ArtList({ dataArticles }) {
                                 </div>
                             ))
                         }
-
                     </ul>
                 </div>
             </div>
