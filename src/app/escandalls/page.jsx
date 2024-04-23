@@ -24,7 +24,6 @@ const AnimalList = () => {
             }
         };
         fetchData();
-
     }, []);
 
     const filteredAnimals = useMemo(() => {

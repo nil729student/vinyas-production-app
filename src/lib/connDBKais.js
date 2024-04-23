@@ -1,5 +1,3 @@
-
-
 import sql from 'mssql';
 import configKais from './config/sqlConfigKais';
 import sqlConfigKaisEscorxa from './config/sqlConfigKaisEscorxa';

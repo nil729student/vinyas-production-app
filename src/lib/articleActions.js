@@ -53,7 +53,7 @@ export async function deleteArticle(idArt) {
         });
         console.log("Article deleted:", deletedArt);
         return deletedArt;
-    
+
     }catch(err){
         console.error("Error deleting article:", err);
         return null;

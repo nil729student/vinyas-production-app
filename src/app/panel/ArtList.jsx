@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { getMaxMinWeightArticles } from "@/lib/articleActions";
 import SelectedArticles from "./SelectedArticlesList";
 import Table from '@mui/material/Table';
@@ -17,19 +17,34 @@ export default function ArtList({ dataArticles }) {
     const [selectedArticles, setSelectedArticles] = useState({});
     const [dataArtsParent, setDataArtsParent] = useState(null);
     const [detallCalcul, setDetallCalcul] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+
+
+    const filteredAnimals = useMemo(() => {
+        return dataArticles.filter((art) =>
+            art.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [dataArticles, searchTerm]);
 
     const handleSelect = async (art) => {
-        console.log(art);
         const weightMaxMin = await getMaxMinWeightArticles(art.id);
-        console.log(weightMaxMin);
+        // add in art the max and min weight of the article
+        /*
+            {
+            _count: { _all: 2 },
+            _max: { weightKg: 7.8 },
+            _min: { weightKg: 7.75 }
+            } 
+        */
+
+        art.counterArts = weightMaxMin._count._all;
+        art.weightMax = weightMaxMin._max.weightKg;
+        art.weightMin = weightMaxMin._min.weightKg;
+
         setSelectedArticles(prevState => ({
             ...prevState,
             [art.id]: prevState[art.id] ? undefined : art,
         }));
-
-
-        console.log(weightMaxMin);
-        console.log(selectedArticles);
     }
 
     // revem les dades del component fill
@@ -43,8 +58,8 @@ export default function ArtList({ dataArticles }) {
                 <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
                 <div class="overflow-x-auto overflow-y-auto h-screen ">
                     <ul className="space-y-4 p-4 ">
-                        {dataArticles.map((art) => (
-                            <li key={art.id} className="bg-white p-4 rounded-lg shadow">
+                        {filteredAnimals.map((art) => (
+                            <li className="bg-white p-4 rounded-lg shadow">
                                 <button onClick={() => handleSelect(art)} className={`flex items-center space-x-2 ${selectedArticles[art.id] ? 'bg-gray-200' : 'bg-white-300 text-black'} hover:bg-gray-200 rounded p-2 w-full`}>
                                     <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => { }} />
                                     <span>{art.id} - {art.name}</span>
@@ -59,7 +74,7 @@ export default function ArtList({ dataArticles }) {
 
                 {/* formulari "format taula" amb els articles  seleccionats  */}
                 <SelectedArticles selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
-         
+
                 <div className="mt-4">
                     <h2 className="text-2xl font-bold mb-4 text-center">Dades dels articles seleccionats:</h2>
                     <ul className="space-y-4">
@@ -116,8 +131,8 @@ export default function ArtList({ dataArticles }) {
                                     </div>
                                     {
                                         detallCalcul && // si detallCalcul es true
-                                        artData.articles.map((artData) => (
-                                            <table key={artId} className="w-full text-left border-collapse space-y-2 p-4 rounded-lg shadow-lg bg-blue-100">
+                                        artData.articles.map((artData, index) => (
+                                            <table key={index} className="w-full text-left border-collapse space-y-2 p-4 rounded-lg shadow-lg bg-blue-100">
                                                 <thead>
                                                     <tr>
                                                         <th className="py-4 px-6 uppercase text-sm text-blue-800 border-b border-blue-300">CODI ARTICLE</th>
