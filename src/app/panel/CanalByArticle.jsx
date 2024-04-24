@@ -11,7 +11,6 @@ export default function CanalByArticle() {
 
     return (
         <>
-            <h1>Canal by Article</h1>
             <div>
                 <div>
                     <ArtList dataArticles={dataArticles} />

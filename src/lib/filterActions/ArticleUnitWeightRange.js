@@ -52,6 +52,7 @@ export default async function ArticleUnitWeightRange(selectedArticlesParmas) {
 
                 results[art_codi] = {
                     articles,
+                    artUnitats: params.units,
                     artMitjanaPerArticle,
                     artMaxWeightPerArticle,
                     artMinWeightPerArticle,

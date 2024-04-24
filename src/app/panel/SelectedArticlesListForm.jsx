@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import ArticleUnitWeightRange from "@/lib/filterActions/ArticleUnitWeightRange";
 
-export default function SelectedArticlesList({ selectedArticles, onDataArtsParent }) {
+export default function SelectedArticlesListForm({ selectedArticles, onDataArtsParent }) {
 
     const [viewInFormat, setViewInFormat] = useState(false);
     const [selectedArticlesParmas, setSelectedArticlesParams] = useState({});
+
     
     const handleCanalByArticle = async () => {
-        console.log(selectedArticlesParmas);
         const resArtsParent = await ArticleUnitWeightRange(selectedArticlesParmas);
         console.log(resArtsParent);
         // Enviem les dades al component para a traves de la funcio onData
@@ -20,7 +20,6 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
             [artId]: { ...selectedArticlesParmas[artId], weight: e.target.value }
         };
         setSelectedArticlesParams(updatedArticlesParams);
-        console.log(updatedArticlesParams);
     };
 
     const handleUnitsChange = (e, artId) => {
@@ -29,7 +28,6 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
             [artId]: { ...selectedArticlesParmas[artId], units: e.target.value }
         };
         setSelectedArticlesParams(updatedArticlesParams);
-        console.log(updatedArticlesParams);
     };
 
     return (
@@ -85,17 +83,11 @@ export default function SelectedArticlesList({ selectedArticles, onDataArtsParen
                                     </tr>
                                 ))}
                             </tbody>
-                            
                             <button onClick={handleCanalByArticle} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Calcula </button>
-                        
                         </table>
-
                     </div>
-                    
                 )
-            }
-
-            
+            }            
         </div>
     );
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { getMaxMinWeightArticles } from "@/lib/articleActions";
-import SelectedArticles from "./SelectedArticlesList";
+import SelectedArticlesListForm from "./SelectedArticlesListForm";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,6 +18,7 @@ export default function ArtList({ dataArticles }) {
     const [dataArtsParent, setDataArtsParent] = useState(null);
     const [detallCalcul, setDetallCalcul] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    console.log(dataArtsParent);
 
 
     const filteredAnimals = useMemo(() => {
@@ -36,11 +37,9 @@ export default function ArtList({ dataArticles }) {
             _min: { weightKg: 7.75 }
             } 
         */
-
         art.counterArts = weightMaxMin._count._all;
         art.weightMax = weightMaxMin._max.weightKg;
         art.weightMin = weightMaxMin._min.weightKg;
-
         setSelectedArticles(prevState => ({
             ...prevState,
             [art.id]: prevState[art.id] ? undefined : art,
@@ -73,7 +72,7 @@ export default function ArtList({ dataArticles }) {
             <div className="flex-1 flex flex-col justify-center items-center">
 
                 {/* formulari "format taula" amb els articles  seleccionats  */}
-                <SelectedArticles selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
+                <SelectedArticlesListForm selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
 
                 <div className="mt-4">
                     <h2 className="text-2xl font-bold mb-4 text-center">Dades dels articles seleccionats:</h2>
@@ -89,6 +88,7 @@ export default function ArtList({ dataArticles }) {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell><b>Codi Article</b></TableCell>
+                                                        <TableCell><b>Article</b></TableCell>
                                                         <TableCell><b>Unitats</b></TableCell>
                                                         <TableCell><b>Pes Mitj</b></TableCell>
                                                         <TableCell><b>Pes Maxim</b></TableCell>
@@ -99,6 +99,7 @@ export default function ArtList({ dataArticles }) {
                                                     <TableRow>
                                                         <TableCell>{artData.articles[0].parent.parent.art_codi}</TableCell>
                                                         <TableCell>{artData.articles[0].parent.parent.name}</TableCell>
+                                                        <TableCell>{artData.artUnitats}</TableCell>
                                                         <TableCell>{Number(artData.canalArtMitjanaPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.canalArtMaxWeightPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.canalArtMinWeightPerArticle.toFixed(2))}kg</TableCell>
@@ -106,6 +107,7 @@ export default function ArtList({ dataArticles }) {
                                                     <TableRow>
                                                         <TableCell>{artData.articles[0].parent.art_codi}</TableCell>
                                                         <TableCell>{artData.articles[0].parent.name}</TableCell>
+                                                        <TableCell>{artData.artUnitats}</TableCell>
                                                         <TableCell>{Number(artData.quarterArtMitjanaPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.quarterArtMaxWeightPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.quarterArtMinWeightPerArticle.toFixed(2))}kg</TableCell>
@@ -113,19 +115,27 @@ export default function ArtList({ dataArticles }) {
                                                     <TableRow>
                                                         <TableCell>{artData.articles[0].art_codi}</TableCell>
                                                         <TableCell>{artData.articles[0].name}</TableCell>
+                                                        <TableCell>{artData.artUnitats}</TableCell>
                                                         <TableCell>{Number(artData.artMitjanaPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.artMaxWeightPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.artMinWeightPerArticle.toFixed(2))}kg</TableCell>
                                                     </TableRow>
+                                                    {/*<button onClick={() => setDataArtsParent({ ...dataArtsParent, [artId]: undefined })} className="mt-4 mb-4 bg-red-500 text-white rounded-lg p-2 hover:bg-red-600"> Esborra Article  </button>*/}
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>
+
+
+
                                     ) : (
                                         <div>
                                             <h2 className="text-2xl font-bold mb-4 text-center">No hi ha dades:</h2>
                                         </div>
                                     )}
+
+                                                      
                                     <button onClick={() => setDetallCalcul(!detallCalcul)} className="mt-4 mb-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Detall Calcul  </button>
+                                    
                                     <div>
                                         Numero de articles obtinguts: <b>{artData.articles.length}</b>
                                     </div>
