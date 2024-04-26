@@ -51,6 +51,18 @@ export default function ArtList({ dataArticles }) {
         setDataArtsParent(data);
     };
 
+    const handleDeleteDataLoadedByArtId = (artCode) => {
+        console.log(artCode);
+        // eliminem les dades del article seleccionat
+        const { [artCode]: _, ...rest } = dataArtsParent; // _ dummy variable: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+        console.log(rest);
+        setDataArtsParent(rest);
+
+
+    };
+
+
+
     return (
         <div className="flex justify-between items-start h-screen">
             <div className="w-1/6 bg-gray-200 p-4 rounded-lg shadow-lg">
@@ -114,15 +126,15 @@ export default function ArtList({ dataArticles }) {
                                                     </TableRow>
                                                     <TableRow>
                                                         <TableCell>{artData.articles[0].art_codi}</TableCell>
-                                                        <TableCell>{artData.articles[0].name}</TableCell>
+                                                        <TableCell>{artData.articles[0].name}</TableCell> 
                                                         <TableCell>{artData.artUnitats}</TableCell>
                                                         <TableCell>{Number(artData.artMitjanaPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.artMaxWeightPerArticle.toFixed(2))}kg</TableCell>
                                                         <TableCell>{Number(artData.artMinWeightPerArticle.toFixed(2))}kg</TableCell>
                                                     </TableRow>
-                                                    {/*<button onClick={() => setDataArtsParent({ ...dataArtsParent, [artId]: undefined })} className="mt-4 mb-4 bg-red-500 text-white rounded-lg p-2 hover:bg-red-600"> Esborra Article  </button>*/}
                                                 </TableBody>
                                             </Table>
+                                            <button onClick={ () => handleDeleteDataLoadedByArtId(artId, artData.articles[0].id)} className=" m-4 bg-red-500 text-white rounded-lg p-2 hover:bg-red-600"> Neteja  </button>
                                         </TableContainer>
 
 
@@ -133,7 +145,6 @@ export default function ArtList({ dataArticles }) {
                                         </div>
                                     )}
 
-                                                      
                                     <button onClick={() => setDetallCalcul(!detallCalcul)} className="mt-4 mb-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Detall Calcul  </button>
                                     
                                     <div>
