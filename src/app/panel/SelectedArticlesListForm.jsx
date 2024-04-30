@@ -31,25 +31,25 @@ export default function SelectedArticlesListForm({ selectedArticles, onDataArtsP
     };
 
     return (
-        <div className="p-4 rounded-lg">
+        <div className="p-2 rounded-lg">
 
             <button onClick={() => setViewInFormat(!viewInFormat)} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Canvia format </button>
-            <h2 className="text-2xl font-bold mb-4 text-center">Articles Comanda</h2>
+            <h2 className="text-2xl font-bold mb-2 text-center">Articles Comanda</h2>
             {
                 viewInFormat ? (
                     <>
-                        <div className="">
-                            <ul className="space-y-4">
+                        <div >
+                            <ul className="">
                                 {Object.values(selectedArticles).filter(Boolean).map((art, index) => (
-                                    <li key={index} className="flex flex-col space-y-2 p-4 rounded-lg shadow">
+                                    <li key={index} className="flex flex-col rounded-lg shadow">
                                         <span className="text-lg font-semibold">  {art.id} - {art.name}</span>
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex items-center ">
                                             <label htmlFor="units" className="font-medium">Unitats</label>
-                                            <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 rounded-lg p-2 w-full" />
+                                            <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 rounded-lg  w-full" />
                                         </div>
-                                        <div className="flex items-center space-x-2">
+                                        <div className="flex items-center">
                                             <label htmlFor="weight" className="font-medium">Pes peça 0.5</label>
-                                            <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 rounded-lg p-2 w-full" />
+                                            <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 rounded-lg  w-full" />
                                         </div>
                                     </li>
                                 ))}
@@ -72,13 +72,13 @@ export default function SelectedArticlesListForm({ selectedArticles, onDataArtsP
                                         <tr className="hover:bg-grey-lighter" key={index}>
                                         <td className="py-4 px-6 border-b border-grey-light">{art.counterArts}</td>
                                         <td className="py-4 px-6 border-b border-grey-light"> {art.name} - {art.id}</td>
-                                        <td className="py-4 pt-11 px-6 border-b border-grey-light">
-
+                                        <td className="py-4 px-6 border-b border-grey-light">
                                             <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 border-gray-200 rounded-lg p-2 w-full" />
                                         </td>
-                                        <td className="py-4 px-6 border-b border-grey-light">
-                                            <label htmlFor="weight"> <b> Weight range </b> <br /> {art.weightMax} - {art.weightMin} </label>
+                                        <td className=" px-6 border-b border-grey-light">
+                                            <label htmlFor="weight"> <b>Rang: </b>  {art.weightMax} - {art.weightMin} </label>
                                             <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 border-gray-200 rounded-lg p-2 w-full" />
+                        
                                         </td>
                                     </tr>
                                 ))}

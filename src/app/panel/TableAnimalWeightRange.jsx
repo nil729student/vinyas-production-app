@@ -10,9 +10,9 @@ export default function TableAnimalWeightRange({ dataArt, weights }) {
 
 
     return (
-        <div className="overflow-x-auto overflow-auto">
+        <div className="max-h-[700px] overflow-auto">
             <table className="w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className=" sticky top-0 bg-gray-50">
                     <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Codi</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
@@ -23,7 +23,7 @@ export default function TableAnimalWeightRange({ dataArt, weights }) {
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200 overflow-auto">
+                <tbody className="bg-white divide-y divide-gray-200">
                     {uniqueArticles.map((article) => (
                         <tr key={article.id}>
                             <td className="px-6 py-4 whitespace-nowrap">{article.art_codi}</td>

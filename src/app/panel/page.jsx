@@ -40,8 +40,8 @@ export default function panel() {
                         initial={{ opacity: 0, y: -50 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 50 }}
-                        className="fixed top-0 left-0 w-full h- bg-white flex flex-col items-center justify-center"
-                    >
+                        className="fixed top-0 left-0 w-full h-full bg-white flex flex-col items-center justify-center"
+                        >
                         <button onClick={handleClose} className="absolute top-4 right-4 bg-red-500 text-white rounded-full p-2 px-4 hover:bg-red-600">X</button>
                         {selectedComponent === 'AnimalWeightRange' && <AnimalWeightRange />}
                         {selectedComponent === 'CanalByArticle' && <CanalByArticle />}
