@@ -57,10 +57,7 @@ export default function ArtList({ dataArticles }) {
         const { [artCode]: _, ...rest } = dataArtsParent; // _ dummy variable: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
         console.log(rest);
         setDataArtsParent(rest);
-
-
     };
-
 
 
     return (
@@ -70,8 +67,8 @@ export default function ArtList({ dataArticles }) {
                 <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
                 <div class="overflow-auto h-screen ">
                     <ul className="space-y-4 p-4 ">
-                        {filteredAnimals.map((art) => (
-                            <li className="bg-white p-4 rounded-lg shadow">
+                        {filteredAnimals.map((art, index) => (
+                            <li key={index} className="bg-white p-4 rounded-lg shadow">
                                 <button onClick={() => handleSelect(art)} className={`flex items-center space-x-2 ${selectedArticles[art.id] ? 'bg-gray-200' : 'bg-white-300 text-black'} hover:bg-gray-200 rounded p-2 w-full`}>
                                     <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => { }} />
                                     <span>{art.id} - {art.name}</span>

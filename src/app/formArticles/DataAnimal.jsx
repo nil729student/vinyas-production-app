@@ -6,7 +6,7 @@ const DataAnimal = ({ dib, onBolaClick, onBlocClick, onFaldaClick, onDevantClick
     
 
     return (
-        <div className=" m-4 w-full md:w-1/4 lg:w-5/6 p-4 bg-gray-400 p-4 rounded">
+        <div className=" m-4 w-full md:w-1/4 lg:w-5/6 p-4 bg-gray-400 rounded">
             <h2 className="text-lg font-semibold mb-4">Data Animal</h2>
             <p>
                 <strong>DIB:</strong> {dib}
