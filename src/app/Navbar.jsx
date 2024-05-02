@@ -13,19 +13,19 @@ export default function Navbar() {
       </div>
       <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <div className="text-sm lg:flex-grow">
-          <Link href="/admin" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-              admin
+          <Link href="/admin" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
+              Admin
           </Link>
-          <Link href="/escandalls" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+          <Link href="/escandalls" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
             Escandalls
           </Link>
-          <Link href="/panel" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+          <Link href="/panel" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
             Panell de control
           </Link>
-          <Link href="/formArticles" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+          <Link href="/formArticles" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
             Form Articles
           </Link>
-          <Link href="/contact" passHref className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
+          <Link href="/contact" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100">
               Contact
           </Link>
         </div>

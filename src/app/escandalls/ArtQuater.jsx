@@ -29,7 +29,7 @@ const ArtQuarter = (quarts) => {
                     <li><span className="font-semibold">Percentatge:</span> <span>{sumaPercentatge}%</span></li>
                 </ul>
                 <button
-                    className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="mt-4 bg-color-button hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => setShowArticles(!showArticles)}
                 >
                     {showArticles ? 'Ocultar articles' : 'Mostrar articles'}

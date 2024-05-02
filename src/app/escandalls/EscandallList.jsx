@@ -21,7 +21,7 @@ const EscandallList = () => {
                     <ArtAnimal />
                 </div>
                 <button
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded ml-4 mb-4"
+                        className="bg-color-button hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-4 mb-4"
                         onClick={() => setViewQuarters(!viewQuarters)}
                     >
                         {viewQuarters ? 'Oculta' : 'Mostrar'}

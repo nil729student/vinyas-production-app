@@ -57,8 +57,8 @@ export default function SelectedArticlesListForm({ selectedArticles, onDataArtsP
                         </div>
                     </>
                 ) : (
-                    <div className="flex justify-center space-x-4 ">
-                        <table className=" w-1/2 text-left border-collapse table-fixed">
+                    <div className="flex  justify-center space-x-4 ">
+                        <table className=" w-1/2  text-left border-collapse table-fixed">
                             <thead>
                                 <tr>
                                     <th className="w-1/3 py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">Contador </th>
@@ -70,15 +70,14 @@ export default function SelectedArticlesListForm({ selectedArticles, onDataArtsP
                             <tbody>
                                 {Object.values(selectedArticles).filter(Boolean).map((art, index) => (
                                         <tr className="hover:bg-grey-lighter" key={index}>
-                                        <td className="py-4 px-6 border-b border-grey-light">{art.counterArts}</td>
-                                        <td className="py-4 px-6 border-b border-grey-light"> {art.name} - {art.id}</td>
-                                        <td className="py-4 px-6 border-b border-grey-light">
+                                        <td className="py-2 px-6 border-b border-grey-light">{art.counterArts}</td>
+                                        <td className="py-2 px-6 border-b border-grey-light"> {art.name} - {art.id}</td>
+                                        <td className="py-2 pt-8 px-6 border-b border-grey-light">
                                             <input name="units" type="number" placeholder="unitats" onChange={(e) => handleUnitsChange(e, art.id)} className="border-2 border-gray-200 rounded-lg p-2 w-full" />
                                         </td>
                                         <td className=" px-6 border-b border-grey-light">
                                             <label htmlFor="weight"> <b>Rang: </b>  {art.weightMax} - {art.weightMin} </label>
                                             <input name="weight" type="number" placeholder="pes" onChange={(e) => handleWeightChange(e, art.id)} className="border-2 border-gray-200 rounded-lg p-2 w-full" />
-                        
                                         </td>
                                     </tr>
                                 ))}

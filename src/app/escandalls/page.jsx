@@ -13,7 +13,7 @@ const AnimalList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showDetall, setShowDetall] = useState(false);
     const [escandall, setEscandall] = useState([]);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
