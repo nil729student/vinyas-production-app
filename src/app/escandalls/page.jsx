@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { getAllAnimals } from '@/lib/animalActions';
 import { handlerEscandallbyAnimal } from '@/lib/escandallActions';
 import EscandallList from './EscandallList';
@@ -19,6 +19,7 @@ const AnimalList = () => {
             try {
                 const fetchedAnimals = await getAllAnimals();
                 setAnimals(fetchedAnimals);
+                console.log('useEffect render')
             } catch (error) {
                 console.error('Error fetching animals:', error);
             }
@@ -32,6 +33,7 @@ const AnimalList = () => {
         );
     }, [animals, searchTerm]);
 
+    /*
     const handleDetall = async (animalId) => {
         try {
             const fetchedEscandall = await handlerEscandallbyAnimal(animalId);
@@ -43,6 +45,18 @@ const AnimalList = () => {
             console.error('Error fetching escandall:', error);
         }
     };
+    */
+    const handleDetall = useCallback(async (animalId) => {
+        try {
+            const fetchedEscandall = await handlerEscandallbyAnimal(animalId);
+            const handleAnimal = animals.find((animal) => animal.id === animalId);
+            setSelectAnimal(handleAnimal);
+            setEscandall(fetchedEscandall);
+            setShowDetall(true);
+        } catch (error) {
+            console.error('Error fetching escandall:', error);
+        }
+    }, [animals]); // dependencies
 
     return (
         <div className="flex">
