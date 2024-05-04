@@ -13,19 +13,27 @@ const AnimalList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [showDetall, setShowDetall] = useState(false);
     const [escandall, setEscandall] = useState([]);
-    
+
+    const fetchData = async () => {
+        try {
+            const fetchedAnimals = await getAllAnimals();
+            setAnimals(fetchedAnimals);
+        } catch (error) {
+            console.error('Error fetching animals:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const fetchedAnimals = await getAllAnimals();
-                setAnimals(fetchedAnimals);
-                console.log('useEffect render')
-            } catch (error) {
-                console.error('Error fetching animals:', error);
-            }
-        };
         fetchData();
     }, []);
+
+    useEffect(() => {
+
+        if (animals.length > 0) {
+            console.log('animals:', animals[0].id);
+            handleDetall(animals[0].id);
+        }
+    }, [animals]);
 
     const filteredAnimals = useMemo(() => {
         return animals.filter((animal) =>
@@ -48,6 +56,8 @@ const AnimalList = () => {
     */
     const handleDetall = useCallback(async (animalId) => {
         try {
+            console.log('animals:', animals);
+            console.log('animals:', animalId);
             const fetchedEscandall = await handlerEscandallbyAnimal(animalId);
             const handleAnimal = animals.find((animal) => animal.id === animalId);
             setSelectAnimal(handleAnimal);
@@ -56,7 +66,7 @@ const AnimalList = () => {
         } catch (error) {
             console.error('Error fetching escandall:', error);
         }
-    }, [animals]); // dependencies
+    }, [animals]);
 
     return (
         <div className="flex">
