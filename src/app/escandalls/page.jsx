@@ -30,7 +30,6 @@ const AnimalList = () => {
     useEffect(() => {
 
         if (animals.length > 0) {
-            console.log('animals:', animals[0].id);
             handleDetall(animals[0].id);
         }
     }, [animals]);
@@ -54,10 +53,9 @@ const AnimalList = () => {
         }
     };
     */
+
     const handleDetall = useCallback(async (animalId) => {
         try {
-            console.log('animals:', animals);
-            console.log('animals:', animalId);
             const fetchedEscandall = await handlerEscandallbyAnimal(animalId);
             const handleAnimal = animals.find((animal) => animal.id === animalId);
             setSelectAnimal(handleAnimal);

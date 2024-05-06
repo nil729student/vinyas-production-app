@@ -33,8 +33,8 @@ export default function SelectedArticlesListForm({ selectedArticles, onDataArtsP
     return (
         <div className="p-2 rounded-lg">
 
-            <button onClick={() => setViewInFormat(!viewInFormat)} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Canvia format </button>
-            <h2 className="text-2xl font-bold mb-2 text-center">Articles Comanda</h2>
+            {/*<button onClick={() => setViewInFormat(!viewInFormat)} className="mt-4 bg-color-button text-white rounded-lg p-2 hover:bg-belue-600"> Canvia format </button> */}
+            <h2 className="text-2xl font-bold mt-20 mb-2 text-center">Articles Comanda</h2>
             {
                 viewInFormat ? (
                     <>
@@ -82,7 +82,7 @@ export default function SelectedArticlesListForm({ selectedArticles, onDataArtsP
                                     </tr>
                                 ))}
                             </tbody>
-                            <button onClick={handleCanalByArticle} className="mt-4 bg-blue-500 text-white rounded-lg p-2 hover:bg-belue-600"> Calcula </button>
+                            <button onClick={handleCanalByArticle} className="mt-4 bg-color-button text-white rounded-lg p-2 hover:bg-belue-600"> Calcula </button>
                         </table>
                     </div>
                 )
