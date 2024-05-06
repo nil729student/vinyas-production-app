@@ -1,6 +1,15 @@
+'use client'
+import React, { useState } from 'react'
 import Link from 'next/link'
 
 export default function Navbar() {
+
+  const [activeLink, setActiveLink] = useState('');
+
+  const handleClick = (path) => {
+    setActiveLink(path);
+  };
+
   return (
     <nav className="flex items-center justify-between flex-wrap bg-color-nav p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -13,19 +22,33 @@ export default function Navbar() {
       </div>
       <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <div className="text-sm lg:flex-grow">
-          <Link href="/admin" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
+          <Link href="/admin" passHref 
+              onClick={() => handleClick('/admin')}
+              className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/admin' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}
+            >
               Admin
           </Link>
-          <Link href="/escandalls" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
+          <Link href="/escandalls" passHref onClick={() => handleClick('/escandalls')}
+              className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/escandalls' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}
+          >
             Escandalls
           </Link>
-          <Link href="/panel" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
+          <Link href="/panel" passHref 
+              onClick={() => handleClick('/panel')}
+              className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/panel' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}
+            >
             Panell de control
           </Link>
-          <Link href="/formArticles" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100 mr-4">
+          <Link href="/formArticles" passHref 
+              onClick={() => handleClick('/formArticles')}
+              className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/formArticles' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}
+            >
             Form Articles
           </Link>
-          <Link href="/contact" passHref className="block mt-4 lg:inline-block lg:mt-0 text-color-secondary hover:text-neutral-100">
+          <Link href="/contact" passHref 
+              onClick={() => handleClick('/contact')}
+              className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/contact' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}
+            >
               Contact
           </Link>
         </div>
