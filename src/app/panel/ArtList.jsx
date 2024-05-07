@@ -18,8 +18,6 @@ export default function ArtList({ dataArticles }) {
     const [dataArtsParent, setDataArtsParent] = useState(null);
     const [detallCalcul, setDetallCalcul] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(dataArtsParent);
-
 
     const filteredAnimals = useMemo(() => {
         return dataArticles.filter((art) =>

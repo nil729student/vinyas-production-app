@@ -73,8 +73,6 @@ export default function AnimalWeightRange() {
                     </div>
                 </div>
             </div>
-
-
         </>
     )
 }
