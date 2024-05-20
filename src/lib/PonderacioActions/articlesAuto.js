@@ -2,13 +2,13 @@
 import sql from 'mssql';
 import { connKais } from '@/lib/connDBKais';
 
-export async function fetchDespieceAuto(){
-    try {
-        await connKais();
-        let sinceDate = new Date(2024, 4, 1); // Months are 0-based in JavaScript
-        let toDate = new Date(2024, 4, 31);
+export async function fetchDespieceAuto() {
+        try {
+                await connKais();
+                let sinceDate = new Date(2024, 4, 1); // Months are 0-based in JavaScript
+                let toDate = new Date(2024, 4, 31);
 
-        const result = await sql.query`
+                const result = await sql.query`
         DECLARE @SINCEDATE AS DATETIME;
 
         SET @SINCEDATE = ${sinceDate};
@@ -96,12 +96,34 @@ export async function fetchDespieceAuto(){
                 ON PECES.DIB_ID = ANIMAL_ESCORXA.DIB_ID
         WHERE    ANIMAL_ESCORXA.LPA_FECHAMATANZA BETWEEN @SINCEdATE AND @TODATE
         ORDER BY PESO_ART DESC`
-        
-        sql.close();
-        return result.recordset;
-        
-    }catch (error) {
-        console.error(error);
-        return error;
-    }
+
+                sql.close();
+
+                // group by ART_CODIGO
+                const resultGroup = result.recordset.reduce((acc, item) => {
+                        const { ART_CODI, ART_DESCRIP, PESO_ART, LPA_PES } = item;
+                        if (!acc[ART_CODI]) { // mira si el ART_CODI ya existe en el objeto acc
+                                acc[ART_CODI] = {
+                                        ART_DESCRIP,
+                                        PESO_ART,
+                                        LPA_PES,
+                                        count: 1
+                                };
+                        } else {
+                                acc[ART_CODI].PESO_ART += PESO_ART;
+                                acc[ART_CODI].count += 1;
+                        }
+                        return acc;
+                }, {});
+
+                console.log(result.recordset);
+
+                console.log(resultGroup);
+
+                //return result.recordset;
+
+        } catch (error) {
+                console.error(error);
+                return error;
+        }
 }

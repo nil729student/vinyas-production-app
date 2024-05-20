@@ -55,7 +55,7 @@ function splitData(xs, ys, testSize = 0.2) {
 
 // Construcción del modelo
 function createModel(inputShape) {
-  const model = tf.sequential();
+  const model = tf.sequential(); // Crear un model secuencial
   model.add(tf.layers.dense({ inputShape, units: 10, activation: 'relu' }));
   model.add(tf.layers.dense({ units: 1 }));
 

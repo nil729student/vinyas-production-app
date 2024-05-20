@@ -51,6 +51,12 @@ export default function Navbar() {
             >
               Contact
           </Link>
+          <Link href="/ia" passHref 
+              onClick={() => handleClick('/ia')}
+              className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/contact' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}
+            >
+              IA
+          </Link>
         </div>
       </div>
     </nav>
