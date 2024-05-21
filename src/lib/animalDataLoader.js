@@ -108,7 +108,6 @@ function formatArticles(data) {
         // Filtrem les peçes per davants
         if ( item.art_codi.trim() == data.slice(4, 5)[0].art_codi.trim() ){ // 001107 es el codi de la peça del davant
             // Afagim el quarter al canal
-            
             const pesArtQuarterDavant = data.slice(4, 6).map((item) => {
                 canal.quarter.davants.push(quarter);
                 //if (item.art_codi.trim() == '001107') {
@@ -123,7 +122,6 @@ function formatArticles(data) {
         // treu els elemnets repetits del array de  i davants
         canal.quarter.davants = [...new Map(canal.quarter.davants.map(item => [item['lot_codigo'], item])).values()]
         canal.quarter.derreres = [...new Map(canal.quarter.derreres.map(item => [item['lot_codigo'], item])).values()];
-;
 
     }
     // Paso 3: Organizar despieces por lote en cada quarter segun el lote del quarter i el lote del despiece

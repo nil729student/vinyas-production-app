@@ -10,7 +10,7 @@ export default function TableAnimalWeightRange({ dataArt, weights }) {
 
 
     return (
-        <div className="max-h-[700px] overflow-auto">
+        <div className="max-h-[600px] overflow-auto">
             <table className="w-full divide-y divide-gray-200">
                 <thead className=" sticky top-0 bg-gray-50">
                     <tr>

@@ -46,18 +46,7 @@ export default function panel() {
                     />
                     <span className="flex justify-center">Comanda a Canal</span>
                 </div>
-                <div
-                    onClick={() => handleSelect('ArticleWeighing')}
-                    className="cursor-pointer bg-color-nav text-white px-20 py-24 rounded-lg hover:bg-gray-700 border-4 border-color-secondary-vinas"
-                >
-                    <Image
-                        src="/comanda.png"
-                        width={150}
-                        height={150}
-                        alt="porc imatge"
-                    />
 
-                </div>
 
             </div>
             <AnimatePresence>
@@ -71,7 +60,6 @@ export default function panel() {
                         <button onClick={handleClose} className="absolute top-4 right-4 bg-red-500 text-white rounded-full p-2 px-4 hover:bg-red-600">X</button>
                         {selectedComponent === 'AnimalWeightRange' && <AnimalWeightRange />}
                         {selectedComponent === 'CanalByArticle' && <CanalByArticle />}
-                        {selectedComponent === 'ArticleWeighing' && <ArticleWeighing />}
                     </motion.div>
                 )}
             </AnimatePresence>
