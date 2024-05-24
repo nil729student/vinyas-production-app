@@ -236,17 +236,16 @@ export async function fechDespiecePerDib(dib_id) {
 export async function createEscandall(dataEscandall) {
 
     try {
-
-        // Aixó funciona: await createAnimal(dataEscandall);
+        // Insertem l'animal
         const animalId = await createAnimal(dataEscandall);
+        // insertem l'article principal la canal
         const articleAnimalId = await createMainArticleByAnimal(animalId, dataEscandall);
+        // inerterem els articles dels quarts
         const articleQuarter = await createArticleQuarter(dataEscandall, articleAnimalId, animalId);
         // insertem els articles dels quarts
         const article = await createManyArticles(dataEscandall, articleQuarter, animalId);
-        // cridem a la funció article
         article;
 
-        // Promise.all(promises);
         return { message: 'Escandall Created' };
     } catch (error) {
         return { message: 'Database Error: Failed to Create Escandall' };
