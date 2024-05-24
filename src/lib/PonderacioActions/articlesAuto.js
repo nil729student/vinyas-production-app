@@ -5,8 +5,8 @@ import { connKais } from '@/lib/connDBKais';
 export async function fetchDespieceAuto() {
         try {
                 await connKais();
-                let sinceDate = new Date(2024, 4, 1); // Months are 0-based in JavaScript
-                let toDate = new Date(2024, 4, 31);
+                let sinceDate = new Date(2024, 1, 1); // Months are 0-based in JavaScript
+                let toDate = new Date(2024, 1, 31);
 
                 const result = await sql.query`
         DECLARE @SINCEDATE AS DATETIME;
@@ -117,8 +117,10 @@ export async function fetchDespieceAuto() {
                 }, {});
 
                 console.log(result.recordset);
+                // save in json file
+                const fs = require('fs');
+                fs.writeFileSync('despiece4.json', JSON.stringify(result.recordset, null, 2));
 
-                console.log(resultGroup);
 
                 //return result.recordset;
 
