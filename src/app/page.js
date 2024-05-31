@@ -60,6 +60,8 @@ export default function Home() {
         current: data.current.temp_c,
         humidity: data.current.humidity,
         temps: data.current.condition.icon,
+        localtime: data.location.localtime,
+        bent_km: data.current.wind_kph,
         //min: data.forecast.forecastday[0].day.mintemp_c,
         //max: data.forecast.forecastday[0].day.maxtemp_c,
       });
@@ -80,11 +82,13 @@ export default function Home() {
             <Image src="/images/marca-grup-viñas-transparent-left.png" alt="Grup Viñas Logo" width={500} height={400} />
 
             <div className="mt-0 text-center text-2xl bg-slate-100 shadow-lg rounded-lg justify-center px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+              
               {weather ? (
-                <>
-                  <p className="mb-2">Ubicació: {weather.location}</p>
+                <div className="space-y-4">
+                  <p className="mb-2 text-lx font-bold">Ubicació: {weather.location}</p>
+                  <p className="text-lx"> <span className="font-semibold">{weather.localtime}</span></p>
                   <div className="flex items-center justify-center mb-2">
-                    <p className="mr-2">{weather.current}°C</p>
+                    <p className="mr-2 text-4xl font-semibold">{weather.current}°C</p>
                     <img
                       src={weather.temps}
                       alt="Weather icon"
@@ -93,20 +97,21 @@ export default function Home() {
                       className="inline-block"
                     />
                   </div>
-                  <p>Humitat {weather.humidity}</p>
-                </>
+                  <p className="text-lx">Humitat: {weather.humidity}%</p>
+                  <p className="text-lx">Vent: {weather.bent_km} km/h</p>
+                  
+                </div>
               ) : (
-                <p>Loading...</p>
+                <p className="text-lg font-semibold">Loading...</p>
               )}
-
             </div>
           </div>
-            <div className="relative py-32">
-              <Image src="/images/vaca.jpg" alt="Paisaje" width={1000} height={1000} />
-              <div className="absolute top-0 left-0 bottom-0 w-1/2 h- bg-gradient-to-r from-gray-100 to-transparent"></div>
-            </div>
+          <div className="relative py-32">
+            <Image src="/images/vaca.jpg" alt="Paisaje" width={1000} height={1000} />
+            <div className="absolute top-0 left-0 bottom-0 w-1/2 h- bg-gradient-to-r from-gray-100 to-transparent"></div>
           </div>
-          {/* Aquí puedes agregar otros elementos de la página, como información sobre la empresa, etc. */}
+        </div>
+        {/* Aquí puedes agregar otros elementos de la página, como información sobre la empresa, etc. */}
       </main>
       <footer className="bg-gray-800 text-white py-4">
         <div className="container mx-auto">
