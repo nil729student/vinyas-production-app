@@ -137,7 +137,7 @@ export default function LoadData() {
                                                 <td className="border px-4 py-2">{item.peso_art} kg</td>
                                                 <td className="px-4">
                                                     <button
-                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                        className="bg-color-button hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                                                         onClick={() => setmostrarDetallCanal(!mostrarDetallCanal)}
                                                     >
                                                         {mostrarDetallCanal ? ' - ' : '+'}
@@ -170,7 +170,7 @@ export default function LoadData() {
                                                     <td className=" bg-slate-300 border px-4 py-2">{item.peso_art} kg</td>
                                                     <td className="px-4">
                                                         <button
-                                                            className="bg-green-400 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
+                                                            className="bg-color-button hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                                                             onClick={() => setmostrarDetallDavants(!mostrarDetallDavants)}
                                                         >
                                                             {mostrarDetallDavants ? '-' : '+'}
@@ -200,7 +200,7 @@ export default function LoadData() {
                                                     <td className="bg-slate-300 border px-4 py-2">{item.peso_art} kg</td>
                                                     <td className="px-4">
                                                         <button
-                                                            className="bg-green-400 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
+                                                            className="bg-color-button hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                                                             onClick={() => setmostrarDetallDerreres(!mostrarDetallDerreres)}
                                                         >
                                                             {mostrarDetallDerreres ? '-' : '+'}
@@ -222,9 +222,9 @@ export default function LoadData() {
                                     </table>
                                 )}
 
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-10 py-2 px-4 rounded"
+                                <button className="bg-blue-700 hover:bg-blue-900 text-white font-bold m-10 py-2 px-4 rounded"
                                     onClick={handleCreateEscandall} >Crear escandall</button>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-10 py-2 px-4 rounded" onClick={handleCancel} >Cancel·la</button>
+                                <button className="bg-blue-700 hover:bg-blue-900 text-white font-bold m-10 py-2 px-4 rounded" onClick={handleCancel} >Cancel·la</button>
                             </dib>
                         </>
                     }
