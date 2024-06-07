@@ -84,12 +84,12 @@ export default function ArtList({ dataArticles }) {
 
                 <div className="mt-4">
                     <h2 className="text-2xl font-bold mb-4 text-center">Dades dels articles seleccionats:</h2>
-                    <ul className="space-y-4">
+                    <ul className="space-y-4 max-h-[500px] overflow-auto">
                         {
                             // taula dels resultats
                             dataArtsParent &&
                             Object.entries(dataArtsParent).map(([artId, artData]) => (
-                                <div key={artId} className="max-h-[500px] overflow-auto">
+                                <div key={artId} className="">
                                     {artData.artMitjanaPerArticle ? (
                                         <TableContainer component={Paper}>
                                             <Table aria-label="simple table">
