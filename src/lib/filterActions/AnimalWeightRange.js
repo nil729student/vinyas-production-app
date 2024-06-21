@@ -44,6 +44,40 @@ export async function getArticlesByCanalWeightRange(maxWeight, minWeight) {
     return {articles, artMitjanaPerArticle, artMaxWeightPerArticle, artMinWeightPerArticle};
 }
 
+export async function getArticlesByMultipleCanalsWeightRange(maxWeight, minWeight) {
+    const articles = await prisma.article.findMany({
+        where: {
+            AND: [
+                {
+                    parent: {
+                        parent: {
+                            weightKg: {
+                                gte: minWeight,
+                                lte: maxWeight
+                            }
+                        }
+                    }
+                },
+                {
+                    classificationArtId: 1
+                }
+            ]
+        },
+        orderBy: {
+            parent: {
+                weightKg: 'asc'
+            }
+        }
+    });
+
+    const artMitjanaPerArticle = calculMitjanaPerArticle(articles);
+    const artMaxWeightPerArticle = getMaxWeightPerArticle(articles);
+    const artMinWeightPerArticle = getMinWeightPerArticle(articles);
+
+    return {articles, artMitjanaPerArticle, artMaxWeightPerArticle, artMinWeightPerArticle};
+}
+
+
 
 export async function getArticlesByQuarterWeightRange(maxWeight, minWeight) {
     const articles = await prisma.article.findMany({

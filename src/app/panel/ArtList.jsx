@@ -62,7 +62,7 @@ export default function ArtList({ dataArticles }) {
         <div className="flex justify-between items-start h-screen mt-5">
             {/* Articles check list  */}
             <div className="w-1/6 bg-gray-200 p-4 rounded-lg shadow-lg">
-                <input type="text" placeholder="Buscar animal" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
+                <input type="text" placeholder="Buscar article" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
                 <div class="overflow-auto h-screen ">
                     <ul className="space-y-4 p-4 ">
                         {filteredAnimals.map((art, index) => (

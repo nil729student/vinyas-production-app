@@ -352,6 +352,7 @@ const createAnimal = async (item) => {
                 classificationId: 1,
                 age: 10,
                 sexe: item.lpa_sexe,
+                animaWeightKg: item.lpa_pes,
             },
             select: {
                 id: true,
