@@ -87,7 +87,7 @@ export async function animalRelationWeight() {
         const data = animal.recordset;
         sql.close();
         return data;
-
+        
     } catch (error) {
         return {error: error.message};
     }
