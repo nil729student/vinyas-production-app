@@ -11,17 +11,26 @@ export default function ClassificationWeightChart({ data = [] }) {  // Usar un v
     useEffect(() => {
         if (data.length === 0) return;  // Verificar si data está vacío
 
-        // Agrupar los datos por clasificación y sumar los pesos
         const groupedData = data.reduce((acc, animal) => {
+            // Initialize the classification if it doesn't exist
             if (!acc[animal.hip_clasabr]) {
-                acc[animal.hip_clasabr] = 0;
+                acc[animal.hip_clasabr] = { totalWeight: 0, count: 0 };
             }
-            acc[animal.hip_clasabr] += animal.hip_pes;
+            // Accumulate the total weight and count for each classification
+            acc[animal.hip_clasabr].totalWeight += animal.hip_pes;
+            acc[animal.hip_clasabr].count += 1;
+        
+            return acc;
+        }, {});
+        
+        // Calculate the average weight for each classification
+        const averageWeights = Object.keys(groupedData).reduce((acc, classification) => {
+            acc[classification] = groupedData[classification].totalWeight / groupedData[classification].count;
             return acc;
         }, {});
 
         const labels = Object.keys(groupedData);
-        const weights = Object.values(groupedData);
+        const weights = Object.values(averageWeights);
 
         setChartData({
             labels,
