@@ -43,8 +43,9 @@ export default function Navbar() {
           <Link href="/formArticles" passHref onClick={() => handleClick('/formArticles')} className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/formArticles' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}>
             Form Articles
           </Link>
-          <Link href="/contact" passHref onClick={() => handleClick('/contact')} className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/contact' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}>
-            Contact
+
+          <Link href="/relacioDePesos" passHref onClick={() => handleClick('/relacioDePesos')} className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/contact' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}>
+            Relació de pesos
           </Link>
           <Link href="/ia" passHref onClick={() => handleClick('/ia')} className={`block mt-4 lg:inline-block lg:mt-0 ${activeLink === '/ia' ? 'text-neutral-100' : 'text-color-secondary'} hover:text-neutral-100 mr-4`}>
             IA

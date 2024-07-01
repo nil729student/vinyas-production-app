@@ -2,14 +2,34 @@
 import { useState, useEffect, useMemo } from 'react';
 import { animalRelationWeight } from "@/lib/animalDataLoader";
 import { getMaxMinWeightArticles } from "@/lib/articleActions";
-import SelectedArticlesListForm from "./SelectedArticlesListForm";
-import dataArticles from "./dataArticles.json";
+//import SelectedArticlesListForm from "./SelectedArticlesListForm";
+
 
 export default function ArticleWeighing() {
     const [searchTerm, setSearchTerm] = useState('');
     const [dataArtsParent, setDataArtsParent] = useState(null);
     const [selectedArticles, setSelectedArticles] = useState({});
 
+    const [loadArts, setLoadArts] = useState(false);
+    const [minWeight, setMinWeight] = useState(0);
+    const [maxWeight, setMaxWeight] = useState(0);
+    const [dataArt, setDataArt] = useState({});
+    const [weights, setWeights] = useState({});
+
+    const handlerAnimalWeightRange = async () => {
+        const response = await getArticlesByCanalWeightRange(maxWeight, minWeight); // 250, 220
+        console.log(response);
+        const {
+            articles: articles,
+            artMitjanaPerArticle: artMitjanaPerArticle,
+            artMaxWeightPerArticle: artMaxWeightPerArticle,
+            artMinWeightPerArticle: artMinWeightPerArticle
+        } = response; // estem definint articles i mitjanaPerArticle a les 
+
+        setLoadArts(true);
+        setWeights({ artMitjanaPerArticle, artMaxWeightPerArticle, artMinWeightPerArticle }); // Update weights state variable
+        setDataArt(articles);
+    }
     const [animalsData, setAnimalsData] = useState([]);
 
     const loadData = async () => {
@@ -17,11 +37,6 @@ export default function ArticleWeighing() {
         setAnimalsData(data);
     };
 
-    const filteredAnimals = useMemo(() => {
-        return dataArticles.filter((art) =>
-            art.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [dataArticles, searchTerm]);
 
     const handleSelect = async (art) => {
         console.log(art.id)
@@ -52,22 +67,39 @@ export default function ArticleWeighing() {
 
     return (
         <>
-            <div className="flex justify-between items-start h-screen p-10 overflow-auto">
-                <div className="w-1/6 bg-gray-200 p-4 rounded-lg shadow-lg">
-                    <input type="text" placeholder="Buscar article" onChange={(e) => setSearchTerm(e.target.value)} className="mb-4 p-2 border border-gray-300 w-full rounded" />
-                    <div class="overflow-auto h-screen ">
-                        <ul className="space-y-4 p-4 ">
-                            {filteredAnimals.map((art, index) => (
-                                <li key={index} className="bg-white p-4 rounded-lg shadow">
-                                    <button onClick={() => handleSelect(art)} className={`flex items-center space-x-2 ${selectedArticles[art.id] ? 'bg-gray-200' : 'bg-white-300 text-black'} hover:bg-gray-200 rounded p-2 w-full`}>
-                                        <input type="checkbox" checked={!!selectedArticles[art.id]} onChange={() => { }} />
-                                        <span>{art.id} - {art.name}</span>
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+            <div className=" mx-auto max-w-sm p-6" >
+                <h1 className="text-xl font-bold mb-4">Canal Weight Range</h1>
+                <div className="mb-4">
+                    <input className="border p-2 rounded w-full" type="number" placeholder="Minimum weight"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setMinWeight(parseInt(e.target.value, 10));
+                        }}
+                    />
+                    <span className="mx-2">-</span>
+                    <input className="border p-2 rounded w-full" type="number" placeholder="Maximum weight"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setMaxWeight(parseInt(e.target.value, 10));
+                        }}
+                    />
                 </div>
+                <div className="mb-4">
+                    <label htmlFor="class" className="block text-sm font-medium text-gray-700">Classification</label>
+                    <input id="class" className="border p-2 rounded w-full" type="text" />
+                </div>
+                {/*<div className="mb-4">
+                            <label htmlFor="unit" className="block text-sm font-medium text-gray-700">Unitat</label>
+                            <input id="unit" className="border p-2 rounded w-full" type="number" />
+                        </div>*/}
+                <button
+                    onClick={handlerAnimalWeightRange}
+                    className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-color-button hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                    Search
+                </button>
+            </div>
+            <div className="flex justify-between items-start h-screen p-10 ">
                 <div className="flex-1 flex flex-col justify-center items-center">
 
                     <h1 className="text-4xl font-bold mb-10 text-center">Relació de pesos</h1>
@@ -77,7 +109,6 @@ export default function ArticleWeighing() {
                             Carregar dades
                         </button>
                     </div>
-                    <SelectedArticlesListForm selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
                     <div className='flex flex-wrap justify-between'>
                         <div className="overflow-auto max-h-[600px] mb-10 w-full ">
                             <table className="min-w-full bg-white border border-gray-300">
@@ -91,6 +122,7 @@ export default function ArticleWeighing() {
                                         <th className="py-2 px-4 border-b">Hallal</th>
                                         <th className="py-2 px-4 border-b">Certi1</th>
                                         <th className="py-2 px-4 border-b">Certi2</th>
+                                        <th className="py-2 px-4 border-b">Proveïdor</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,6 +136,7 @@ export default function ArticleWeighing() {
                                             <td className="py-2 px-4 border-b">{animal.Hallal}</td>
                                             <td className="py-2 px-4 border-b">{animal.certi1}</td>
                                             <td className="py-2 px-4 border-b">{animal.certi2}</td>
+                                            <td className="py-2 px-4 border-b">{animal.hip_nomproveidor}</td>
                                         </tr>
                                     ))}
                                 </tbody>
