@@ -24,6 +24,7 @@ model Animal {
   age                Int?
   sexe               String
   animaWeightKg      Float
+  createdAt          DateTime  @default(now())
   articles           Article[]      // un animal pot tenir molts articles o no tenir-ne cap
   classification     Classification  @relation(fields: [classificationId], references: [id]) // An animal can have a classification
 }

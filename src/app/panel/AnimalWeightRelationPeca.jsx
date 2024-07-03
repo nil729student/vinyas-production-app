@@ -4,6 +4,7 @@ import { animalRelationWeight } from "@/lib/animalDataLoader";
 import { getMaxMinWeightArticles } from "@/lib/articleActions";
 import SelectedArticlesListForm from "./SelectedArticlesListForm";
 import dataArticles from "./dataArticles.json";
+import {getArticlesByAnimalWeightRange} from "@/lib/animalActions";
 
 export default function ArticleWeighing() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +27,9 @@ export default function ArticleWeighing() {
     const handleSelect = async (art) => {
         console.log(art.id)
         const weightMaxMin = await getMaxMinWeightArticles(art.id);
+        const animals = await getArticlesByAnimalWeightRange(art.id);
+        console.log(animals);
+
         // add in art the max and min weight of the article
         /*
             {

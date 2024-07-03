@@ -13,6 +13,7 @@ export default function AnimalWeightRange() {
     const [weights, setWeights] = useState({});
 
     const handlerAnimalWeightRange = async () => {
+        // Obtenisó de la canal per rang de pes
         const response = await getArticlesByCanalWeightRange(maxWeight, minWeight); // 250, 220
         console.log(response);
         const {
