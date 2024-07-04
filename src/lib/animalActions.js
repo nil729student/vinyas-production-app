@@ -29,7 +29,7 @@ export async function getArticlesByAnimalWeightRange(art_codi) {
     });
     console.log(animals);
     return animals;
-  }finally {
+  } finally {
     await prisma.$disconnect();
   }
 }

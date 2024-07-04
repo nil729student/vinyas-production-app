@@ -28,7 +28,7 @@ export default function ArticleWeighing() {
         console.log(art.id)
         const weightMaxMin = await getMaxMinWeightArticles(art.id);
         const animals = await getArticlesByAnimalWeightRange(art.id);
-        console.log(animals);
+
 
         // add in art the max and min weight of the article
         /*
@@ -36,15 +36,23 @@ export default function ArticleWeighing() {
             _count: { _all: 2 },
             _max: { weightKg: 7.8 },
             _min: { weightKg: 7.75 }
+            animal: { id: 1, name: 'Corder', weightKg: 7.8 }
             }
         */
+
+        const animalWeights = animals.map(item => item.animal.animaWeightKg);
+        const maxWeight = Math.max(...animalWeights);
+        const minWeight = Math.min(...animalWeights);
         art.counterArts = weightMaxMin._count._all;
-        art.weightMax = weightMaxMin._max.weightKg;
-        art.weightMin = weightMaxMin._min.weightKg;
+        art.weightMax = maxWeight;
+        art.weightMin = minWeight;
+        art.animals = animals;
+        console.log(art);
         setSelectedArticles(prevState => ({
             ...prevState,
             [art.id]: prevState[art.id] ? undefined : art,
         }));
+
     }
 
     // revem les dades del component fill
