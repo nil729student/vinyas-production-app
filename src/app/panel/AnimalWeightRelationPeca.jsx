@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { animalRelationWeight } from "@/lib/animalDataLoader";
 import { getMaxMinWeightArticles } from "@/lib/articleActions";
-import SelectedArticlesListForm from "./SelectedArticlesListForm";
+import SelectedAnimalxArt from "./SelectedAnimalxArt";
 import dataArticles from "./dataArticles.json";
 import {getArticlesByAnimalWeightRange} from "@/lib/animalActions";
 
@@ -89,7 +89,7 @@ export default function ArticleWeighing() {
                             Carregar dades
                         </button>
                     </div>
-                    <SelectedArticlesListForm selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
+                    <SelectedAnimalxArt selectedArticles={selectedArticles} onDataArtsParent={handleDataArtsParent} />
                     <div className='flex flex-wrap justify-between'>
                         <div className="overflow-auto max-h-[600px] mb-10 w-full ">
                             <table className="min-w-full bg-white border border-gray-300">
