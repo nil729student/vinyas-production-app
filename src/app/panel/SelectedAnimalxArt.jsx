@@ -70,9 +70,11 @@ export default function SelectedAnimalxArt({ selectedArticles, onDataArtsParent 
                             </thead>
                             <tbody>
                                 {Object.values(selectedArticles).filter(Boolean).map((art, index) => (
+                                    console.log(art),
                                         <tr className="hover:bg-grey-lighter" key={index}>
                                         <td className="py-2 px-6 border-b border-grey-light">{art.counterArts}</td>
                                         <td className="py-2 px-6 border-b border-grey-light"> {art.name} - {art.id}</td>
+                                        <td className="py-2 px-6 border-b border-grey-light"> <b>{art.ageMax} - {art.ageMin}</b> </td>
                                         <td className=" px-6 border-b border-grey-light">
                                             <b htmlFor="weight"> <b>Rang: </b>  {art.weightMax - 2} - {art.weightMin + 2} </b>
                                         </td>

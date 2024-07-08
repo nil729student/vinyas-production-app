@@ -41,11 +41,16 @@ export default function ArticleWeighing() {
         */
 
         const animalWeights = animals.map(item => item.animal.animaWeightKg);
+        const animalAge = animals.map(item => item.animal.age);
         const maxWeight = Math.max(...animalWeights);
         const minWeight = Math.min(...animalWeights);
+        const maxAge = Math.max(...animalAge);
+        const minAge = Math.min(...animalAge);
         art.counterArts = weightMaxMin._count._all;
         art.weightMax = maxWeight;
         art.weightMin = minWeight;
+        art.ageMax = maxAge;
+        art.ageMin = minAge;
         art.animals = animals;
         console.log(art);
         setSelectedArticles(prevState => ({
