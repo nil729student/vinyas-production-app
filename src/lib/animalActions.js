@@ -21,7 +21,8 @@ export async function getArticlesByAnimalWeightRange(art_codi) {
     // obtenir tots els animals que tinguin associat el codi de l'article
     const animals = await prisma.article.findMany({
       include: {
-        animal: true
+        animal: true,
+        classification: true
       },
       where: {
         art_codi: art_codi

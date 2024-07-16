@@ -9,7 +9,7 @@ export default function SelectedAnimalxArt({ selectedArticles, onDataArtsParent 
     console.log(selectedArticles);
     const handleCanalByArticle = async () => {
         const resArtsParent = await ArticleUnitWeightRange(selectedArticlesParmas);
-        console.log(resArtsParent);
+        console.log("resArtsParent");
         // Enviem les dades al component para a traves de la funcio onData
         onDataArtsParent(resArtsParent);
     }
@@ -75,6 +75,7 @@ export default function SelectedAnimalxArt({ selectedArticles, onDataArtsParent 
                                         <td className="py-2 px-6 border-b border-grey-light">{art.counterArts}</td>
                                         <td className="py-2 px-6 border-b border-grey-light"> {art.name} - {art.id}</td>
                                         <td className="py-2 px-6 border-b border-grey-light"> <b>{art.ageMax} - {art.ageMin}</b> </td>
+                                        <td className="py-2 px-6 border-b border-grey-light"> {art.classifciacions}</td>
                                         <td className=" px-6 border-b border-grey-light">
                                             <b htmlFor="weight"> <b>Rang: </b>  {art.weightMax - 2} - {art.weightMin + 2} </b>
                                         </td>

@@ -11,7 +11,6 @@ export default async function ArticleUnitWeightRange(selectedArticlesParmas) {
         for (const [art_codi, params] of Object.entries(selectedArticlesParmas)) {
 
             try {
-
                 const articles = await prisma.article.findMany({
                     where: {
                         art_codi: parseInt(art_codi, 10),
@@ -23,12 +22,13 @@ export default async function ArticleUnitWeightRange(selectedArticlesParmas) {
                     include: {
                         parent: {
                             include: {
-                                parent: true
-                            }
-                        }
-                    }
+                                parent: true,
+                            },
+                        },
+                        classification: true,
+                    },
                 });
-
+                console.log(articles);
                 // Mitjana dels pesos dels articles
                 const artMitjanaPerArticle = articles.reduce((acc, art) => acc + art.weightKg, 0) / articles.length;
                 // Pes maxim de els articles

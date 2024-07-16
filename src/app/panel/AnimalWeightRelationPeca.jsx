@@ -51,7 +51,9 @@ export default function ArticleWeighing() {
         art.weightMin = minWeight;
         art.ageMax = maxAge;
         art.ageMin = minAge;
-        art.animals = animals;
+        art.animals = animals;        
+        art.classifciacions = [...new Set(animals.map(item => item.classification.name))];
+
         console.log(art);
         setSelectedArticles(prevState => ({
             ...prevState,
