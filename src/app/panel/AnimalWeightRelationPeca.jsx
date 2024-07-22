@@ -11,6 +11,7 @@ export default function ArticleWeighing() {
     const [dataArtsParent, setDataArtsParent] = useState(null);
     const [selectedArticles, setSelectedArticles] = useState({});
     const [animalsData, setAnimalsData] = useState([]);
+    const [filteredAnimalsData, setFilteredAnimalsData] = useState([]);
 
     const loadData = async () => {
         const data = await animalRelationWeight();
@@ -45,12 +46,31 @@ export default function ArticleWeighing() {
             ...prevState,
             [art.id]: prevState[art.id] ? undefined : art,
         }));
-        console.log('test');
 
-        animalsData.filter((animal) => {
+        const filterAnimalDataClass = animalsData.filter((animal) => {
             // filtrar per classifciacions
-            return animal.hip_clasabr === 'AO 2+';
+            return animal.hip_clasabr === "ZAO 3";
         });
+
+        // 2. Función para aplicar filtros y ordenar
+        function aplicarFiltrosYOrdenar() {
+            const resultados = animalsData.map(elemento => {
+                // Aplicar filtros y contar coincidencias
+                const coincidencias = [filterAnimalDataClass].reduce((acc, filtro) => acc + filtro(elemento), 0);
+                return { ...elemento, coincidencias };
+            });
+
+            // 3. Ordenar basándose en coincidencias
+            resultados.sort((a, b) => b.coincidencias - a.coincidencias);
+
+            // Actualizar estado con datos filtrados y ordenados
+            setDatosFiltrados(resultados);
+        };
+
+        // llama la función
+        aplicarFiltrosYOrdenar();
+
+
     }
 
     // Recibir las datos del componente hijo
