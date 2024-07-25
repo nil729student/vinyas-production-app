@@ -87,9 +87,9 @@ export async function animalRelationWeight() {
         const data = animal.recordset;
         sql.close();
         return data;
-        
+
     } catch (error) {
-        return {error: error.message};
+        return { error: error.message };
     }
 
 }
@@ -128,123 +128,94 @@ export async function fechAnimalByDib(dib_id) {
 }
 
 
-function formatArticles(data) {
+const createCanal = (item) => ({
+    dib_id: item.dib_id.trim(),
+    lot_codigo: item.lot_codigo.trim(),
+    art_codi: item.art_codi.trim(),
+    art_descrip: item.art_descrip.trim(),
+    peso_art: [],
+    quarter: {
+        derreres: [],
+        davants: []
+    }
+});
+
+const calculateTotalWeight = (items) => {
+    const totalWeight = items.map(item => item.peso_art).filter(value => value !== undefined).reduce((total, item) => total + item, 0);
+    return parseFloat(totalWeight.toFixed(2));
+};
+
+const createQuarter = (item) => ({
+    lot_codigo: item.lot_codigo.trim(),
+    art_codi: item.art_codi.trim(),
+    art_descrip: item.art_descrip.trim(),
+    peso_art: [],
+    despiece: []
+});
+
+const addUniqueItems = (array) => {
+    return [...new Map(array.map(item => [item['lot_codigo'], item])).values()];
+};
+
+const formatArticles = (data) => {
     let canals = [];
 
-    // Pas 1: Crear les canals
+    // Paso 1: Crear los canales
     for (let item of data.slice(0, 1)) {
-        //console.log("canal: ", item)
-        //if (item.art_codi.trim() == '001007') { // 001007          001027
-
-        // Crear canal
-        const canal = {
-            dib_id: item.dib_id.trim(),
-            lot_codigo: item.lot_codigo.trim(),
-            art_codi: item.art_codi.trim(),
-            art_descrip: item.art_descrip.trim(),
-            peso_art: [],
-            quarter: {
-                derreres: [],
-                davants: []
-            }
-        };
-        // enviali al array canals
+        const canal = createCanal(item);
         canals.push(canal);
-        //break;
-        //}
     }
 
-    const pesArtCanal = data.slice(0, 2).map((item) => {
-        //if (item.art_codi.trim() == '001007') {
-        //console.log(item.peso_art);
-        return item.peso_art;
-        //}
-    }).filter((value) => value !== undefined); // Filter out undefined values
+    const pesArtCanal = data.slice(0, 2);
+    const sumArtCanal = calculateTotalWeight(pesArtCanal);
+    canals[0].peso_art = sumArtCanal;
 
-    const sumArtCanal = pesArtCanal.reduce((total, item) => total + item, 0)
-
-    canals[0].peso_art = parseFloat(sumArtCanal.toFixed(2));
-
-
-
-
-    // Pas 2: Organiza els quarts per canal
+    // Paso 2: Organizar los cuartos por canal
     for (let item of data.slice(2, 6)) {
-        // Buscar el canal
-        const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
-        // Crear el quarter
-        const quarter = {
-            lot_codigo: item.lot_codigo.trim(),
-            art_codi: item.art_codi.trim(),
-            art_descrip: item.art_descrip.trim(),
-            peso_art: [],
-            despiece: []
-        };
-        // Filtrem les peçes per derreres
-        if (item.art_codi.trim() == data.slice(2, 3)[0].art_codi.trim()) {
-            // Añadir el quarter al canal amb la suma total del pes de les peçes 
-            // suma el pes de les peçes
-            const pesArtQuarterDerrere = data.slice(2, 4).map((item) => {
-                canal.quarter.derreres.push(quarter);
-                return item.peso_art;
-            }).filter((value) => value !== undefined); // Filter out undefined values
-            // suma el pesArtQuarter
-            const sumArtQuarterDerrere = pesArtQuarterDerrere.reduce((total, item) => total + item, 0)
-            quarter.peso_art = parseFloat(sumArtQuarterDerrere.toFixed(2))
+        const canal = canals.find(canal => canal.dib_id === item.dib_id.trim());
+        const quarter = createQuarter(item);
+
+        if (item.art_codi.trim() === data[2].art_codi.trim()) {
+            const pesArtQuarterDerrere = data.slice(2, 4);
+            const sumArtQuarterDerrere = calculateTotalWeight(pesArtQuarterDerrere);
+            quarter.peso_art = sumArtQuarterDerrere;
+            canal.quarter.derreres.push(quarter);
         }
 
-        // Filtrem les peçes per davants
-        if (item.art_codi.trim() == data.slice(4, 5)[0].art_codi.trim()) { // 001107 es el codi de la peça del davant
-            // Afagim el quarter al canal
-            const pesArtQuarterDavant = data.slice(4, 6).map((item) => {
-                canal.quarter.davants.push(quarter);
-                //if (item.art_codi.trim() == '001107') {
-                return item.peso_art;
-                //}
-            }).filter((value) => value !== undefined); // Filter out undefined values
-            const sumArtQuarterDavant = pesArtQuarterDavant.reduce((total, item) => total + item, 0)
-
-            quarter.peso_art = parseFloat(sumArtQuarterDavant.toFixed(2));
+        if (item.art_codi.trim() === data[4].art_codi.trim()) {
+            const pesArtQuarterDavant = data.slice(4, 6);
+            const sumArtQuarterDavant = calculateTotalWeight(pesArtQuarterDavant);
+            quarter.peso_art = sumArtQuarterDavant;
+            canal.quarter.davants.push(quarter);
         }
 
-        // treu els elemnets repetits del array de  i davants
-        canal.quarter.davants = [...new Map(canal.quarter.davants.map(item => [item['lot_codigo'], item])).values()]
-        canal.quarter.derreres = [...new Map(canal.quarter.derreres.map(item => [item['lot_codigo'], item])).values()];
-
+        canal.quarter.davants = addUniqueItems(canal.quarter.davants);
+        canal.quarter.derreres = addUniqueItems(canal.quarter.derreres);
     }
-    // Paso 3: Organizar despieces por lote en cada quarter segun el lote del quarter i el lote del despiece
+
+    // Paso 3: Organizar despieces por lote en cada cuarto según el lote del cuarto y el lote del despiece
     for (let item of data) {
-        // Buscar la canal
-        const canal = canals.find(canal => canal.dib_id == item.dib_id.trim());
-        let artDavant = canal.quarter.davants[0]
-        console.log(artDavant);
-        let artDerrere = canal.quarter.derreres[0]
-        // Crear el despiece
+        const canal = canals.find(canal => canal.dib_id === item.dib_id.trim());
+        const artDavant = canal.quarter.davants[0];
+        const artDerrere = canal.quarter.derreres[0];
+
         const despiece = {
             lot_codigo: item.lot_codigo.trim(),
             art_codi: item.art_codi.trim(),
             art_descrip: item.art_descrip.trim(),
             peso_art: item.peso_art
         };
-        // carregem les dades diferents a la canal i els quartes: davants i derreres
-        if (item.art_codi.trim() !== data.slice(4, 6) && item.art_codi.trim() !== data.slice(2, 4) && item.art_codi.trim() !== data.slice(0, 1)) {
 
-            if (item.lot_codigo.trim() == artDavant.lot_codigo && despiece.art_codi !== artDavant.art_codi) {
-
-                // Afeguim el despiece 
-                artDavant.despiece.push(despiece);
-            }
-            if (item.lot_codigo.trim() == artDerrere.lot_codigo && despiece.art_codi !== artDerrere.art_codi) {
-                // Afeguim el despiece al quarter
-                artDerrere.despiece.push(despiece);
-
-            }
-
+        if (item.lot_codigo.trim() === artDavant.lot_codigo && despiece.art_codi !== artDavant.art_codi) {
+            artDavant.despiece.push(despiece);
+        }
+        if (item.lot_codigo.trim() === artDerrere.lot_codigo && despiece.art_codi !== artDerrere.art_codi) {
+            artDerrere.despiece.push(despiece);
         }
     }
 
     return canals;
-}
+};
 
 
 export async function fechDespiecePerDib(dib_id) {
@@ -331,7 +302,7 @@ export async function createEscandall(dataEscandall) {
         // inerterem els articles dels quarts
         const articleQuarter = await createArticleQuarter(dataEscandall, articleAnimalId, animalId);
         // insertem els articles dels quarts
-        const article = await createManyArticles(dataEscandall, articleQuarter, animalId);
+        const article = await createManyDerrere(dataEscandall, articleQuarter, animalId);
         article;
 
         return { message: 'Escandall Created' };
@@ -363,13 +334,17 @@ const createAnimal = async (item) => {
         return newAnimal;
     }
     catch (error) {
-        return { message: 'Database Error: Failed to Create Animal' };
+        return {
+            message: 'Database Error: Failed to Create Animal',
+            error: error.message
+        };
     }
 }
 
 
 const createMainArticleByAnimal = async (newAnimal, item) => {
     try {
+        console.log(item)
         const animalArticle = await prisma.article.create({
             data: {
                 name: item.despiece[0].art_descrip,
@@ -382,17 +357,20 @@ const createMainArticleByAnimal = async (newAnimal, item) => {
                 units: 2,
                 unitsConsum: 2,
                 animal: { connect: newAnimal },
-                art_codi: item.despiece[0].art_codi,
+                art_codi: parseInt(item.despiece[0].art_codi),
             },
             select: {
                 id: true,
             }
         });
-        console.log(animalArticle)
+        console.log('Article animal', animalArticle)
         return animalArticle
 
     } catch (error) {
-        return { message: 'Database Error: Failed to Create MainArticleByAnimal' };
+        return {
+            message: 'Database Error: Failed to Create MainArticleByAnimal',
+            error: error.message
+        };
     }
 }
 
@@ -507,6 +485,83 @@ const createManyArticles = async (articles, parentArticle, animalId) => {
                 }
             });
         });
+        dataArticlesDerrere.forEach(async (art) => {
+            console.log(art);
+            await prisma.article.create({
+                data: art,
+                select: {
+                    id: true,
+                }
+            });
+        });
+    }
+    catch (error) {
+        return { message: 'Database Error: Failed to Create Article' };
+    }
+}
+
+const createManyDavant = async (articles, parentArticle, animalId) => {
+    console.log(parentArticle) // { newArticleDavant: [ { id: 291 } ], newArticleDerrere: [ { id: 292 } ] }
+    console.log(animalId)
+    try {
+        const dataArticlesDavant = articles.despiece[0].quarter.davants.map((article) => {
+
+            return article.despiece.map((item) => ({
+                name: item.art_descrip.trim(),
+                lot: item.lot_codigo,
+                description: "",
+                price: 0,
+                image: "",
+                weightKg: item.peso_art,
+                classification: { connect: { id: 1 } },
+                units: 1,
+                unitsConsum: 1,
+                animal: { connect: animalId },
+                parent: { connect: { id: parentArticle.newArticleDavant[0].id } },
+                art_codi: item.art_codi,
+            }));
+        }).flat();
+
+
+
+        dataArticlesDavant.forEach(async (art) => {
+            console.log(art);
+            await prisma.article.create({
+                data: art,
+                select: {
+                    id: true,
+                }
+            });
+        });
+
+    }
+    catch (error) {
+        return { message: 'Database Error: Failed to Create Article' };
+    }
+}
+
+const createManyDerrere = async (articles, parentArticle, animalId) => {
+    console.log(parentArticle) // { newArticleDavant: [ { id: 291 } ], newArticleDerrere: [ { id: 292 } ] }
+    console.log(animalId)
+    try {
+
+        const dataArticlesDerrere = articles.despiece[0].quarter.derreres.map((article) => {
+            return article.despiece.map((item) => ({
+                name: item.art_descrip.trim(),
+                lot: item.lot_codigo,
+                description: "",
+                price: 0,
+                image: "",
+                weightKg: item.peso_art,
+                classification: { connect: { id: 1 } },
+                units: 1,
+                unitsConsum: 1,
+                animal: { connect: animalId },
+                parent: { connect: { id: parentArticle.newArticleDerrere[0].id } },
+                art_codi: parseInt(item.art_codi),
+            }));
+        }).flat();
+
         dataArticlesDerrere.forEach(async (art) => {
             console.log(art);
             await prisma.article.create({
