@@ -8,7 +8,7 @@ import prisma from "./prisma";
 import { createMainArticleByForm, createDerivedArticles } from "./actions";
 
 
-export async function animalRelationWeight() {
+export async function animalRelationWeight(fecha) {
 
     try {
         await connKaisEscorxa();
@@ -80,7 +80,7 @@ export async function animalRelationWeight() {
                     ON lpa_fechamatanza = hip_fecmatanza
                         AND lpa_canalintern = hip_canalintern
             left join clasificacion on clasificacion.cla_cm=lpapesos.lpa_qualitat
-        WHERE  histpesos.hip_fecmatanza = '2024-06-18'
+        WHERE  histpesos.hip_fecmatanza = ${fecha}
             AND histpesos.gan_ganado = '001'
         ORDER  BY histpesos.hip_canalintern, histpesos.hip_canalgeneral`;
 
@@ -302,7 +302,7 @@ export async function createEscandall(dataEscandall) {
         // inerterem els articles dels quarts
         const articleQuarter = await createArticleQuarter(dataEscandall, articleAnimalId, animalId);
         // insertem els articles dels quarts
-        const article = await createManyDerrere(dataEscandall, articleQuarter, animalId);
+        const article = await createManyArticles(dataEscandall, articleQuarter, animalId);
         article;
 
         return { message: 'Escandall Created' };
@@ -391,7 +391,7 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
             unitsConsum: 1,
             animal: { connect: animalId },
             parent: { connect: parentArticle },
-            art_codi: article.art_codi,
+            art_codi: parseInt(article.art_codi),
         }));
 
         const dataArticlesDerrere = articles.despiece[0].quarter.derreres.map((article) => ({
@@ -406,7 +406,7 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
             unitsConsum: 1,
             animal: { connect: animalId },
             parent: { connect: parentArticle },
-            art_codi: article.art_codi,
+            art_codi: parseInt(article.art_codi),
         }));
 
         const newArticleDavantPromises = dataArticlesDavant.map((item) => {
@@ -432,7 +432,9 @@ const createArticleQuarter = async (articles, parentArticle, animalId) => {
         return { newArticleDavant, newArticleDerrere }
     }
     catch (error) {
-        return { message: 'Database Error: Failed to Create Quarters' };
+        return { message: 'Database Error: Failed to Create Quarters', 
+            error: error.message 
+        };
     }
 }
 
@@ -455,7 +457,7 @@ const createManyArticles = async (articles, parentArticle, animalId) => {
                 unitsConsum: 1,
                 animal: { connect: animalId },
                 parent: { connect: { id: parentArticle.newArticleDavant[0].id } },
-                art_codi: item.art_codi,
+                art_codi: parseInt(item.art_codi),
             }));
         }).flat();
 
@@ -472,7 +474,7 @@ const createManyArticles = async (articles, parentArticle, animalId) => {
                 unitsConsum: 1,
                 animal: { connect: animalId },
                 parent: { connect: { id: parentArticle.newArticleDerrere[0].id } },
-                art_codi: item.art_codi,
+                art_codi: parseInt(item.art_codi),
             }));
         }).flat();
 
@@ -496,7 +498,10 @@ const createManyArticles = async (articles, parentArticle, animalId) => {
         });
     }
     catch (error) {
-        return { message: 'Database Error: Failed to Create Article' };
+        return { 
+            message: 'Database Error: Failed to Create Article', 
+            error: error.message
+        };
     }
 }
 
@@ -518,7 +523,7 @@ const createManyDavant = async (articles, parentArticle, animalId) => {
                 unitsConsum: 1,
                 animal: { connect: animalId },
                 parent: { connect: { id: parentArticle.newArticleDavant[0].id } },
-                art_codi: item.art_codi,
+                art_codi: parseInt(item.art_codi),
             }));
         }).flat();
 

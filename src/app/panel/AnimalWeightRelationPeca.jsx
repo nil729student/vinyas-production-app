@@ -14,11 +14,15 @@ export default function ArticleWeighing() {
 
     // Cargar datos automáticamente al inicio
     useEffect(() => {
-        loadData();
+        // Obtenir la data de hayer format 2024-06-18
+        const ahir = new Date();
+        ahir.setDate(ahir.getDate() - 1);
+        const ahirFormat = ahir.toISOString().split('T')[0];
+        loadData(ahirFormat);
     }, []);
 
-    const loadData = async () => {
-        const data = await animalRelationWeight();
+    const loadData = async (fecha) => {
+        const data = await animalRelationWeight(fecha);
         setAnimalsData(data);
         setFilteredAnimalsData(data); // Cargar datos sin filtros al inicio
     };
