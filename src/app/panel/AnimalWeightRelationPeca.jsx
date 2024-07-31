@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { animalRelationWeight } from "@/lib/animalDataLoader";
 import { getMaxMinWeightArticles } from "@/lib/articleActions";
 import SelectedAnimalxArt from "./SelectedAnimalxArt";
@@ -11,6 +11,7 @@ export default function ArticleWeighing() {
     const [selectedArticles, setSelectedArticles] = useState({});
     const [animalsData, setAnimalsData] = useState([]);
     const [filteredAnimalsData, setFilteredAnimalsData] = useState([]);
+    const dateInputRef = useRef(null);
 
     // Cargar datos automáticamente al inicio
     useEffect(() => {
@@ -20,6 +21,17 @@ export default function ArticleWeighing() {
         const ahirFormat = ahir.toISOString().split('T')[0];
         loadData(ahirFormat);
     }, []);
+
+    const handleLoadData = () => {
+        const selectedDate = dateInputRef.current.querySelector('#date').value;
+
+        if (selectedDate) {
+            loadData(selectedDate);
+        }
+        else {
+            alert('Selecciona una data');
+        }
+    };
 
     const loadData = async (fecha) => {
         const data = await animalRelationWeight(fecha);
@@ -37,11 +49,10 @@ export default function ArticleWeighing() {
         console.log('Artículo Seleccionado', art);
         const weightMaxMin = await getMaxMinWeightArticles(art.id);
         const animals = await getArticlesByAnimalWeightRange(art.id); // Obtener animales asociados al artículo
-
         const animalWeights = animals.map(item => item.animal.animaWeightKg);
         const animalAge = animals.map(item => item.animal.age);
-        const maxWeight = Math.max(...animalWeights) + 10;
-        const minWeight = Math.min(...animalWeights) -  10;
+        const maxWeight = Math.max(...animalWeights) + 2;
+        const minWeight = Math.min(...animalWeights) -  2;
         const maxAge = Math.max(...animalAge);
         const minAge = Math.min(...animalAge);
         art.counterArts = weightMaxMin._count._all;
@@ -50,7 +61,7 @@ export default function ArticleWeighing() {
         art.ageMax = maxAge;
         art.ageMin = minAge;
         art.animals = animals;
-        art.classifciacions = [...new Set(animals.map(item => item.classification.name))];
+        art.classifciacions = [...new Set(animals.map(item => item.animal.classification.name))];
 
         setSelectedArticles(prevState => ({
             ...prevState,
@@ -60,8 +71,10 @@ export default function ArticleWeighing() {
         // Definir los filtros
         const filterClass = (animal) => {
             //return animal.hip_clasabr === "ZAO 3";
-            console.log('art.classifciacions:', animal.hip_clasabr, art.classifciacions);
-            return animal.hip_clasabr.includes(art.classifciacions);
+            console.log('art.classifciacions:', animal.hip_clasabr);
+            //return animal.hip_clasabr.includes(art.classifciacions);
+            return animal.hip_clasabr === [...art.classifciacions].find(clas => clas === animal.hip_clasabr);
+
         };
         const filterWeightRange = (animal) => animal.hip_pes >= minWeight && animal.hip_pes <= maxWeight;
         const filterAgeRange = (animal) => animal.hip_edat >= minAge && animal.hip_edat <= maxAge;
@@ -134,9 +147,9 @@ export default function ArticleWeighing() {
                 </div>
                 <div className="flex-1 flex flex-col justify-center items-center">
                     <h1 className="text-4xl font-bold mb-10 text-center">Relación de pesos</h1>
-                    <div className="flex justify-center mb-10">
-                        <input type="date" className="p-3 border rounded-lg" />
-                        <button className="ml-4 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={loadData}>
+                    <div className="flex justify-center mb-10" ref={dateInputRef}>
+                        <input type="date" id='date' className="p-3 border rounded-lg" />
+                        <button className="ml-4 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={handleLoadData}>
                             Cargar datos
                         </button>
                     </div>

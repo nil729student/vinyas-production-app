@@ -21,12 +21,22 @@ export async function getArticlesByAnimalWeightRange(art_codi) {
     // obtenir tots els animals que tinguin associat el codi de l'article
     const animals = await prisma.article.findMany({
       include: {
-        animal: true,
-        classification: true
+        animal: {
+          select: {
+            animaWeightKg: true,
+            age: true,
+            classification: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
       },
       where: {
         art_codi: art_codi
-      }
+      },
+      
     });
     console.log(animals);
     return animals;
