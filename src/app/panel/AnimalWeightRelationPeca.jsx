@@ -11,6 +11,7 @@ export default function ArticleWeighing() {
     const [selectedArticles, setSelectedArticles] = useState({});
     const [animalsData, setAnimalsData] = useState([]);
     const [filteredAnimalsData, setFilteredAnimalsData] = useState([]);
+    const [date, setDate] = useState('');
     const dateInputRef = useRef(null);
 
     // Cargar datos automáticamente al inicio
@@ -19,8 +20,15 @@ export default function ArticleWeighing() {
         const ahir = new Date();
         ahir.setDate(ahir.getDate() - 1);
         const ahirFormat = ahir.toISOString().split('T')[0];
+        setDate(ahirFormat);
         loadData(ahirFormat);
     }, []);
+
+    // Handle date change
+    const handleDateChange = (event) => {
+        setDate(event.target.value);
+    };
+    
 
     const handleLoadData = () => {
         const selectedDate = dateInputRef.current.querySelector('#date').value;
@@ -46,60 +54,72 @@ export default function ArticleWeighing() {
     }, [searchTerm]);
 
     const handleSelect = async (art) => {
-        console.log('Artículo Seleccionado', art);
-        const weightMaxMin = await getMaxMinWeightArticles(art.id);
-        const animals = await getArticlesByAnimalWeightRange(art.id); // Obtener animales asociados al artículo
-        const animalWeights = animals.map(item => item.animal.animaWeightKg);
-        const animalAge = animals.map(item => item.animal.age);
-        const maxWeight = Math.max(...animalWeights) + 2;
-        const minWeight = Math.min(...animalWeights) -  2;
-        const maxAge = Math.max(...animalAge);
-        const minAge = Math.min(...animalAge);
-        art.counterArts = weightMaxMin._count._all;
-        art.weightMax = maxWeight;
-        art.weightMin = minWeight;
-        art.ageMax = maxAge;
-        art.ageMin = minAge;
-        art.animals = animals;
-        art.classifciacions = [...new Set(animals.map(item => item.animal.classification.name))];
-
-        setSelectedArticles(prevState => ({
-            ...prevState,
-            [art.id]: prevState[art.id] ? undefined : art,
-        }));
-
-        // Definir los filtros
-        const filterClass = (animal) => {
-            //return animal.hip_clasabr === "ZAO 3";
-            console.log('art.classifciacions:', animal.hip_clasabr);
-            //return animal.hip_clasabr.includes(art.classifciacions);
-            return animal.hip_clasabr === [...art.classifciacions].find(clas => clas === animal.hip_clasabr);
-
-        };
-        const filterWeightRange = (animal) => animal.hip_pes >= minWeight && animal.hip_pes <= maxWeight;
-        const filterAgeRange = (animal) => animal.hip_edat >= minAge && animal.hip_edat <= maxAge;
-
-        // Aplicar filtros y ordenar
-        function aplicarFiltrosYOrdenar() {
-            const resultados = animalsData.map(animll => {
-                const coincidencias = [
-                    filterClass(animll),
-                    filterWeightRange(animll),
-                    filterAgeRange(animll)
-                ].reduce((acc, cumpleFiltro) => acc + (cumpleFiltro ? 1 : 0), 0);
-
-                return { ...animll, coincidencias };
+        if (selectedArticles[art.id]) {
+            // Article is being deselected
+            setSelectedArticles(prevState => {
+                const newState = { ...prevState };
+                delete newState[art.id];
+                return newState;
             });
+            // Call setFilteredAnimalsData with appropriate data when deselected
+            setFilteredAnimalsData(animalsData); // or any other data you want to display when deselected
+        } else {
+            const weightMaxMin = await getMaxMinWeightArticles(art.id);
+            const animals = await getArticlesByAnimalWeightRange(art.id); // Obtener animales asociados al artículo
+            const animalWeights = animals.map(item => item.animal.animaWeightKg);
+            const animalAge = animals.map(item => item.animal.age);
+            const maxWeight = Math.max(...animalWeights) + 2;
+            const minWeight = Math.min(...animalWeights) - 2;
+            const maxAge = Math.max(...animalAge);
+            const minAge = Math.min(...animalAge);
+            art.counterArts = weightMaxMin._count._all;
+            art.weightMax = maxWeight;
+            art.weightMin = minWeight;
+            art.ageMax = maxAge;
+            art.ageMin = minAge;
+            art.animals = animals;
+            art.classifciacions = [...new Set(animals.map(item => item.animal.classification.name))];
 
-            // Ordenar basándose en coincidencias
-            resultados.sort((a, b) => b.coincidencias - a.coincidencias);
+            setSelectedArticles(prevState => ({
+                ...prevState,
+                [art.id]: prevState[art.id] ? undefined : art,
+            }));
 
-            // Actualizar estado con datos filtrados y ordenados
-            setFilteredAnimalsData(resultados);
+            const filterClass = (animal) => {
+                return art.classifciacions.some((classification) => {
+                    const cleanedAnimalClass = animal.hip_clasabr.replace(/\s/g, '');
+                    const cleanedArticleClass = classification.replace(/\s/g, '');
+                    //console.log('Clasificación', animal.id, '-', cleanedAnimalClass, '-', cleanedArticleClass);
+                    if (cleanedAnimalClass === cleanedArticleClass) {
+                        return true;
+                    }
+                    return false;
+                });
+            };
+
+            const filterWeightRange = (animal) => animal.hip_pes >= minWeight && animal.hip_pes <= maxWeight;
+            const filterAgeRange = (animal) => animal.hip_edat >= minAge && animal.hip_edat <= maxAge;
+
+            // Aplicar filtres y ordena els resultats
+            function aplicarFiltrosYOrdenar() {
+                const resultados = animalsData.map(animal => {
+                    const coincidencias = [
+                        filterClass(animal),
+                        filterWeightRange(animal),
+                        filterAgeRange(animal)
+                    ].reduce((acc, cumpleFiltro) => acc + (cumpleFiltro ? 1 : 0), 0);
+
+                    return { ...animal, coincidencias };
+                });
+
+                resultados.sort((a, b) => b.coincidencias - a.coincidencias);
+
+
+                setFilteredAnimalsData(resultados);
+            }
+
+            aplicarFiltrosYOrdenar();
         }
-
-        // Llamar a la función
-        aplicarFiltrosYOrdenar();
     }
 
     const getRowClass = (coincidencias) => {
@@ -148,7 +168,7 @@ export default function ArticleWeighing() {
                 <div className="flex-1 flex flex-col justify-center items-center">
                     <h1 className="text-4xl font-bold mb-10 text-center">Relación de pesos</h1>
                     <div className="flex justify-center mb-10" ref={dateInputRef}>
-                        <input type="date" id='date' className="p-3 border rounded-lg" />
+                        <input id='date' className="p-3 border rounded-lg" type="date" value={date} onChange={handleDateChange} />
                         <button className="ml-4 p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={handleLoadData}>
                             Cargar datos
                         </button>
