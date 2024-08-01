@@ -64,6 +64,10 @@
       "name": "SOLOMILLO TERNERA VACIO -2KG"
     },
     {
+      "id": 12099,
+      "name": "PECHO TERNERA PAD CONG"
+    },
+    {
       "id": 11108,
       "name": "LLANA TERNERA VACÍO"
     },
@@ -250,6 +254,26 @@
     {
       "id": 500316,
       "name": "GOLDEN COIN                   "
+    },
+    {
+      "id": 11128,
+      "name": "RABILLO TERNERA VACÍO"
+    },
+    {
+      "id": 11249,
+      "name": "TAPA TERNERA VACIO -7KG"
+    },
+    {
+      "id": 12124,
+      "name": "TAPA TERNERA VACIO -7KG"
+    },
+    {
+      "id": 12130,
+      "name": "CULATA DE CONTRA CONG."
+    },
+    {
+      "id": 12149,
+      "name": "REDONDO TERNERA CONG. -2KG"
     }
   ]
   
