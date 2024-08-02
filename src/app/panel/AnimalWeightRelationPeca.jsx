@@ -107,7 +107,7 @@ export default function ArticleWeighing() {
                         filterClass(animal),
                         filterWeightRange(animal),
                         filterAgeRange(animal)
-                    ].reduce((acc, cumpleFiltro) => acc + (cumpleFiltro ? 1 : 0), 0);
+                    ].reduce((acc, compleixFiltre) => acc + (compleixFiltre ? 1 : 0), 0);
 
                     return { ...animal, coincidencias };
                 });
