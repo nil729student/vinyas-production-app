@@ -101,7 +101,12 @@ export async function fechAnimalByDib(dib_id) {
         await connKaisEscorxa();
         const animal = await sql.query`
             SELECT
-                SUBSTRING(dib_id, 1, 12) as dib_id,
+                CASE 
+                WHEN SUBSTRING(dib_id, 1, 2) = 'CZ' THEN CAST(SUBSTRING(dib_id, 1, 11) AS VARCHAR(11))
+                WHEN SUBSTRING(dib_id, 1, 2) = 'FR' THEN CAST(SUBSTRING(dib_id, 1, 12) AS VARCHAR(12))
+                WHEN SUBSTRING(dib_id, 1, 2) = 'ES' THEN CAST(SUBSTRING(dib_id, 1, 14) AS VARCHAR(14))
+                ELSE 'ERR'
+            END AS dib_id,
                 lpa_pes, 
                 lpa_qualitatabr, 
                 lpa_sexe 
@@ -286,6 +291,7 @@ export async function fechDespiecePerDib(dib_id) {
         sql.close();
         return data;
     } catch (error) {
+        
         console.error(error);
         return NextResponse.json({ 'error': 'An error occurred.' }, { status: 500 });
     }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ArtList from "./ArtList";
 
 const ArtQuarter = (quarts) => {
-    const [showArticles, setShowArticles] = useState(true);
+    const [showArticles, setShowArticles] = useState(false);
     const { quart } = quarts;
     const pesQuart = quart.weightKg;
 
